@@ -1,10 +1,10 @@
 ***Demon name, level, skills(list)***
 Avian
-Hamsa,10,Zio:Attack Knowhow:Dia:Hama
-Suparna,15,Rakukaja:Diarama:Spirit Drain:Mazio
-Phoenix,24,Fire Breath:Recarm:Fire Pleroma:Light Mana Aid
-Vidofnir,34,Damascus Claw:Ally Counter:Mazionga:Zionga
-Thunderbird,42,Mazionga:Elec Pleroma:Ziodyne:Taunt
-Yatagarasu,52,Maragion:Gun Pleroma:Maragidyne:Grand Tack
-Feng Huang,63,High Fire Pleroma:Agidyne:Dekunda:Bind Voice
-Garuda,72,Zandyne:Amrita:Madness Nails:Floral Gust
+Hamsa,10,Zio|0:Attack Knowhow|0:Dia|11:Hama|12,Gun|Weak:Elec|Resist:Dark|Weak,Electricity|1:Lighty|1:Healing|1:Gun|-4
+Suparna,15,Rakukaja|0:Diarama|0:Spirit Drain|17:Mazio|16,Gun|Weak:Elec|Resist:Light|Resist:Dark|Weak,Electricity|1:Healing|1:Support|1:Dark|-3
+Phoenix,24,Fire Breath|0:Recarm|0:Fire Pleroma|26:Light Mana Aid|25,Gun|Weak:Fire|Resist:Ice|Weak:Light|Resist,Fire|4:Healing|1:Ice|-4
+Vidofnir,34,Damascus Claw|0:Ally Counter|35:Mazionga|36:Zionga|0,Gun|Weak:Light|Resist:Dark|Weak,Electricity|2:Physical|1:Force|-1:Gun|-4
+Thunderbird,42,Mazionga|0:Elec Pleroma|0:Ziodyne|45:Taunt|43,Gun|Weak:Elec|Null,Electricity|4:Gun|-3:Force|-4
+Yatagarasu,52,Maragion|0:Gun Pleroma|0:Maragidyne|54:Grand Tack|53,Gun|Weak:Fire|Null:Ice|Weak:Light|Resist,Gun|3:Fire|3:Ice|-5
+Feng Huang,63,High Fire Pleroma|66:Agidyne|0:Dekunda|0:Bind Voice|64,Gun|Weak:Fire|Null:Ice|Weak,Fire|5:Ailment|1:Support|1:Gun|-4:Ice|-7
+Garuda,72,Zandyne|0:Amrita|0:Madness Nails|73:Floral Gust|74,Gun|Weak:Fire|Repel:Ice|Weak:Force|Null:Light|Resist,Force|4:Physical|3:Fire|3:Gun|-4:Electricity|-4:Ice|-5
