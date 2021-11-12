@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,16 @@
   to {
     transform: rotate(360deg);
   }
+} */
+
+.table {
+  border: 2px solid black;
+}
+
+.tableRow {
+  border-top: 1px dotted blue;
+}
+
+.tableRow:hover {
+  background-color: grey;
 }

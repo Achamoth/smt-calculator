@@ -1,0 +1,41 @@
+[
+  {
+    "race": "Fury",
+    "name": "Asura",
+    "level": 43,
+    "skills": [
+      {
+        "level": 0,
+        "name": "Titanomachia"
+      },
+      {
+        "level": 0,
+        "name": "Maragion"
+      },
+      {
+        "level": 44,
+        "name": "Critical Eye"
+      },
+      {
+        "level": 45,
+        "name": "Resist Gun"
+      }
+    ],
+    "resistances": [
+      {
+        "phys": "resist",
+        "fire": "null",
+        "ice": "weak",
+        "light": "resist"
+      }
+    ],
+    "affinities": [
+      {
+        "phys": 4,
+        "fire": 2,
+        "healing": -2,
+        "ice": -5
+      }
+    ]
+  }
+]
