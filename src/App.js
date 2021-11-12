@@ -1,4 +1,3 @@
-// import logo from "./logo.svg";
 import "./App.css";
 import { Demon } from "./Demon";
 import data from "./data.json";

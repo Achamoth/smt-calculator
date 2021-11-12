@@ -1,10 +1,10 @@
 ***Demon name, level, skills(list)***
 Avatar
-Shiisaa,14,Mazan:Shibaboo:Frenzied Chomp
-Kamapua'a,23,Media:Oni-Kagura:Posumudi:Tarunda
-Makami,33,Diarama:Recarm:Posumudi:Workaholic
-Kaiming Shou,40,Dekaja:Mortal Jihad:Magaon:Resist Phys
-Chimera,46,Elec Pleroma:Ziodyne:War Cry:Madness Nails
-Ukano Mitama,53,Mediarama:Healing Knowhow:High Heal Pleroma:Tetrakarn
-Anubis,60,Judgement Light:Mamudoon:Dekunda:Light Pleroma:Dark Pleroma
-Barong,68,Endure:Tetrakarn:Ziodyne:Nihil Claw
+Shiisaa,14,Mazan|0:Shibaboo|15:Frenzied Chomp|16,Fire|Resist:Force|Resist:Dark|Weak,Force|4:Electricity|-1:Dark|-3
+Kamapua'a,23,Media|0:Oni-Kagura|0:Posumudi|24:Tarunda|25,Phys|Resist:Gun|Weak:Fire|Resist:Ice|Weak:Elec|Resist:Force|Resist,Healing|2:Support|1:Ice|-3:Force|-3:Gun|-4
+Makami,33,Diarama|0:Recarm|0:Heal Pleroma|0:Posumudi|34:Workaholic|35,Light|Resist:Dark|Weak,Healing|3:Ailment|-1
+Kaiming Shou,40,Dekaja|0:Mortal Jihad|0:Magaon|41:Resist Phys|42,Light|Null:Dark|Weak,Physical|2:Support|2:Dark|-3
+Chimera,46,Elec Pleroma|0:Ziodyne|0:War Cry|49:Madness Nails|50,Fire|Resist:Elec|Resist:Force|Weak,Electricity|3:Physical|2:Ailment|-2:Force|-4
+Ukano Mitama,53,Mediarama|0:Healing Knowhow|0:High Heal Pleroma|54:Tetrakarn|55,Ice|Weak:Elec|Null:Light|Null:Dark|Weak,Healing|3:Ice|-3
+Anubis,60,Judgement Light|0:Mamudoon|0:Dekunda|61:Light Pleroma|62:Dark Pleroma|63,Light|Null:Dark|Resist,Light|4:Dark|4:Healing|1:Physical|-3
+Barong,68,Endure|70:Tetrakarn|0:Ziodyne|0:Nihil Claw|69,Phys|Resist:Elec|Null:Force|Weak:Light|Null:Dark|Weak,Physical|3:Electricity|3:Ailment|1:Support|1:Force|-3:Dark|-3
