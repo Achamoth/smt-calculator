@@ -1,15 +1,15 @@
 ***Demon Name, Level, Skills(List)***
 Deity
-Thoth,30,Hamaon:Mana Gain:Resist Gun:Light Pleroma:Megido
-Inti,34,Maragion:Fire Pleroma:Mabufula:Ice Pleroma
-Prometheus,40,Fire Breath:Maragion:Recarmdra:Fire Pleroma:Workaholic
-Lord Nandou,48,Agidyne:Berserker God:Samarecarm:Fang Breaker
-Osiris,53,Dark Pleroma:Dekaja:Mamudoon:Mudoon
-Omoteotl,59,Agidyne:Recarmdra:Bufudyne:Judgement
-Mahamayuri,67,Diarahan:Doping:Null Nerve:Zandyne
-Hachiman,75,Maziodyne:Tetrakarn:Berserker God:Life Surge:Holy Wrath
-Baal,79,Maragidyne:Mist Rush:Ally Retaliate:Vengeful Thunder:Null Fire
-Apsu,82,Titanomachia:Ice Age:Victory Cry:Smile Charge:Repel Fire
-Maitreya,83,Hades Blast:Enlightenment:Makajamaon:5.67 Billion Hands:Drain Ice:Doping
-Odin,85,Concentrate:Gungnir:Thunder Reign:Will of Thunder:Phys Pleroma:Drain Force
-Krishna,87,Dream Raga:Venomous Raga:Ziodyne:Deadly Wind:Combat Tara:Salvation:Drain Dark
+Thoth,30,Hamaon|0:Mana Gain|0:Resist Gun|31:Light Pleroma|32:Megido|33,Gun|Weak:Fire|Resist:Ice|Resist:Dark|Weak,Light|2:Almighty|1:Support|-2:Dark|-3:Gun|-4
+Inti,34,Maragion|0:Fire Pleroma|0:Mabufula|35:Ice Pleroma|36,Fire|Resist:Ice|Resist:Elec|Weak:Force|Weak,Fire|2:Ice|2:Support|-2:Electricity|-3
+Prometheus,40,Fire Breath|0:Maragion|0:Recarmdra|0:Fire Pleroma|41:Workaholic|43,Fire|Null:Ice|Weak:Light|Resist,Fire|5:Healing|1:Ailment|-1:Support|-2:Ice|-7
+Lord Nandou,48,Agidyne|0:Berserker God|49:Samarecarm|50:Fang Breaker|0,Fire|Null:Ice|Weak:Light|Resist,Fire|3:Physical|2:Healing|1:Support|-2:Ice|-5
+Osiris,53,Dark Pleroma|0:Dekaja|0:Mamudoon|54:Mudoon|0,Phys|Resist:Dark|Resist,Dark|4:Support|2:Light|-2:Healing|-3
+Omoteotl,59,Agidyne|0:Recarmdra|0:Bufudyne|60:Judgement|61
+Mahamayuri,67,Diarahan|0:Doping|70:Null Nerve|68:Zandyne|0,Fire|Resist:Elec|Weak:Force|Null:Light|Resist,Force|3:Almighty|2:Healing|2:Support|2:Physical|-2:Gun|-3:Electricity|-6
+Hachiman,75,Maziodyne|0:Tetrakarn|0:Berserker God|76:Life Surge|77:Holy Wrath|0,Fire|Repel:Elec|Resist:Force|Weak:Light|Resist,Physical|3:Electricity|3:Support|1:Force|-3:Healing|-3
+Baal,79,Maragidyne|0:Mist Rush|0:Ally Retaliate|80:Vengeful Thunder|81:Null Fire|82,Ice|Weak:Elec|Drain:Light|Resist,Physical|4:Fire|3:Ice|-4:Electricity|4:Support|-3
+Apsu,82,Titanomachia|83:Ice Age|0:Victory Cry|0:Smile Charge|84:Repel Fire|85,Ice|Repel:Elec|Weak:Dark|Resist,Physical|3:Ice|5:Electricity|-3:Healing|-2
+Maitreya,83,Hades Blast|0:Enlightenment|0:Makajamaon|0:5.67 Billion Hands|84:Drain Ice|85:Doping|86,Phys|Resist:Gun|Weak:Fire|Weak:Ice|Resist:Light|Null:Dark|Resist,Physical|4:Gun|-3:Fire|-3:Almighty|4:Ailment|3:Support|2
+Odin,85,Concentrate|0:Gungnir|0:Thunder Reign|0:Will of Thunder|86:Phys Pleroma|87:Drain Force|88,Gun|Repel:Elec|Repel:Force|Weak:Light|Resist:Dark|Resist,Electricity|7:Physical|5:Force|-7
+Krishna,87,Dream Raga|0:Venomous Raga|0:Ziodyne|0:Deadly Wind|88:Combat Tara|89:Salvation|90:Drain Dark|91,Light|Resist:Dark|Weak,Electricity|5:Force|5:Dark|-3:Ailment|5:Healing|3:Support|3
