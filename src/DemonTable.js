@@ -72,10 +72,11 @@ export function DemonTable(props) {
       </div>
       <br />
       <div>
-        <table className="table">
+        <table className="demonTable">
           <tbody>
             <tr>
               <th
+                className="demonTableHeader"
                 onClick={(e) =>
                   setSort((s) => updateSort(s, sortingOrders.LEVEL))
                 }
@@ -83,6 +84,7 @@ export function DemonTable(props) {
                 LV
               </th>
               <th
+                className="demonTableHeader"
                 onClick={(e) =>
                   setSort((s) => updateSort(s, sortingOrders.RACE))
                 }
@@ -90,6 +92,7 @@ export function DemonTable(props) {
                 Race
               </th>
               <th
+                className="demonTableHeader"
                 onClick={(e) =>
                   setSort((s) => updateSort(s, sortingOrders.NAME))
                 }
@@ -99,10 +102,10 @@ export function DemonTable(props) {
             </tr>
             {demons.map((x) => {
               return (
-                <tr className="tableRow" key={x.name}>
-                  <td>{x.level}</td>
-                  <td>{x.race}</td>
-                  <td>
+                <tr className="demonTableRow" key={x.name}>
+                  <td className="demonTableCell">{x.level}</td>
+                  <td className="demonTableCell">{x.race}</td>
+                  <td className="demonTableCell">
                     <Link to={`/${x.name.toLowerCase()}`}>{x.name}</Link>
                   </td>
                 </tr>

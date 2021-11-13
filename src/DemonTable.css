@@ -2,30 +2,30 @@
   padding-top: 20px;
 }
 
-.table {
+.demonTable {
   border: 2px solid black;
   border-collapse: collapse;
 }
 
-.tableRow {
+.demonTableRow {
   border-top: 1px solid blue;
 }
 
-.tableRow:hover {
+.demonTableRow:hover {
   background-color: grey;
 }
 
-td,
-th {
+.demonTableCell,
+.demonTableHeader {
   border-right: 1px dotted blue;
   padding-right: 20px;
   text-align: start;
 }
 
-th:hover {
+.demonTableHeader:hover {
   cursor: pointer;
 }
 
-th {
+.demonTableHeader {
   background-color: grey;
 }
