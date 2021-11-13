@@ -1,0 +1,31 @@
+.App {
+  padding-top: 20px;
+}
+
+.table {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+.tableRow {
+  border-top: 1px solid blue;
+}
+
+.tableRow:hover {
+  background-color: grey;
+}
+
+td,
+th {
+  border-right: 1px dotted blue;
+  padding-right: 20px;
+  text-align: start;
+}
+
+th:hover {
+  cursor: pointer;
+}
+
+th {
+  background-color: grey;
+}
