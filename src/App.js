@@ -1,31 +1,18 @@
 import "./App.css";
-import { Demon } from "./Demon";
-import data from "./data.json";
+import { parse_demons } from './demon_utils.js';
+import { DemonTable } from './DemonTable.js';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-function TestList() {
-  console.log(data);
-  let demons = data.map(
-    (d) =>
-      new Demon(d.race, d.name, d.level, d.skills, d.resistances, d.affinities)
-  );
+function App() {
+  let demons = parse_demons();
 
   return (
-    <div className="TestList">
-      <table className="table">
-        <tbody>
-          {demons.map((x) => {
-            return (
-              <tr className="tableRow" key={x.name}>
-                <td>{x.race}</td>
-                <td>{x.name}</td>
-                <td>{x.level}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<DemonTable demons={demons} />} />
+      </Routes>
+    </Router>
   );
 }
 
-export default TestList;
+export default App;
