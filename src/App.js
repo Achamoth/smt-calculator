@@ -1,5 +1,5 @@
-import { parse_demons } from './utils/demon_utils.js';
-import { DemonTable } from './DemonTable.js';
+import { parse_demons } from "./utils/demon_utils.js";
+import { DemonTable } from "./DemonTable.js";
 import { DemonFusions } from "./DemonFusions";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 

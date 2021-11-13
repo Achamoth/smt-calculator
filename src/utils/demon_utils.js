@@ -1,4 +1,4 @@
-import { Demon } from "../classes/Demon";
+import { Demon } from "../classes/Demon.js";
 import { SMT5_DEMON_DATA } from "../smt_v_data/demon_data.js";
 
 export function parse_demons() {

@@ -1,4 +1,4 @@
-const SMT5_ELEMENT_CHART = {
+export const SMT5_ELEMENT_CHART = {
     "elems": [
       "Erthys",
       "Aeros",
