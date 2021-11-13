@@ -1,5 +1,5 @@
-import { Demon } from "./Demon";
-import {SMT5_DEMON_DATA} from './smt_v_data/demon_data.js';
+import { Demon } from "../classes/Demon";
+import {SMT5_DEMON_DATA} from '../smt_v_data/demon_data.js';
 
 export function parse_demons() {
     let demons = [];
