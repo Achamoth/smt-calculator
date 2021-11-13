@@ -60,59 +60,61 @@ export function DemonTable(props) {
 
   return (
     <div className="App">
-      <div>
-        <label>
-          Search:
-          <input
-            type="text"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          />
-        </label>
-      </div>
-      <br />
-      <div>
-        <table className="demonTable">
-          <tbody>
-            <tr>
-              <th
-                className="demonTableHeader"
-                onClick={(e) =>
-                  setSort((s) => updateSort(s, sortingOrders.LEVEL))
-                }
-              >
-                LV
-              </th>
-              <th
-                className="demonTableHeader"
-                onClick={(e) =>
-                  setSort((s) => updateSort(s, sortingOrders.RACE))
-                }
-              >
-                Race
-              </th>
-              <th
-                className="demonTableHeader"
-                onClick={(e) =>
-                  setSort((s) => updateSort(s, sortingOrders.NAME))
-                }
-              >
-                Name
-              </th>
-            </tr>
-            {demons.map((x) => {
-              return (
-                <tr className="demonTableRow" key={x.name}>
-                  <td className="demonTableCell">{x.level}</td>
-                  <td className="demonTableCell">{x.race}</td>
-                  <td className="demonTableCell">
-                    <Link to={`/${x.name.toLowerCase()}`}>{x.name}</Link>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div className="contents">
+        <div>
+          <label>
+            Search:
+            <input
+              type="text"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+          </label>
+        </div>
+        <br />
+        <div>
+          <table className="demonTable">
+            <tbody>
+              <tr>
+                <th
+                  className="demonTableHeader"
+                  onClick={(e) =>
+                    setSort((s) => updateSort(s, sortingOrders.LEVEL))
+                  }
+                >
+                  LV
+                </th>
+                <th
+                  className="demonTableHeader"
+                  onClick={(e) =>
+                    setSort((s) => updateSort(s, sortingOrders.RACE))
+                  }
+                >
+                  Race
+                </th>
+                <th
+                  className="demonTableHeader"
+                  onClick={(e) =>
+                    setSort((s) => updateSort(s, sortingOrders.NAME))
+                  }
+                >
+                  Name
+                </th>
+              </tr>
+              {demons.map((x) => {
+                return (
+                  <tr className="demonTableRow" key={x.name}>
+                    <td className="demonTableCell">{x.level}</td>
+                    <td className="demonTableCell">{x.race}</td>
+                    <td className="demonTableCell">
+                      <Link to={`/${x.name.toLowerCase()}`}>{x.name}</Link>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

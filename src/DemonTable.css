@@ -1,5 +1,11 @@
 .App {
+  display: flex;
+  justify-content: center;
   padding-top: 20px;
+}
+
+.contents {
+  display: block;
 }
 
 .demonTable {
