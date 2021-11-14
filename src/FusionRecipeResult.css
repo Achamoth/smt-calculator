@@ -1,0 +1,25 @@
+.recipeTable {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+.recipeTableHeader {
+  background-color: grey;
+}
+
+.recipeTableResultCell,
+.recipeTableHeader,
+.recipeTableComponentCell {
+  border-right: 1px solid blue;
+  padding-right: 20px;
+  text-align: start;
+}
+
+.recipeTableSkillRow {
+  background-color: honeydew;
+  border-bottom: 1px solid black;
+}
+
+.recipeTableRow {
+  border-bottom: 1px solid black;
+}

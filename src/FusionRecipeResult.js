@@ -1,3 +1,5 @@
+import "./FusionRecipeResult.css";
+
 function traverseRecipe(recipe) {
   let recipeStack = [];
   let recipeQueue = [recipe];
@@ -36,9 +38,9 @@ function SkillRows(props) {
             .filter((s) => props.skills.includes(s));
 
           return (
-            <tr className="recipeTableSkillCell">
+            <tr className="recipeTableSkillRow">
               <td></td>
-              <td>{`${d.race} ${d.name}: ${skillString(skillsOnDemon)}`}</td>
+              <td colSpan={props.numColumns+1}>{`${d.race} ${d.name}: ${skillString(skillsOnDemon)}`}</td>
             </tr>
           );
         })}
@@ -57,7 +59,7 @@ export function FusionRecipeResult(props) {
         <thead>
           <tr>
             <th></th>
-            <th>Result</th>
+            <th className="recipeTableHeader">Result</th>
             {[...Array(maxComponents).keys()].map((i) => {
               return <th className="recipeTableHeader">Component {i + 1}</th>;
             })}
@@ -69,7 +71,7 @@ export function FusionRecipeResult(props) {
               return (
                 <>
                   <tr className="recipeTableRow">
-                    <td>{i++}</td>
+                    <td className="recipeTableResultCell">{i++}</td>
                     <td className="recipeTableResultCell">{`${r.demon.race} ${r.demon.name}`}</td>
                     {r.recipes.map((rr) => {
                       return (
@@ -80,6 +82,7 @@ export function FusionRecipeResult(props) {
                   <SkillRows
                     demons={r.recipes.map((r) => r.demon)}
                     skills={props.skills}
+                    numColumns={maxComponents}
                   />
                 </>
               );

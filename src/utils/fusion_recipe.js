@@ -5,6 +5,7 @@ import { FusionRecipe } from "./../classes/FusionRecipe.js";
 export function findFusionRecipes(demon, targetSkills) {
   return new Promise((resolve, reject) => {
     let result = getFusionRecipes(demon, targetSkills, 5, 0);
+    // TODO Simplify recipy (check Jack Frost with Bufu for example; cull useless leaves)
     resolve(result);
   })
 }
