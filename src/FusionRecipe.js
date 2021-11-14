@@ -1,8 +1,46 @@
-import { Autocomplete, TextField, Button } from "@mui/material";
+import {
+  Autocomplete,
+  TextField,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import { useState } from "react";
 import { NavBar } from "./NavBar.js";
 import { get_all_skills, parse_demons } from "./utils/demon_utils.js";
+import { findFusionRecipes } from "./utils/fusion_recipe.js";
 import "./FusionRecipe.css";
+
+function getTargetSkills(state) {
+  let result = [];
+  if (state.skill_1) result.push(state.skill_1);
+  if (state.skill_2) result.push(state.skill_2);
+  if (state.skill_3) result.push(state.skill_3);
+  if (state.skill_4) result.push(state.skill_4);
+  if (state.skill_5) result.push(state.skill_5);
+  if (state.skill_6) result.push(state.skill_6);
+  if (state.skill_7) result.push(state.skill_7);
+  if (state.skill_8) result.push(state.skill_8);
+  return result;
+}
+
+function getFusionRecipe(state, demons, completionCallback, setFusionRecipe) {
+  let demon = demons.find((d) => d.name === state.demon);
+  let skills = getTargetSkills(state);
+  let promise = findFusionRecipes(demon, skills);
+  promise.then(
+    (v) => {
+      completionCallback();
+      setFusionRecipe(v);
+    },
+    (r) => {}
+  );
+}
+
+const RecipeCalculationStatus = {
+  UNSTARTED: 0,
+  RUNNING: 1,
+  FINISHED: 2,
+};
 
 const State = {
   SKILL_1: 1,
@@ -19,48 +57,48 @@ const State = {
 function onChangeState(newValue, stateType, setState) {
   switch (stateType) {
     case State.SKILL_1:
-      setState(s => {
-        return {...s, skill_1: newValue };
+      setState((s) => {
+        return { ...s, skill_1: newValue };
       });
       break;
     case State.SKILL_2:
-      setState(s => {
-        return {...s, skill_2: newValue };
+      setState((s) => {
+        return { ...s, skill_2: newValue };
       });
       break;
     case State.SKILL_3:
-      setState(s => {
-        return {...s, skill_3: newValue };
+      setState((s) => {
+        return { ...s, skill_3: newValue };
       });
       break;
     case State.SKILL_4:
-      setState(s => {
-        return {...s, skill_4: newValue };
+      setState((s) => {
+        return { ...s, skill_4: newValue };
       });
       break;
     case State.SKILL_5:
-      setState(s => {
-        return {...s, skill_5: newValue };
+      setState((s) => {
+        return { ...s, skill_5: newValue };
       });
       break;
     case State.SKILL_6:
-      setState(s => {
-        return {...s, skill_6: newValue };
+      setState((s) => {
+        return { ...s, skill_6: newValue };
       });
       break;
     case State.SKILL_7:
-      setState(s => {
-        return {...s, skill_7: newValue };
+      setState((s) => {
+        return { ...s, skill_7: newValue };
       });
       break;
     case State.SKILL_8:
-      setState(s => {
-        return {...s, skill_8: newValue };
+      setState((s) => {
+        return { ...s, skill_8: newValue };
       });
       break;
     case State.DEMON:
-      setState(s => {
-        return {...s, demon: newValue.name };
+      setState((s) => {
+        return { ...s, demon: newValue?.name };
       });
       break;
     default:
@@ -76,6 +114,10 @@ export function FusionRecipe(props) {
   });
 
   let [state, setState] = useState({});
+  let [recipeCalculationStatus, setRecipeCalculationStatus] = useState(
+    RecipeCalculationStatus.UNSTARTED
+  );
+  let [fusionRecipe, setFusionRecipe] = useState(null);
 
   return (
     <div>
@@ -196,9 +238,31 @@ export function FusionRecipe(props) {
         </div>
       </div>
       <div className="centeredContainer">
-        <Button className="findRecipeButton" variant="contained">
+        <Button
+          className="findRecipeButton"
+          variant="contained"
+          onClick={() => {
+            setRecipeCalculationStatus(RecipeCalculationStatus.RUNNING);
+            getFusionRecipe(
+              state,
+              demons,
+              () =>
+                setRecipeCalculationStatus(RecipeCalculationStatus.FINISHED),
+              setFusionRecipe
+            );
+          }}
+        >
           Find Recipe
         </Button>
+      </div>
+      <div className="centeredContainer">
+        {recipeCalculationStatus === RecipeCalculationStatus.RUNNING && (
+          <CircularProgress />
+        )}
+        {recipeCalculationStatus === RecipeCalculationStatus.FINISHED &&
+          fusionRecipe && (
+            <div>{fusionRecipe.parseChain(0, getTargetSkills(state))}</div>
+          )}
       </div>
     </div>
   );

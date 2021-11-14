@@ -1,8 +1,15 @@
 import { getFusionCombinations } from "./demon_fusion.js";
 import { FusionRecipe } from "./../classes/FusionRecipe.js";
-import { parse_demons } from "./demon_utils.js";
+// import { parse_demons } from "./demon_utils.js";
 
-export function getFusionRecipes(demon, targetSkills, depthLimit, curDepth) {
+export function findFusionRecipes(demon, targetSkills) {
+  return new Promise((resolve, reject) => {
+    let result = getFusionRecipes(demon, targetSkills, 5, 0);
+    resolve(result);
+  })
+}
+
+function getFusionRecipes(demon, targetSkills, depthLimit, curDepth) {
   if (curDepth === depthLimit) {
     return new FusionRecipe(demon);
   }
