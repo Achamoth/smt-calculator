@@ -6,6 +6,7 @@ export function NavBar() {
     <div className="navBar">
       <Button route="/" text="Demons" />
       <Button route="/skills" text="Skills" />
+      <Button route="/recipe" text="Recipe" />
     </div>
   );
 }

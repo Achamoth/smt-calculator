@@ -9,6 +9,34 @@ const sortingOrders = {
   NAME: "name",
 };
 
+const ElementalResistances = {
+  PHYS: 0,
+  FIRE: 1,
+  ICE: 2,
+  ELEC: 3,
+  WIND: 4,
+  LIGHT: 5,
+  DARK: 6,
+};
+
+function DemonResist(demon, elementalResistance) {
+  switch (demon.resistances[elementalResistance]) {
+    case "w":
+      return "wk";
+    case "s":
+      return "rs";
+    case "n":
+      return "nu";
+    case "d":
+      return "ab";
+    case "r":
+      return "rp";
+    case "-":
+    default:
+      return "-";
+  }
+}
+
 function compareDemonsByRace(d1, d2) {
   if (d1.race === d2.race) {
     return d1.level < d2.level ? -1 : 1;
@@ -102,6 +130,13 @@ export function DemonTable(props) {
                 >
                   Name
                 </th>
+                <th className="demonTableHeader">Phys</th>
+                <th className="demonTableHeader">Fire</th>
+                <th className="demonTableHeader">Ice</th>
+                <th className="demonTableHeader">Elec</th>
+                <th className="demonTableHeader">Wind</th>
+                <th className="demonTableHeader">Light</th>
+                <th className="demonTableHeader">Dark</th>
               </tr>
               {demons.map((x) => {
                 return (
@@ -110,6 +145,27 @@ export function DemonTable(props) {
                     <td className="demonTableCell">{x.race}</td>
                     <td className="demonTableCell">
                       <Link to={`/${x.name.toLowerCase()}`}>{x.name}</Link>
+                    </td>
+                    <td className="demonTableCell">
+                      {DemonResist(x, ElementalResistances.PHYS)}
+                    </td>
+                    <td className="demonTableCell">
+                      {DemonResist(x, ElementalResistances.FIRE)}
+                    </td>
+                    <td className="demonTableCell">
+                      {DemonResist(x, ElementalResistances.ICE)}
+                    </td>
+                    <td className="demonTableCell">
+                      {DemonResist(x, ElementalResistances.ELEC)}
+                    </td>
+                    <td className="demonTableCell">
+                      {DemonResist(x, ElementalResistances.WIND)}
+                    </td>
+                    <td className="demonTableCell">
+                      {DemonResist(x, ElementalResistances.LIGHT)}
+                    </td>
+                    <td className="demonTableCell">
+                      {DemonResist(x, ElementalResistances.DARK)}
                     </td>
                   </tr>
                 );
