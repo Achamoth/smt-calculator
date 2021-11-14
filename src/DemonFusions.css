@@ -1,8 +1,39 @@
-.contents {
+.demonFusionContents {
   display: flex;
   justify-content: center;
 }
 
 h1 {
   font-size: larger;
+}
+
+.demonSkills, .fusionCombinations {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+.demonSkillRow, .fusionRow {
+  border-top: 1px solid blue;
+}
+
+.demonSkillRow:nth-child(even), .fusionRow:nth-child(even) {
+  background-color: #CCC;
+}
+
+.demonSkillRow:nth-child(odd), .fusionRow:nth-child(odd) {
+  background-color: #FFF;
+}
+
+.demonSkillCell,
+.demonSkillsHeader,
+.fusionCombinationsCell,
+.fusionCombinationsHeader {
+  border-right: 1px dotted blue;
+  padding-right: 20px;
+  text-align: start;
+}
+
+.demonSkillsHeader,
+.fusionCombinationsHeader {
+  background-color: grey;
 }

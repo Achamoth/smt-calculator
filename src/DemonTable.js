@@ -59,8 +59,8 @@ export function DemonTable(props) {
     .sort((d1, d2) => compareDemons(d1, d2, sort));
 
   return (
-    <div className="App">
-      <div className="contents">
+    <div className="centeredContainer">
+      <div className="demonTableContents">
         <div>
           <label>
             Search:

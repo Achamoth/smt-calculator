@@ -1,10 +1,10 @@
-.App {
+.centeredContainer {
   display: flex;
   justify-content: center;
   padding-top: 20px;
 }
 
-.contents {
+.demonTableContents {
   display: block;
 }
 
@@ -17,8 +17,12 @@
   border-top: 1px solid blue;
 }
 
-.demonTableRow:hover {
-  background-color: grey;
+.demonTableRow:nth-child(even) {
+  background-color: #CCC;
+}
+
+.demonTableRow:nth-child(odd) {
+  background-color: #FFF;
 }
 
 .demonTableCell,
