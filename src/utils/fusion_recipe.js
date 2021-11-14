@@ -4,10 +4,18 @@ import { FusionRecipe } from "./../classes/FusionRecipe.js";
 
 export function findFusionRecipes(demon, targetSkills) {
   return new Promise((resolve, reject) => {
-    let result = getFusionRecipes(demon, targetSkills, 5, 0);
-    // TODO Simplify recipy (check Jack Frost with Bufu for example; cull useless leaves)
+    let recipe = getFusionRecipes(demon, targetSkills, 5, 0);
+    let result = simplifyRecipe(recipe, targetSkills);
     resolve(result);
   })
+}
+
+function simplifyRecipe(recipe, targetSkills) {
+  let targetDemon = recipe.demon;
+  let foundSkills = [];
+
+  // TODO Implement
+  return recipe;
 }
 
 function getFusionRecipes(demon, targetSkills, depthLimit, curDepth) {
@@ -60,10 +68,3 @@ function getFusionRecipes(demon, targetSkills, depthLimit, curDepth) {
 function findMissingSkills(foundSkills, targetSkills) {
   return targetSkills.filter((s) => !foundSkills.includes(s));
 }
-
-// Test
-// let demons = parse_demons();
-// let targetDemon = demons.find((d) => d.name === "Jack Frost");
-// let skills = ["Agi", "Bufu", "Maragi", "Resist Ice", "Agidyne"];
-// let recipe = getFusionRecipes(targetDemon, skills, 5, 0);
-// console.log(recipe.parseChain(0, skills));
