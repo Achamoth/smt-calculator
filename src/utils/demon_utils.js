@@ -20,6 +20,11 @@ export function parse_demons() {
   return demons;
 }
 
+export function get_all_skills() {
+  let demons = parse_demons();
+  return [{name: "Maragi"}];
+}
+
 function parse_skills(skills) {
   let result = [];
   for (const property in skills) {

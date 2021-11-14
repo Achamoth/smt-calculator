@@ -161,14 +161,3 @@ function getAllCombinations(strList) {
   }
   return result;
 }
-
-//Test
-let demons = parse_demons();
-let combinations = getFusionCombinations(
-  demons.find((d) => d.name === "Jack Frost")
-);
-console.log(
-  combinations.map((c) => {
-    return c[0].race + " " + c[0].name + " + " + c[1].race + " " + c[1].name;
-  })
-);

@@ -1,4 +1,5 @@
 import "./DemonTable.css";
+import { NavBar } from "./NavBar.js";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -61,6 +62,7 @@ export function DemonTable(props) {
   return (
     <div className="centeredContainer">
       <div className="demonTableContents">
+        <NavBar />
         <div>
           <label>
             Search:

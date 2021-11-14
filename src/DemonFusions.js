@@ -6,7 +6,6 @@ export function DemonFusions(props) {
   let name = useParams().demonName;
   let demon = props.demons.find((d) => d.name.toLowerCase() === name);
   let fusionCombinations = getFusionCombinations(demon);
-  console.log(fusionCombinations);
 
   return (
     <div>
