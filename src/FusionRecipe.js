@@ -6,7 +6,7 @@ import "./FusionRecipe.css";
 export function FusionRecipe(props) {
   const skills = get_all_skills().map((s) => s.name);
   const demons = parse_demons();
-  const demonOptions = demons.filter((d) => {
+  const demonOptions = demons.map((d) => {
     return { label: `${d.race} ${d.name}`, name: d.name };
   });
 
