@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import "./DemonFusions.css";
 import { getFusionCombinations } from "./utils/demon_fusion.js";
 
@@ -55,8 +55,16 @@ export function DemonFusions(props) {
             {fusionCombinations.map((c) => {
               return (
                 <tr className="fusionRow" key={`${c[0].name}-${c[1].name}`}>
-                  <td className="fusionCombinationsCell">{`LV${c[0].level} ${c[0].race} ${c[0].name}`}</td>
-                  <td className="fusionCombinationsCell">{`LV${c[1].level} ${c[1].race} ${c[1].name}`}</td>
+                  <td className="fusionCombinationsCell">
+                    <Link
+                      to={`/${c[0].name.toLowerCase()}`}
+                    >{`LV${c[0].level} ${c[0].race} ${c[0].name}`}</Link>
+                  </td>
+                  <td className="fusionCombinationsCell">
+                    <Link
+                      to={`/${c[1].name.toLowerCase()}`}
+                    >{`LV${c[1].level} ${c[1].race} ${c[1].name}`}</Link>
+                  </td>
                 </tr>
               );
             })}
