@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { NavBar } from "./NavBar.js";
+import { FusionRecipeResult } from "./FusionRecipeResult.js";
 import { get_all_skills, parse_demons } from "./utils/demon_utils.js";
 import { findFusionRecipes } from "./utils/fusion_recipe.js";
 import "./FusionRecipe.css";
@@ -261,7 +262,7 @@ export function FusionRecipe(props) {
         )}
         {recipeCalculationStatus === RecipeCalculationStatus.FINISHED &&
           fusionRecipe && (
-            <div>{fusionRecipe.parseChain(0, getTargetSkills(state))}</div>
+            <FusionRecipeResult recipe={fusionRecipe} skills={getTargetSkills(state)} />
           )}
       </div>
     </div>
