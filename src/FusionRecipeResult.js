@@ -49,6 +49,7 @@ function SkillRows(props) {
 export function FusionRecipeResult(props) {
   let stack = traverseRecipe(props.recipe);
   let maxComponents = Math.max(...stack.map((r) => r.recipes.length));
+  let i = 1;
 
   return (
     <div>
@@ -63,12 +64,12 @@ export function FusionRecipeResult(props) {
           </tr>
         </thead>
         <tbody>
-          {stack.map((r, i) => {
+          {stack.reverse().map((r) => {
             if (r.recipes.length) {
               return (
                 <>
                   <tr className="recipeTableRow">
-                    <td>{i + 1}</td>
+                    <td>{i++}</td>
                     <td className="recipeTableResultCell">{`${r.demon.race} ${r.demon.name}`}</td>
                     {r.recipes.map((rr) => {
                       return (
