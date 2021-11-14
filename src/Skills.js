@@ -33,21 +33,19 @@ export function Skills(props) {
   return (
     <div>
       <div className="centeredContainer">
-        <div className="skillTableContents">
-          <NavBar />
-          <div>
-            <label>
-              Search:
-              <input
-                type="text"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-              />
-            </label>
-          </div>
-          <br />
-        </div>
+        <NavBar />
       </div>
+      <div className="centeredContainer">
+        <label>
+          Search:
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+        </label>
+      </div>
+      <br />
       <div>
         <table className="skillTable">
           <tbody>

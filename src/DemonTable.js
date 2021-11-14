@@ -88,9 +88,11 @@ export function DemonTable(props) {
     .sort((d1, d2) => compareDemons(d1, d2, sort));
 
   return (
-    <div className="centeredContainer">
-      <div className="demonTableContents">
+    <div>
+      <div className="centeredContainer">
         <NavBar />
+      </div>
+      <div className="centeredContainer">
         <div>
           <label>
             Search:
@@ -101,78 +103,77 @@ export function DemonTable(props) {
             />
           </label>
         </div>
-        <br />
-        <div>
-          <table className="demonTable">
-            <tbody>
-              <tr>
-                <th
-                  className="demonTableHeader"
-                  onClick={(e) =>
-                    setSort((s) => updateSort(s, sortingOrders.LEVEL))
-                  }
-                >
-                  LV
-                </th>
-                <th
-                  className="demonTableHeader"
-                  onClick={(e) =>
-                    setSort((s) => updateSort(s, sortingOrders.RACE))
-                  }
-                >
-                  Race
-                </th>
-                <th
-                  className="demonTableHeader"
-                  onClick={(e) =>
-                    setSort((s) => updateSort(s, sortingOrders.NAME))
-                  }
-                >
-                  Name
-                </th>
-                <th className="demonTableHeader">Phys</th>
-                <th className="demonTableHeader">Fire</th>
-                <th className="demonTableHeader">Ice</th>
-                <th className="demonTableHeader">Elec</th>
-                <th className="demonTableHeader">Wind</th>
-                <th className="demonTableHeader">Light</th>
-                <th className="demonTableHeader">Dark</th>
-              </tr>
-              {demons.map((x) => {
-                return (
-                  <tr className="demonTableRow" key={x.name}>
-                    <td className="demonTableCell">{x.level}</td>
-                    <td className="demonTableCell">{x.race}</td>
-                    <td className="demonTableCell">
-                      <Link to={`/${x.name.toLowerCase()}`}>{x.name}</Link>
-                    </td>
-                    <td className="demonTableCell">
-                      {DemonResist(x, ElementalResistances.PHYS)}
-                    </td>
-                    <td className="demonTableCell">
-                      {DemonResist(x, ElementalResistances.FIRE)}
-                    </td>
-                    <td className="demonTableCell">
-                      {DemonResist(x, ElementalResistances.ICE)}
-                    </td>
-                    <td className="demonTableCell">
-                      {DemonResist(x, ElementalResistances.ELEC)}
-                    </td>
-                    <td className="demonTableCell">
-                      {DemonResist(x, ElementalResistances.WIND)}
-                    </td>
-                    <td className="demonTableCell">
-                      {DemonResist(x, ElementalResistances.LIGHT)}
-                    </td>
-                    <td className="demonTableCell">
-                      {DemonResist(x, ElementalResistances.DARK)}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+      </div>
+      <div className="centeredContainer">
+        <table className="demonTable">
+          <tbody>
+            <tr>
+              <th
+                className="demonTableHeader"
+                onClick={(e) =>
+                  setSort((s) => updateSort(s, sortingOrders.LEVEL))
+                }
+              >
+                LV
+              </th>
+              <th
+                className="demonTableHeader"
+                onClick={(e) =>
+                  setSort((s) => updateSort(s, sortingOrders.RACE))
+                }
+              >
+                Race
+              </th>
+              <th
+                className="demonTableHeader"
+                onClick={(e) =>
+                  setSort((s) => updateSort(s, sortingOrders.NAME))
+                }
+              >
+                Name
+              </th>
+              <th className="demonTableHeader">Phys</th>
+              <th className="demonTableHeader">Fire</th>
+              <th className="demonTableHeader">Ice</th>
+              <th className="demonTableHeader">Elec</th>
+              <th className="demonTableHeader">Wind</th>
+              <th className="demonTableHeader">Light</th>
+              <th className="demonTableHeader">Dark</th>
+            </tr>
+            {demons.map((x) => {
+              return (
+                <tr className="demonTableRow" key={x.name}>
+                  <td className="demonTableCell">{x.level}</td>
+                  <td className="demonTableCell">{x.race}</td>
+                  <td className="demonTableCell">
+                    <Link to={`/${x.name.toLowerCase()}`}>{x.name}</Link>
+                  </td>
+                  <td className="demonTableCell">
+                    {DemonResist(x, ElementalResistances.PHYS)}
+                  </td>
+                  <td className="demonTableCell">
+                    {DemonResist(x, ElementalResistances.FIRE)}
+                  </td>
+                  <td className="demonTableCell">
+                    {DemonResist(x, ElementalResistances.ICE)}
+                  </td>
+                  <td className="demonTableCell">
+                    {DemonResist(x, ElementalResistances.ELEC)}
+                  </td>
+                  <td className="demonTableCell">
+                    {DemonResist(x, ElementalResistances.WIND)}
+                  </td>
+                  <td className="demonTableCell">
+                    {DemonResist(x, ElementalResistances.LIGHT)}
+                  </td>
+                  <td className="demonTableCell">
+                    {DemonResist(x, ElementalResistances.DARK)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );
