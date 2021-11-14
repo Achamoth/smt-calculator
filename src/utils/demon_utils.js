@@ -21,8 +21,25 @@ export function parse_demons() {
 }
 
 export function get_all_skills() {
+  let skills = {};
   let demons = parse_demons();
-  return [{name: "Maragi"}];
+  demons.forEach(d => {
+    d.skills.forEach(s => {
+      if (skills[s.name]) {
+        skills[s.name].push({demonLevel: d.level, race: d.race, name: d.name, skillLevel: s.level});
+      }
+      else {
+        skills[s.name] = []
+        skills[s.name].push({demonLevel: d.level, race: d.race, name: d.name, skillLevel: s.level});
+      }
+    });
+  })
+
+  let result = [];
+  Object.keys(skills).forEach(s => {
+    result.push({name: s, demons: skills[s]});
+  });
+  return result;
 }
 
 function parse_skills(skills) {

@@ -1,0 +1,33 @@
+.skillTableContents {
+    display: block;
+}
+
+.skillTable {
+  border: 2px solid black;
+  border-collapse: collapse;
+  margin: auto;
+  width: 90%;
+}
+
+.skillTableRow {
+  border-top: 1px solid blue;
+}
+
+.skillTableRow:nth-child(even) {
+  background-color: #ccc;
+}
+
+.skillTableRow:nth-child(odd) {
+  background-color: #fff;
+}
+
+.skillTableCell,
+.skillTableHeader {
+  border-right: 1px dotted blue;
+  padding-right: 20px;
+  text-align: start;
+}
+
+.skillTableHeader {
+  background-color: grey;
+}
