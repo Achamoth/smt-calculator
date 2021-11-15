@@ -3,19 +3,37 @@ import { FusionRecipe } from "./../classes/FusionRecipe.js";
 
 export function findFusionRecipes(demon, targetSkills) {
   return new Promise((resolve, reject) => {
-    let recipe = getFusionRecipes(demon, targetSkills, 5, 0);
+    let recipe = getBestFusionRecipe(demon, targetSkills, 10);
     resolve(recipe);
   });
 }
 
+function getBestFusionRecipe(demon, targetSkills, maxDepth) {
+  let bestChain = new FusionRecipe(demon);
+  for (let i = 1; i < maxDepth; i++) {
+    let recipe = getFusionRecipes(demon, targetSkills, i, 0);
+    if (recipe.foundSkills(targetSkills).length >= targetSkills.length) {
+      return recipe;
+    }
+    if (
+      recipe.foundSkills(targetSkills).length >
+      bestChain.foundSkills(targetSkills)
+    ) {
+      bestChain = recipe;
+    }
+  }
+  return bestChain;
+}
+
 function getFusionRecipes(demon, targetSkills, depthLimit, curDepth) {
+  let bestChain = new FusionRecipe(demon);
+
   if (curDepth === depthLimit) {
-    return new FusionRecipe(demon);
+    return bestChain;
   }
 
-  let bestChain;
-
   let fusionCombinations = getFusionCombinations(demon);
+
   for (let combination of fusionCombinations) {
     let result = new FusionRecipe(demon);
 
@@ -44,11 +62,7 @@ function getFusionRecipes(demon, targetSkills, depthLimit, curDepth) {
       }
     }
 
-    if (!bestChain) {
-      bestChain = result;
-    } else if (
-      bestChain.foundSkills(targetSkills).length < foundSkills.length
-    ) {
+    if (bestChain.foundSkills(targetSkills).length < foundSkills.length) {
       bestChain = result;
     }
   }
