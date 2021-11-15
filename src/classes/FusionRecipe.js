@@ -12,7 +12,8 @@ export class FusionRecipe {
   }
 
   foundSkills(targetSkills) {
-    return this.skills.filter((s) => targetSkills.includes(s));
+    let skills = this.skills.filter((s) => targetSkills.includes(s));
+    return [...new Set(skills)];
   }
 
   addComponentRecipe(recipe) {
@@ -26,10 +27,10 @@ export class FusionRecipe {
 
   immediateSkillIntersection(targetSkills) {
     let skills = [];
-    skills.push(this.demon.skills.map(s => s.name));
-    this.recipes.forEach(r => {
-      skills.push(r.demon.skills.map(s => s.name));
-    })
-    return skills.filter(s => targetSkills.includes(s));
+    skills.push(this.demon.skills.map((s) => s.name));
+    this.recipes.forEach((r) => {
+      skills.push(r.demon.skills.map((s) => s.name));
+    });
+    return skills.filter((s) => targetSkills.includes(s));
   }
 }
