@@ -30,7 +30,11 @@ export function DemonFusions(props) {
                     .map((s) => {
                       return (
                         <tr className="demonSkillRow" key={s.name}>
-                          <td className="demonSkillCell">{s.name}</td>
+                          <td className="demonSkillCell">
+                            <Link to={`/skills/${s.name.toLowerCase().replace(" ", "_")}`}>
+                              {s.name}
+                            </Link>
+                          </td>
                           <td className="demonSkillCell">
                             {s.level === 0
                               ? "Innate"
