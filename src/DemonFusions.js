@@ -3,11 +3,23 @@ import "./DemonFusions.css";
 import { getFusionCombinations } from "./utils/demon_fusion.js";
 import { NavBar } from "./NavBar.js";
 
+function calculateFusions(demon) {
+  return (
+    demon.race.toLowerCase() !== "proto" &&
+    demon.name.toLowerCase() !== "shiva" &&
+    demon.name.toLowerCase() !== "demi-fiend"
+  );
+}
+
 export function DemonFusions(props) {
   let name = useParams().demonName;
   let demon = props.demons.find((d) => d.name.toLowerCase() === name);
-  let fusionCombinations = getFusionCombinations(demon);
-  let maxComponents = Math.max(...fusionCombinations.map((r) => r.length));
+  let fusionCombinations = calculateFusions(demon)
+    ? getFusionCombinations(demon)
+    : [];
+  let maxComponents = calculateFusions(demon)
+    ? Math.max(...fusionCombinations.map((r) => r.length))
+    : 0;
 
   return (
     <div>
@@ -31,7 +43,11 @@ export function DemonFusions(props) {
                       return (
                         <tr className="demonSkillRow" key={s.name}>
                           <td className="demonSkillCell">
-                            <Link to={`/skills/${s.name.toLowerCase().replace(" ", "_")}`}>
+                            <Link
+                              to={`/skills/${s.name
+                                .toLowerCase()
+                                .replace(" ", "_")}`}
+                            >
                               {s.name}
                             </Link>
                           </td>
