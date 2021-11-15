@@ -1,6 +1,6 @@
 import { SMT5_FUSION_CHART } from "../smt_v_data/fusion_chart.js";
 import { SMT5_ELEMENT_CHART } from "../smt_v_data/element_chart.js";
-import { parse_demons } from "./demon_utils.js";
+import { parse_demons, get_special_fusions } from "./demon_utils.js";
 
 const ElementTransforms = {
   UP: 1,
@@ -11,8 +11,16 @@ const ElementTransforms = {
 export function getFusionCombinations(demon) {
   let combinations = [];
   let demons = parse_demons();
+  let specialFusions = get_special_fusions();
 
-  // Special fusion
+  if (specialFusions.map((s) => s.name).includes(demon.name)) {
+    let fusion = specialFusions.find((s) => s.name === demon.name).fusion;
+    console.log(fusion);
+    combinations.push(
+      fusion.map((name) => demons.find((d) => d.name === name))
+    );
+    return combinations;
+  }
 
   if (demon.race === "Element") {
     let racesToProduce = findRacesThatProduceElement(demon.name);
