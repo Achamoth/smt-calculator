@@ -1,21 +1,11 @@
 import { getFusionCombinations } from "./demon_fusion.js";
 import { FusionRecipe } from "./../classes/FusionRecipe.js";
-// import { parse_demons } from "./demon_utils.js";
 
 export function findFusionRecipes(demon, targetSkills) {
   return new Promise((resolve, reject) => {
     let recipe = getFusionRecipes(demon, targetSkills, 5, 0);
-    let result = simplifyRecipe(recipe, targetSkills);
-    resolve(result);
-  })
-}
-
-function simplifyRecipe(recipe, targetSkills) {
-  let targetDemon = recipe.demon;
-  let foundSkills = [];
-
-  // TODO Implement
-  return recipe;
+    resolve(recipe);
+  });
 }
 
 function getFusionRecipes(demon, targetSkills, depthLimit, curDepth) {
@@ -34,24 +24,24 @@ function getFusionRecipes(demon, targetSkills, depthLimit, curDepth) {
     });
 
     let foundSkills = result.foundSkills(targetSkills);
-    if (foundSkills.length === targetSkills.length) {
+    if (foundSkills.length >= targetSkills.length) {
       return result;
     }
 
-    combination.forEach((d, i) => {
+    for (const component of combination) {
       let missingSkills = findMissingSkills(result.skills, targetSkills);
+      // TODO See if I can make this an incrementally increasing depth
       let newRecipe = getFusionRecipes(
-        d,
+        component,
         missingSkills,
         depthLimit,
         curDepth + 1
       );
-      result.replaceRecipe(d.name, newRecipe);
-    });
-
-    foundSkills = result.foundSkills(targetSkills);
-    if (foundSkills.length === targetSkills.length) {
-      return result;
+      result.replaceRecipe(component.name, newRecipe);
+      foundSkills = result.foundSkills(targetSkills);
+      if (foundSkills.length >= targetSkills.length) {
+        return result;
+      }
     }
 
     if (!bestChain) {
