@@ -51,7 +51,9 @@ export function getFusionCombinations(demon) {
 
   let racePairs = getRacePairsForDesiredRace(demon.race);
   racePairs.forEach((r, _) => {
-    combinations.push(getCombinationsFromRaces(demon, demons, r[0], r[1]));
+    combinations.push(
+      getCombinationsFromRaces(demon, demons, specialFusions, r[0], r[1])
+    );
   });
   return combinations.flat();
 }
@@ -80,7 +82,13 @@ function searchFusionChart(desiredResult, action) {
   return result;
 }
 
-function getCombinationsFromRaces(desiredDemon, demonList, race1, race2) {
+function getCombinationsFromRaces(
+  desiredDemon,
+  demonList,
+  specialFusions,
+  race1,
+  race2
+) {
   let result = [];
   let race1Demons = demonList.filter((d) => d.race === race1);
   let race2Demons = demonList.filter((d) => d.race === race2);
@@ -93,6 +101,7 @@ function getCombinationsFromRaces(desiredDemon, demonList, race1, race2) {
       let avgLevel = Math.ceil((d1.level + d2.level) / 2);
       let resultingDemon = desiredRaceDemons
         .filter((d) => d.level > avgLevel)
+        .filter((d) => !specialFusions.map((s) => s.name).includes(d.name))
         .sort((d1, d2) => (d1.level < d2.level ? -1 : 1))[0];
       if (resultingDemon && resultingDemon.name === desiredDemon.name) {
         result.push([d1, d2]);
@@ -128,6 +137,7 @@ function findCombinationsForElementAscension(demons, elementsUp, demon) {
     .filter((d) => d.race === demon.race)
     .sort((d1, d2) => (d1.level < d2.level ? -1 : 1));
 
+    // TODO Does not account for excluding special demons
   if (demon.name === demonsInRace[0].name) {
     elementsUp.forEach((e) => {
       result.push([e, demonsInRace[demonsInRace.length - 1]]);
@@ -152,6 +162,7 @@ function findCombinationsForElementDescension(demons, elementsDown, demon) {
     return result;
   }
 
+  // TODO Does not account for excluding special demons
   let targetDemonIndex = demonsInRace.findIndex((d) => d.name === demon.name);
   elementsDown.forEach((e) => {
     result.push([e, demonsInRace[targetDemonIndex + 1]]);
