@@ -2,7 +2,7 @@ import { parse_demons } from "./utils/demon_utils.js";
 import { DemonTable } from "./DemonTable.js";
 import { DemonFusions } from "./DemonFusions";
 import { Skills } from "./Skills.js";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { FusionRecipe } from "./FusionRecipe.js";
 
 function App() {
