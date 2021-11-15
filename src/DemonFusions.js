@@ -7,6 +7,7 @@ export function DemonFusions(props) {
   let name = useParams().demonName;
   let demon = props.demons.find((d) => d.name.toLowerCase() === name);
   let fusionCombinations = getFusionCombinations(demon);
+  let maxComponents = Math.max(...fusionCombinations.map((r) => r.length));
 
   return (
     <div>
@@ -18,7 +19,7 @@ export function DemonFusions(props) {
               <h1>{`LV${demon.level} ${demon.race} ${demon.name}`}</h1>
               <table className="demonSkills">
                 <thead>
-                  <tr>
+                  <tr key="skillHeader">
                     <th className="demonSkillsHeader">Skill</th>
                     <th className="demonSkillsHeader">Level</th>
                   </tr>
@@ -49,25 +50,30 @@ export function DemonFusions(props) {
       <div className="centeredContainer">
         <table className="fusionCombinations">
           <thead>
-            <tr>
-              <th className="fusionCombinationsHeader">Component 1</th>
-              <th className="fusionCombinationsHeader">Component 2</th>
+            <tr key="fusionHeader">
+              {[...Array(maxComponents).keys()].map((i) => {
+                return (
+                  <th className="fusionCombinationsHeader">
+                    Component {i + 1}
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody>
             {fusionCombinations.map((c) => {
               return (
                 <tr className="fusionRow" key={`${c[0].name}-${c[1].name}`}>
-                  <td className="fusionCombinationsCell">
-                    <Link
-                      to={`/${c[0].name.toLowerCase()}`}
-                    >{`LV${c[0].level} ${c[0].race} ${c[0].name}`}</Link>
-                  </td>
-                  <td className="fusionCombinationsCell">
-                    <Link
-                      to={`/${c[1].name.toLowerCase()}`}
-                    >{`LV${c[1].level} ${c[1].race} ${c[1].name}`}</Link>
-                  </td>
+                  {/* Redo key */}
+                  {c.map((component) => {
+                    return (
+                      <td className="fusionCombinationsCell">
+                        <Link
+                          to={`/${component.name.toLowerCase()}`}
+                        >{`LV${component.level} ${component.race} ${component.name}`}</Link>
+                      </td>
+                    );
+                  })}
                 </tr>
               );
             })}

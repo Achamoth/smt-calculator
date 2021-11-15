@@ -15,7 +15,6 @@ export function getFusionCombinations(demon) {
 
   if (specialFusions.map((s) => s.name).includes(demon.name)) {
     let fusion = specialFusions.find((s) => s.name === demon.name).fusion;
-    console.log(fusion);
     combinations.push(
       fusion.map((name) => demons.find((d) => d.name === name))
     );
