@@ -3,7 +3,7 @@ import { FusionRecipe } from "./../classes/FusionRecipe.js";
 
 export function findFusionRecipes(demon, targetSkills) {
   return new Promise((resolve, reject) => {
-    let recipe = getFusionRecipes(demon, targetSkills, 5, 0);
+    let recipe = getFusionRecipes(demon, targetSkills, 4, 0);
     resolve(recipe);
   });
 }
@@ -16,6 +16,10 @@ function getFusionRecipes(demon, targetSkills, depthLimit, curDepth) {
   let bestChain;
 
   let fusionCombinations = getFusionCombinations(demon);
+  if (demon.name === "Matador") {
+    console.log(fusionCombinations.length);
+  }
+  let i = 0;
   for (let combination of fusionCombinations) {
     let result = new FusionRecipe(demon);
 
@@ -28,9 +32,12 @@ function getFusionRecipes(demon, targetSkills, depthLimit, curDepth) {
       return result;
     }
 
+    if (demon.name === "Matador") console.log(i++);
     for (const component of combination) {
+      if (demon.name === "Matador") console.log(component);
       let missingSkills = findMissingSkills(result.skills, targetSkills);
       // TODO See if I can make this an incrementally increasing depth
+      // Getting trapped on demon with no fusions?
       let newRecipe = getFusionRecipes(
         component,
         missingSkills,
