@@ -9,7 +9,7 @@ function App() {
   let demons = parse_demons();
 
   return (
-    <Router basename={window.location.pathname || ""}>
+    <Router basename={"/smt-calculator"}>
       <Routes>
         <Route path="/" element={<DemonTable demons={demons} />} />
         <Route path="/skills" element={<Skills />} />

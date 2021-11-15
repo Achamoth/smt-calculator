@@ -1,5 +1,5 @@
 {
-  "homepage": ".",
+  "homepage": "https://achamoth.github.io/smt-calculator",
   "type": "module",
   "name": "smt-calculator",
   "version": "0.1.0",
