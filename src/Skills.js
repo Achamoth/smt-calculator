@@ -56,7 +56,9 @@ export function Skills(props) {
             {skills.map((x) => {
               return (
                 <tr className="skillTableRow" key={x.name}>
-                  <td className="skillTableCell">{x.name}</td>
+                  <td className="skillTableCell">
+                    {<Link to={x.name.toLowerCase().replace(" ", "_")}>{x.name}</Link>}
+                  </td>
                   <td className="skillTableCell">
                     <DemonsPossessingSkills demonsWithSkills={x.demons} />
                   </td>

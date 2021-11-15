@@ -4,6 +4,7 @@ import { DemonFusions } from "./DemonFusions";
 import { Skills } from "./Skills.js";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { FusionRecipe } from "./FusionRecipe.js";
+import { SkillDetails } from "./SkillDetails.js";
 
 function App() {
   let demons = parse_demons();
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<DemonTable demons={demons} />} />
         <Route path="/skills" element={<Skills />} />
+        <Route path="/skills/:skillName" element={<SkillDetails />} />
         <Route path="/recipe" element={<FusionRecipe />} />
         <Route path="/:demonName" element={<DemonFusions demons={demons} />} />
       </Routes>

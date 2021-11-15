@@ -1,0 +1,34 @@
+.skillDetailContents {
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  font-size: larger;
+}
+
+.skillDetails {
+    border: 2px solid black;
+    border-collapse: collapse;
+}
+
+.skillDetailRow {
+    border-top: 1px solid blue;
+}
+
+.skillDetailRow:nth-child(even) {
+    background-color: #CCC;
+}
+
+.skillDetailRow:nth-child(odd) {
+    background-color: #FFF;
+}
+
+.skillDetailCell, .skillDetailHeaderCell {
+    text-align: start;
+    padding-right: 20px;
+}
+
+.skillDetailHeaderCell {
+    background-color: grey;
+}
