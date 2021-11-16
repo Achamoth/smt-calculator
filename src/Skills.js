@@ -32,21 +32,8 @@ export function Skills(props) {
 
   return (
     <div>
+      <NavBar textFieldOnChange={(e) => setFilter(e.target.value)} />
       <div className="centeredContainer">
-        <NavBar />
-      </div>
-      <div className="centeredContainer">
-        <label>
-          Search:
-          <input
-            type="text"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          />
-        </label>
-      </div>
-      <br />
-      <div>
         <table className="skillTable">
           <tbody>
             <tr>

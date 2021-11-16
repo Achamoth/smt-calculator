@@ -1,20 +1,33 @@
 import { Link } from "react-router-dom";
+import { Button, TextField } from "@mui/material";
 import "./NavBar.css";
 
-export function NavBar() {
+export function NavBar(props) {
   return (
-    <div className="navBar">
-      <Button route="/" text="Demons" />
-      <Button route="/skills" text="Skills" />
-      <Button route="/recipe" text="Recipe" />
+    <div className="centeredContainer">
+      <div className="navBar">
+        <Link className="button" to="/">
+          <Button variant="contained" size="large">
+            Demons
+          </Button>
+        </Link>
+        <Link className="button" to="/skills">
+          <Button variant="contained" size="large" className="button">
+            Skills
+          </Button>
+        </Link>
+        <Link className="button" to="/recipe">
+          <Button variant="contained" size="large" className="button">
+            Recipe
+          </Button>
+        </Link>
+      </div>
+      <TextField
+        label="Filter..."
+        variant="outlined"
+        onChange={props.textFieldOnChange}
+        disabled={!props.textFieldOnChange}
+      />
     </div>
-  );
-}
-
-function Button(props) {
-  return (
-    <Link to={props.route}>
-      <span className="styledButton">{props.text}</span>
-    </Link>
   );
 }

@@ -21,6 +21,16 @@ export function parse_demons() {
   return demons;
 }
 
+function parse_skills(skills) {
+  let result = [];
+  for (const property in skills) {
+    let name = property;
+    let level = skills[property];
+    result.push({ name: name, level: level });
+  }
+  return result;
+}
+
 export function get_all_skills() {
   let skills = {};
   let demons = parse_demons();
@@ -62,12 +72,75 @@ export function get_special_fusions() {
   return specialFusions;
 }
 
-function parse_skills(skills) {
-  let result = [];
-  for (const property in skills) {
-    let name = property;
-    let level = skills[property];
-    result.push({ name: name, level: level });
+export const DemonAttributes = {
+  LEVEL: "LV",
+  RACE: "Race",
+  NAME: "Name",
+  PHYS: "Phys",
+  FIRE: "Fire",
+  ICE: "Ice",
+  ELEC: "Elec",
+  WIND: "Wind",
+  LIGHT: "Light",
+  DARK: "Dark"
+};
+
+export const ElementalResistances = {
+  PHYS: 0,
+  FIRE: 1,
+  ICE: 2,
+  ELEC: 3,
+  WIND: 4,
+  LIGHT: 5,
+  DARK: 6,
+};
+
+export function demonResist(demon, elementalResistance) {
+  switch (demon.resistances[elementalResistance]) {
+    case "w":
+      return "wk";
+    case "s":
+      return "rs";
+    case "n":
+      return "nu";
+    case "d":
+      return "ab";
+    case "r":
+      return "rp";
+    case "-":
+    default:
+      return "-";
   }
-  return result;
+}
+
+export function compareDemons(d1, d2, sort) {
+  switch (sort.sort) {
+    case DemonAttributes.LEVEL:
+      return sort.ascending
+        ? d1.level < d2.level
+          ? -1
+          : 1
+        : d1.level < d2.level
+        ? 1
+        : -1;
+    case DemonAttributes.NAME:
+      return sort.ascending
+        ? d1.name < d2.name
+          ? -1
+          : 1
+        : d1.name < d2.name
+        ? 1
+        : -1;
+    default:
+    case DemonAttributes.RACE:
+      let order = compareDemonsByRace(d1, d2);
+      return sort.ascending ? order : order * -1;
+  }
+}
+
+function compareDemonsByRace(d1, d2) {
+  if (d1.race === d2.race) {
+    return d1.level < d2.level ? -1 : 1;
+  }
+  return d1.race < d2.race ? -1 : 1;
 }

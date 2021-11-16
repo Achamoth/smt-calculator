@@ -1,11 +1,7 @@
-.navBar {
-    height: 50px;
+.button {
+    margin: 0px 10px;
 }
 
-.styledButton {
-    background-color: grey;
-    font-size: x-large;
-    color: white;
-    padding: 10px 20px;
-    margin: 20px;
+.navBar {
+    margin: 5px;
 }
