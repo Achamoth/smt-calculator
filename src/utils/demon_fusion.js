@@ -7,11 +7,21 @@ const ElementTransforms = {
   DOWN: -1,
 };
 
+function demonIsFusable(demon) {
+  return (
+    demon.race.toLowerCase() !== "proto" &&
+    demon.name.toLowerCase() !== "shiva" &&
+    demon.name.toLowerCase() !== "demi-fiend"
+  );
+}
+
 // Get all immediate fusion combinations for demon, disregarding skills
 export function getFusionCombinations(demon) {
   let combinations = [];
   let demons = parse_demons();
   let specialFusions = get_special_fusions();
+
+  if (!demonIsFusable(demon)) return combinations;
 
   if (specialFusions.map((s) => s.name).includes(demon.name)) {
     let fusion = specialFusions.find((s) => s.name === demon.name).fusion;

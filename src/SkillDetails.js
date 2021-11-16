@@ -9,12 +9,10 @@ export function SkillDetails() {
 
   return (
     <div>
-      <div className="centeredContainer">
-        <NavBar />
-      </div>
-      <div className="centeredContainer">
+      <NavBar />
+      <div className="centeredContainerNoMargin">
         <div display="block">
-          <div className="centeredContainer">
+          <div className="centeredContainerNoMargin">
             <h1>{skill.name}</h1>
           </div>
           <table className="skillDetails">

@@ -1,7 +1,11 @@
 .centeredContainer {
+  margin-top: 20px;
+}
+
+.centeredContainer,
+.centeredContainerNoMargin {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
 }
 
 .demonTableContents {

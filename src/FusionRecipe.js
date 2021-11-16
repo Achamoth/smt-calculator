@@ -122,12 +122,7 @@ export function FusionRecipe(props) {
 
   return (
     <div>
-      <div className="centeredContainer">
-        <div>
-          <NavBar />
-        </div>
-        <br />
-      </div>
+      <NavBar />
       <div className="centeredContainer">
         <div className="demonSelection">
           <Autocomplete
