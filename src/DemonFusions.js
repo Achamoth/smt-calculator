@@ -1,7 +1,12 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./DemonFusions.css";
 import { getFusionCombinations } from "./utils/demon_fusion.js";
 import { NavBar } from "./NavBar.js";
+
+function matchesFilter(demon, filter) {
+  return demon.name.toLowerCase().startsWith(filter.toLowerCase());
+}
 
 export function DemonFusions(props) {
   let name = useParams().demonName;
@@ -12,10 +17,21 @@ export function DemonFusions(props) {
       ? Math.max(...fusionCombinations.map((r) => r.length))
       : 0;
 
+  let [filter, setFilter] = useState("");
+  let filteredFusionCombinations = fusionCombinations.filter(
+    (f) => matchesFilter(f[0], filter) || matchesFilter(f[1], filter)
+  );
+
   return (
     <div>
       <div>
-        <NavBar />
+        <NavBar
+          textFieldOnChange={
+            fusionCombinations.length < 2
+              ? null
+              : (e) => setFilter(e.target.value)
+          }
+        />
         <div className="demonFusionContents">
           <div className="demon">
             <h1>{`LV${demon.level} ${demon.race} ${demon.name}`}</h1>
@@ -70,7 +86,7 @@ export function DemonFusions(props) {
             </tr>
           </thead>
           <tbody>
-            {fusionCombinations.map((c) => {
+            {filteredFusionCombinations.map((c) => {
               return (
                 <tr className="fusionRow" key={`${c[0].name}-${c[1].name}`}>
                   {/* Redo key */}
