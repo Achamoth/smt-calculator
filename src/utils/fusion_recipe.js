@@ -32,7 +32,7 @@ function getBestFusionRecipe(demon, targets, found, maxDepth) {
     if (found(recipe, targets).length >= targets.length) {
       return recipe;
     }
-    if (found(recipe, targets).length > found(bestChain).length) {
+    if (found(recipe, targets).length > found(bestChain, targets).length) {
       bestChain = recipe;
     }
   }
@@ -60,7 +60,7 @@ function getFusionRecipes(demon, targets, found, depthLimit, curDepth) {
     }
 
     for (const component of combination) {
-      let missing = findMissing(found(result), targets);
+      let missing = findMissing(found(result, targets), targets);
       let newRecipe = getFusionRecipes(
         component,
         missing,
@@ -81,6 +81,6 @@ function getFusionRecipes(demon, targets, found, depthLimit, curDepth) {
   return bestChain;
 }
 
-function findMissing(found, target) {
-  return target.filter((s) => !found.includes(s));
+function findMissing(found, targets) {
+  return targets.filter((s) => !found.includes(s));
 }
