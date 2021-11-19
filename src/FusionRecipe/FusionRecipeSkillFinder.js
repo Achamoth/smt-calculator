@@ -5,11 +5,10 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
-import { NavBar } from "./NavBar.js";
 import { FusionRecipeResult } from "./FusionRecipeResult.js";
-import { get_all_skills, parse_demons } from "./utils/demon_utils.js";
-import { findFusionRecipes } from "./utils/fusion_recipe.js";
-import "./FusionRecipe.css";
+import { get_all_skills, parse_demons } from "./../utils/demon_utils.js";
+import { findFusionRecipes } from "./../utils/fusion_recipe.js";
+import "./FusionRecipeSkillFinder.css";
 
 function getTargetSkills(state) {
   let result = [];
@@ -107,7 +106,7 @@ function onChangeState(newValue, stateType, setState) {
   }
 }
 
-export function FusionRecipe(props) {
+export function FusionRecipeSkillFinder() {
   const skills = get_all_skills().map((s) => s.name);
   const demons = parse_demons();
   const demonOptions = demons.map((d) => {
@@ -122,7 +121,6 @@ export function FusionRecipe(props) {
 
   return (
     <div>
-      <NavBar />
       <div className="centeredContainer">
         <div className="demonSelection">
           <Autocomplete
@@ -257,7 +255,10 @@ export function FusionRecipe(props) {
         )}
         {recipeCalculationStatus === RecipeCalculationStatus.FINISHED &&
           fusionRecipe && (
-            <FusionRecipeResult recipe={fusionRecipe} skills={getTargetSkills(state)} />
+            <FusionRecipeResult
+              recipe={fusionRecipe}
+              skills={getTargetSkills(state)}
+            />
           )}
       </div>
     </div>

@@ -1,0 +1,13 @@
+.recipeFinderContainer {
+    max-width: fit-content;
+    margin: auto;;
+    margin-top: 20px;
+}
+
+.recipeFinder {
+    border: 1px solid grey;
+}
+
+.toggleRecipeType {
+    width: 50%;
+}

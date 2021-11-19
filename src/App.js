@@ -3,7 +3,7 @@ import { DemonTable } from "./DemonTable.js";
 import { DemonFusions } from "./DemonFusions";
 import { Skills } from "./Skills.js";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { FusionRecipe } from "./FusionRecipe.js";
+import { FusionRecipe } from "./FusionRecipe/FusionRecipe.js";
 import { SkillDetails } from "./SkillDetails.js";
 
 function App() {
