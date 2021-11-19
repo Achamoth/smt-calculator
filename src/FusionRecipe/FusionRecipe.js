@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@mui/material";
 import { FusionRecipeSkillFinder } from "./FusionRecipeSkillFinder.js";
+import { FusionRecipeComponentFinder } from "./FusionRecipeComponentFinder.js";
 import { NavBar } from "../NavBar.js";
 import "./FusionRecipe.css";
 
@@ -38,7 +39,8 @@ export function FusionRecipe() {
           Components
         </Button>
         <div className="recipeFinder">
-          <FusionRecipeSkillFinder />
+          {calculationType === CalculationType.SKILLS && <FusionRecipeSkillFinder />}
+          {calculationType === CalculationType.COMPONENTS && <FusionRecipeComponentFinder />}
         </div>
       </div>
     </div>

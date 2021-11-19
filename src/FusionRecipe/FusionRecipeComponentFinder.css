@@ -1,0 +1,11 @@
+.demonSelection {
+  padding-bottom: 10px;
+}
+
+.fusionByComponentsContainer {
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+}
