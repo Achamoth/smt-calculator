@@ -14,7 +14,7 @@ export class FusionRecipe {
   get components() {
     let result = [];
     result.push(this.demon.name);
-    this.recipe.forEach((r) => result.push(r.components));
+    this.recipes.forEach((r) => result.push(r.components));
     return result.flat();
   }
 

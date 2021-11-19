@@ -61,53 +61,55 @@ export function FusionRecipeComponentFinder() {
 
   return (
     <div className="fusionByComponentsContainer">
-      <div>
-        <DemonSelection
-          demonOptions={demonOptions}
-          label="Demon to fuse"
-          onChange={(e, v) =>
-            setState((s) => {
-              return { ...s, demon: v?.name };
-            })
-          }
-        />
-      </div>
-      <div className="componentSelection">
-        {state.components.map((c, i) => {
-          return (
-            <DemonSelection
-              value={c}
-              key={c.name}
-              demonOptions={demonOptions}
-              label={`Component ${i + 1}`}
-              onChange={(e, v) =>
-                setState((s) => {
-                  let newComponents = s.components;
-                  if (!v) {
-                    newComponents.splice(i, 1);
-                  } else {
-                    newComponents[i] = v;
-                  }
-                  return { ...s, components: newComponents };
-                })
-              }
-            />
-          );
-        })}
-        <DemonSelection
-          key={state.components.length}
-          demonOptions={demonOptions}
-          label={`Component ${state.components.length + 1}`}
-          onChange={(e, v) =>
-            setState((s) => {
-              let newComponents = s.components;
-              if (v) {
-                newComponents.push(v);
-              }
-              return { ...s, components: newComponents };
-            })
-          }
-        />
+      <div className="demonAndComponentSelection">
+        <div>
+          <DemonSelection
+            demonOptions={demonOptions}
+            label="Demon to fuse"
+            onChange={(e, v) =>
+              setState((s) => {
+                return { ...s, demon: v?.name };
+              })
+            }
+          />
+        </div>
+        <div className="componentSelection">
+          {state.components.map((c, i) => {
+            return (
+              <DemonSelection
+                value={c}
+                key={c.name}
+                demonOptions={demonOptions}
+                label={`Component ${i + 1}`}
+                onChange={(e, v) =>
+                  setState((s) => {
+                    let newComponents = s.components;
+                    if (!v) {
+                      newComponents.splice(i, 1);
+                    } else {
+                      newComponents[i] = v;
+                    }
+                    return { ...s, components: newComponents };
+                  })
+                }
+              />
+            );
+          })}
+          <DemonSelection
+            key={state.components.length}
+            demonOptions={demonOptions}
+            label={`Component ${state.components.length + 1}`}
+            onChange={(e, v) =>
+              setState((s) => {
+                let newComponents = s.components;
+                if (v) {
+                  newComponents.push(v);
+                }
+                return { ...s, components: newComponents };
+              })
+            }
+          />
+        </div>
       </div>
       <div className="centeredWithBottomMargin">
         <Button
@@ -132,10 +134,7 @@ export function FusionRecipeComponentFinder() {
         )}
         {recipeCalculationStatus === RecipeCalculationStatus.FINISHED &&
           fusionRecipe && (
-            <FusionRecipeResult
-              recipe={fusionRecipe}
-              skills={[]}
-            />
+            <FusionRecipeResult recipe={fusionRecipe} skills={[]} />
           )}
       </div>
     </div>
