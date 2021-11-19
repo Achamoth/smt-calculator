@@ -16,26 +16,21 @@ const RecipeCalculationStatus = {
   FINISHED: 2,
 };
 
-const State = {
-  COMPONENTS: 0,
-  DEMON: 1,
-};
-
-function onChangeState(newValue, stateType, setState) {
-  switch (stateType) {
-    case State.COMPONENTS:
-      setState((s) => {
-        return { ...s, components: newValue };
-      });
-      break;
-    case State.DEMON:
-      setState((s) => {
-        return { ...s, demon: newValue?.name };
-      });
-      break;
-    default:
-      break;
-  }
+function DemonSelection(props) {
+  return (
+    <div className="demonSelection">
+      <Autocomplete
+        className="demonSelection"
+        disablePortal
+        id="demonSelection"
+        options={props.demonOptions}
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label={props.label} />}
+        onChange={(e, v) => props.onChange(e, v)}
+        isOptionEqualToValue={(o, v) => o.label === v.label}
+      />
+    </div>
+  );
 }
 
 export function FusionRecipeComponentFinder() {
@@ -49,24 +44,56 @@ export function FusionRecipeComponentFinder() {
     RecipeCalculationStatus.UNSTARTED
   );
   let [fusionRecipe, setFusionRecipe] = useState(null);
+  console.log(state);
 
   return (
     <div className="fusionByComponentsContainer">
-      <div className="demonSelection">
-        <Autocomplete
-          className="demonSelection"
-          disablePortal
-          id="demonSelection"
-          options={demonOptions}
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField {...params} label="Demon to fuse" />
-          )}
-          onChange={(e, v) => onChangeState(v, State.DEMON, setState)}
-          isOptionEqualToValue={(o, v) => o.label === v.label}
+      <div>
+        <DemonSelection
+          demonOptions={demonOptions}
+          label="Demon to fuse"
+          onChange={(e, v) =>
+            setState((s) => {
+              return { ...s, demon: v?.name };
+            })
+          }
         />
       </div>
-
+      <div className="componentSelection">
+        {state.components.map((c, i) => {
+          return (
+            <DemonSelection
+              demonOptions={demonOptions}
+              label={`Component ${i + 1}`}
+              onChange={(e, v) =>
+                setState((s) => {
+                  console.log(v);
+                  let newComponents = s.components;
+                  if (!v) {
+                    newComponents.splice(i, 1);
+                  } else {
+                    newComponents[i] = v.name;
+                  }
+                  return { ...s, components: newComponents };
+                })
+              }
+            />
+          );
+        })}
+        <DemonSelection
+          demonOptions={demonOptions}
+          label={`Component ${state.components.length + 1}`}
+          onChange={(e, v) =>
+            setState((s) => {
+              let newComponents = s.components;
+              if (v) {
+                newComponents.push(v.name);
+              }
+              return { ...s, components: newComponents };
+            })
+          }
+        />
+      </div>
     </div>
   );
 }
