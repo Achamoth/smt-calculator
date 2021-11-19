@@ -5,7 +5,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
-import { NavBar } from "./../NavBar.js";
 import { FusionRecipeResult } from "./FusionRecipeResult.js";
 import { get_all_skills, parse_demons } from "./../utils/demon_utils.js";
 import { findFusionRecipes } from "./../utils/fusion_recipe.js";
@@ -122,7 +121,6 @@ export function FusionRecipeSkillFinder() {
 
   return (
     <div>
-      <NavBar />
       <div className="centeredContainer">
         <div className="demonSelection">
           <Autocomplete
