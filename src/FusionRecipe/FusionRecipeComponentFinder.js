@@ -20,6 +20,8 @@ function DemonSelection(props) {
   return (
     <div className="demonSelection">
       <Autocomplete
+        value={props.value}
+        key={props.key}
         className="demonSelection"
         disablePortal
         id="demonSelection"
@@ -44,7 +46,6 @@ export function FusionRecipeComponentFinder() {
     RecipeCalculationStatus.UNSTARTED
   );
   let [fusionRecipe, setFusionRecipe] = useState(null);
-  console.log(state);
 
   return (
     <div className="fusionByComponentsContainer">
@@ -63,16 +64,17 @@ export function FusionRecipeComponentFinder() {
         {state.components.map((c, i) => {
           return (
             <DemonSelection
+              value={c}
+              key={c.name}
               demonOptions={demonOptions}
               label={`Component ${i + 1}`}
               onChange={(e, v) =>
                 setState((s) => {
-                  console.log(v);
                   let newComponents = s.components;
                   if (!v) {
                     newComponents.splice(i, 1);
                   } else {
-                    newComponents[i] = v.name;
+                    newComponents[i] = v;
                   }
                   return { ...s, components: newComponents };
                 })
@@ -81,13 +83,14 @@ export function FusionRecipeComponentFinder() {
           );
         })}
         <DemonSelection
+          key={state.components.length}
           demonOptions={demonOptions}
           label={`Component ${state.components.length + 1}`}
           onChange={(e, v) =>
             setState((s) => {
               let newComponents = s.components;
               if (v) {
-                newComponents.push(v.name);
+                newComponents.push(v);
               }
               return { ...s, components: newComponents };
             })
