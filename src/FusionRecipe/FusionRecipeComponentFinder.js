@@ -6,9 +6,21 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { FusionRecipeResult } from "./FusionRecipeResult.js";
-import { get_all_skills, parse_demons } from "./../utils/demon_utils.js";
-import { findFusionRecipes } from "./../utils/fusion_recipe.js";
+import { parse_demons } from "./../utils/demon_utils.js";
+import { findPathFromComponentToResult } from "./../utils/fusion_recipe.js";
 import "./FusionRecipeComponentFinder.css";
+
+function getFusionRecipe(state, demons, completionCallback, setFusionRecipe) {
+  let demon = demons.find((d) => d.name === state.demon);
+  let promise = findPathFromComponentToResult(demon, state.components);
+  promise.then(
+    (v) => {
+      completionCallback();
+      setFusionRecipe(v);
+    },
+    (r) => {}
+  );
+}
 
 const RecipeCalculationStatus = {
   UNSTARTED: 0,
@@ -96,6 +108,35 @@ export function FusionRecipeComponentFinder() {
             })
           }
         />
+      </div>
+      <div className="centeredWithBottomMargin">
+        <Button
+          variant="contained"
+          onClick={() => {
+            setRecipeCalculationStatus(RecipeCalculationStatus.RUNNING);
+            getFusionRecipe(
+              state,
+              demons,
+              () =>
+                setRecipeCalculationStatus(RecipeCalculationStatus.FINISHED),
+              setFusionRecipe
+            );
+          }}
+        >
+          Find Recipe
+        </Button>
+      </div>
+      <div className="centeredWithBottomMargin">
+        {recipeCalculationStatus === RecipeCalculationStatus.RUNNING && (
+          <CircularProgress />
+        )}
+        {recipeCalculationStatus === RecipeCalculationStatus.FINISHED &&
+          fusionRecipe && (
+            <FusionRecipeResult
+              recipe={fusionRecipe}
+              skills={[]}
+            />
+          )}
       </div>
     </div>
   );
