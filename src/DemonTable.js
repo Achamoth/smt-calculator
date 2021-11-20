@@ -3,17 +3,17 @@ import { NavBar } from "./NavBar.js";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import {
-  DemonAttributes,
+  DemonAttribute,
   compareDemons,
   demonResist,
-  ElementalResistances,
+  ElementalResistance,
 } from "./utils/demon_utils.js";
 import { objectToArray } from "./utils/general_utils";
 
 const SortingOrders = {
-  LV: DemonAttributes.LEVEL,
-  RACE: DemonAttributes.RACE,
-  NAME: DemonAttributes.NAME,
+  LV: DemonAttribute.LEVEL,
+  RACE: DemonAttribute.RACE,
+  NAME: DemonAttribute.NAME,
 };
 
 function updateSort(oldSort, headerClicked) {
@@ -27,7 +27,7 @@ function updateSort(oldSort, headerClicked) {
 export function DemonTable(props) {
   let [filter, setFilter] = useState("");
   let [sort, setSort] = useState({
-    sort: DemonAttributes.RACE,
+    sort: DemonAttribute.RACE,
     ascending: true,
   });
 
@@ -35,8 +35,8 @@ export function DemonTable(props) {
     .filter((d) => d.name.toLowerCase().startsWith(filter.toLowerCase()))
     .sort((d1, d2) => compareDemons(d1, d2, sort));
 
-  let headers = objectToArray(DemonAttributes);
-  let resistances = objectToArray(ElementalResistances);
+  let headers = objectToArray(DemonAttribute);
+  let resistances = objectToArray(ElementalResistance);
 
   return (
     <div>

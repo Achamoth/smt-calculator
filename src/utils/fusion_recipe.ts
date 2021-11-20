@@ -1,31 +1,40 @@
 import { getFusionCombinations } from "./demon_fusion.js";
-import { FusionRecipe } from "./../classes/FusionRecipe.js";
+import { FusionRecipe } from "../classes/FusionRecipe.js";
+import { Demon } from "../classes/Demon.js";
 
-export function findPathFromComponentToResult(demon, targetComponents) {
-  return new Promise((resolve, reject) => {
+export function findPathFromComponentToResult(
+  demon: Demon,
+  targetComponents: Demon[]
+) {
+  return new Promise<FusionRecipe>((resolve, reject) => {
     let recipe = getBestFusionRecipe(
       demon,
-      targetComponents.map(t => t.name),
-      (r, t) => r.foundComponents(t),
+      targetComponents.map((t) => t.name),
+      (r: FusionRecipe, t: string[]) => r.foundComponents(t),
       10
     );
     resolve(recipe);
   });
 }
 
-export function findFusionRecipes(demon, targetSkills) {
-  return new Promise((resolve, reject) => {
+export function findFusionRecipes(demon: Demon, targetSkills: string[]) {
+  return new Promise<FusionRecipe>((resolve, reject) => {
     let recipe = getBestFusionRecipe(
       demon,
       targetSkills,
-      (r, t) => r.foundSkills(t),
+      (r: FusionRecipe, t: string[]) => r.foundSkills(t),
       10
     );
     resolve(recipe);
   });
 }
 
-function getBestFusionRecipe(demon, targets, found, maxDepth) {
+function getBestFusionRecipe(
+  demon: Demon,
+  targets: string[],
+  found: (r: FusionRecipe, t: string[]) => string[],
+  maxDepth: number
+) {
   let bestChain = new FusionRecipe(demon);
   for (let i = 1; i < maxDepth; i++) {
     let recipe = getFusionRecipes(demon, targets, found, i, 0);
@@ -39,7 +48,13 @@ function getBestFusionRecipe(demon, targets, found, maxDepth) {
   return bestChain;
 }
 
-function getFusionRecipes(demon, targets, found, depthLimit, curDepth) {
+function getFusionRecipes(
+  demon: Demon,
+  targets: string[],
+  found: (r: FusionRecipe, t: string[]) => string[],
+  depthLimit: number,
+  curDepth: number
+) {
   let bestChain = new FusionRecipe(demon);
 
   if (curDepth === depthLimit) {
