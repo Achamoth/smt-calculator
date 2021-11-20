@@ -5,12 +5,15 @@ import { FusionRecipeComponentFinder } from "./FusionRecipeComponentFinder";
 import { NavBar } from "../NavBar";
 import "./FusionRecipe.css";
 
-const CalculationType = {
-  SKILLS: "skills",
-  COMPONENTS: "components",
-};
+enum CalculationType {
+  SKILLS,
+  COMPONENTS,
+}
 
-function buttonOutlineType(buttonCalculationType, curCalculationType) {
+function buttonOutlineType(
+  buttonCalculationType: CalculationType,
+  curCalculationType: CalculationType
+) {
   return buttonCalculationType === curCalculationType ? "outlined" : "text";
 }
 
@@ -24,7 +27,7 @@ export function FusionRecipe() {
         <Button
           className="toggleRecipeType"
           variant={buttonOutlineType(CalculationType.SKILLS, calculationType)}
-          onClick={e => setCalculationType(CalculationType.SKILLS)}
+          onClick={(e) => setCalculationType(CalculationType.SKILLS)}
         >
           Skills
         </Button>
@@ -34,13 +37,17 @@ export function FusionRecipe() {
             CalculationType.COMPONENTS,
             calculationType
           )}
-          onClick={e => setCalculationType(CalculationType.COMPONENTS)}
+          onClick={(e) => setCalculationType(CalculationType.COMPONENTS)}
         >
           Components
         </Button>
         <div className="recipeFinder">
-          {calculationType === CalculationType.SKILLS && <FusionRecipeSkillFinder />}
-          {calculationType === CalculationType.COMPONENTS && <FusionRecipeComponentFinder />}
+          {calculationType === CalculationType.SKILLS && (
+            <FusionRecipeSkillFinder />
+          )}
+          {calculationType === CalculationType.COMPONENTS && (
+            <FusionRecipeComponentFinder />
+          )}
         </div>
       </div>
     </div>
