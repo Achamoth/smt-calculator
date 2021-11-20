@@ -1,6 +1,6 @@
-import { get_skill_data } from "./utils/skill_utils.js";
+import { get_skill_data } from "./utils/skill_utils";
 import "./SkillDetails.css";
-import { NavBar } from "./NavBar.js";
+import { NavBar } from "./NavBar";
 import { useParams } from "react-router-dom";
 
 export function SkillDetails() {

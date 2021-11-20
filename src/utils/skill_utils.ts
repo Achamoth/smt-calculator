@@ -1,4 +1,4 @@
-import { SMT_5_SKILL_DATA } from "./../smt_v_data/skill_data.js";
+import { SMT_5_SKILL_DATA } from "./../smt_v_data/skill_data";
 
 export type SkillDetails = {
     cost: number;
@@ -16,7 +16,7 @@ export type SkillDefinition = {
 export function get_skill_data(): SkillDefinition[] {
     let skills: SkillDefinition[] = [];
     for (const property in SMT_5_SKILL_DATA) {
-        skills.push({name: property, skill: SMT_5_SKILL_DATA[property]});
+        skills.push({name: property, skill: (SMT_5_SKILL_DATA as any)[property]});
     }
     return skills;
 }

@@ -6,7 +6,7 @@ export function parse_demons() {
   let demons: Demon[] = [];
   for (const property in SMT5_DEMON_DATA) {
     let name = property;
-    let demon = SMT5_DEMON_DATA[property];
+    let demon = (SMT5_DEMON_DATA as any)[property];
     demons.push(
       new Demon(
         demon.race,
@@ -76,7 +76,7 @@ export function get_special_fusions(): SpecialFusion[] {
   let specialFusions: SpecialFusion[] = [];
   for (const property in SMT5_SPECIAL_RECIPES) {
     let name = property;
-    let fusion: string[] = SMT5_SPECIAL_RECIPES[property];
+    let fusion: string[] = (SMT5_SPECIAL_RECIPES as any)[property];
     specialFusions.push({ name: name, fusion: fusion });
   }
   return specialFusions;

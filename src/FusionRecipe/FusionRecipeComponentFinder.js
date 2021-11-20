@@ -5,9 +5,9 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
-import { FusionRecipeResult } from "./FusionRecipeResult.js";
-import { parse_demons } from "./../utils/demon_utils.js";
-import { findPathFromComponentToResult } from "./../utils/fusion_recipe.js";
+import { FusionRecipeResult } from "./FusionRecipeResult";
+import { parse_demons } from "./../utils/demon_utils";
+import { findPathFromComponentToResult } from "./../utils/fusion_recipe";
 import "./FusionRecipeComponentFinder.css";
 
 function getFusionRecipe(state, demons, completionCallback, setFusionRecipe) {

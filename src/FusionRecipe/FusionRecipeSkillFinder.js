@@ -5,9 +5,9 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
-import { FusionRecipeResult } from "./FusionRecipeResult.js";
-import { get_all_skills, parse_demons } from "./../utils/demon_utils.js";
-import { findFusionRecipes } from "./../utils/fusion_recipe.js";
+import { FusionRecipeResult } from "./FusionRecipeResult";
+import { get_all_skills, parse_demons } from "./../utils/demon_utils";
+import { findFusionRecipes } from "./../utils/fusion_recipe";
 import "./FusionRecipeSkillFinder.css";
 
 function getTargetSkills(state) {

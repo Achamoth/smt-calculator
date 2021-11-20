@@ -1,5 +1,5 @@
 import "./DemonTable.css";
-import { NavBar } from "./NavBar.js";
+import { NavBar } from "./NavBar";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import {
@@ -7,7 +7,7 @@ import {
   compareDemons,
   demonResist,
   ElementalResistance,
-} from "./utils/demon_utils.js";
+} from "./utils/demon_utils";
 import { objectToArray } from "./utils/general_utils";
 
 const SortingOrders = {

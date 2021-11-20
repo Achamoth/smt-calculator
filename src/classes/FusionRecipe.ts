@@ -25,14 +25,14 @@ export class FusionRecipe {
 
   foundSkills(targetSkills: string[]) {
     let skills: string[] = this.skills.filter((s) => targetSkills.includes(s));
-    return [...new Set(skills)];
+    return [...Array.from(new Set(skills))];
   }
 
   foundComponents(targetComponents: string[]) {
     let components = this.components.filter((s) =>
       targetComponents.includes(s)
     );
-    return [...new Set(components)];
+    return [...Array.from(new Set(components))];
   }
 
   addComponentRecipe(recipe: FusionRecipe) {

@@ -1,6 +1,6 @@
 import "./Skills.css";
-import { NavBar } from "./NavBar.js";
-import { get_all_skills } from "./utils/demon_utils.js";
+import { NavBar } from "./NavBar";
+import { get_all_skills } from "./utils/demon_utils";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 

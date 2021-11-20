@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button } from "@mui/material";
-import { FusionRecipeSkillFinder } from "./FusionRecipeSkillFinder.js";
-import { FusionRecipeComponentFinder } from "./FusionRecipeComponentFinder.js";
-import { NavBar } from "../NavBar.js";
+import { FusionRecipeSkillFinder } from "./FusionRecipeSkillFinder";
+import { FusionRecipeComponentFinder } from "./FusionRecipeComponentFinder";
+import { NavBar } from "../NavBar";
 import "./FusionRecipe.css";
 
 const CalculationType = {

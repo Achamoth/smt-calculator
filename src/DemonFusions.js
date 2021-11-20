@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./DemonFusions.css";
-import { getFusionCombinations } from "./utils/demon_fusion.js";
-import { NavBar } from "./NavBar.js";
+import { getFusionCombinations } from "./utils/demon_fusion";
+import { NavBar } from "./NavBar";
 
 function matchesFilter(demon, filter) {
   return demon.name.toLowerCase().startsWith(filter.toLowerCase());

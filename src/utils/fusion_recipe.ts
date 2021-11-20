@@ -1,6 +1,6 @@
-import { getFusionCombinations } from "./demon_fusion.js";
-import { FusionRecipe } from "../classes/FusionRecipe.js";
-import { Demon } from "../classes/Demon.js";
+import { getFusionCombinations } from "./demon_fusion";
+import { FusionRecipe } from "../classes/FusionRecipe";
+import { Demon } from "../classes/Demon";
 
 export function findPathFromComponentToResult(
   demon: Demon,
@@ -96,6 +96,6 @@ function getFusionRecipes(
   return bestChain;
 }
 
-function findMissing(found, targets) {
+function findMissing(found: string[], targets: string[]) {
   return targets.filter((s) => !found.includes(s));
 }

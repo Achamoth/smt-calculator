@@ -1,11 +1,11 @@
-import { SMT5_FUSION_CHART } from "../smt_v_data/fusion_chart.js";
-import { SMT5_ELEMENT_CHART } from "../smt_v_data/element_chart.js";
+import { SMT5_FUSION_CHART } from "../smt_v_data/fusion_chart";
+import { SMT5_ELEMENT_CHART } from "../smt_v_data/element_chart";
 import {
   parse_demons,
   get_special_fusions,
   SpecialFusion,
-} from "./demon_utils.js";
-import { Demon } from "../classes/Demon.js";
+} from "./demon_utils";
+import { Demon } from "../classes/Demon";
 
 enum ElementTransform {
   UP = 1,
@@ -29,9 +29,9 @@ export function getFusionCombinations(demon: Demon): Demon[][] {
   if (!demonIsFusable(demon)) return combinations;
 
   if (specialFusions.map((s) => s.name).includes(demon.name)) {
-    let fusion = specialFusions.find((s) => s.name === demon.name).fusion;
+    let fusion = specialFusions.find((s) => s.name === demon.name)!.fusion;
     combinations.push(
-      fusion.map((name) => demons.find((d) => d.name === name))
+      fusion.map((name) => demons.find((d) => d.name === name)!)
     );
     return combinations;
   }
@@ -70,6 +70,7 @@ export function getFusionCombinations(demon: Demon): Demon[][] {
       ...getCombinationsFromRaces(demon, demons, specialFusions, r[0], r[1])
     );
   });
+  return combinations;
 }
 
 function findRacesThatProduceElement(element: string) {
@@ -140,9 +141,10 @@ function getElementsWithDesiredTransformForRace(
     ];
   elementTransforms.forEach((t, i) => {
     if (t === desiredTransform.valueOf()) {
-      result.push(
-        demonList.find((d) => d.name === SMT5_ELEMENT_CHART.elems[i])
-      );
+      let demon = demonList.find((d) => d.name === SMT5_ELEMENT_CHART.elems[i]);
+      if (demon) {
+        result.push(demon);
+      }
     }
   });
   return result;
