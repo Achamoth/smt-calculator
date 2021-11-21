@@ -1,11 +1,13 @@
+import { Demon } from "../classes/Demon";
+import { FusionRecipe } from "../classes/FusionRecipe";
 import "./FusionRecipeResult.css";
 
-function traverseRecipe(recipe) {
+function traverseRecipe(recipe: FusionRecipe) {
   let recipeStack = [];
   let recipeQueue = [recipe];
 
   while (recipeQueue.length) {
-    let currentRecipe = recipeQueue.shift();
+    let currentRecipe = recipeQueue.shift()!;
     recipeStack.push(currentRecipe);
     currentRecipe.recipes.forEach((r) => {
       recipeQueue.push(r);
@@ -15,7 +17,7 @@ function traverseRecipe(recipe) {
   return recipeStack;
 }
 
-function skillString(skillsFromComponent) {
+function skillString(skillsFromComponent: string[]) {
   let result = "";
   skillsFromComponent.forEach((s, i) => {
     result += s;
@@ -24,7 +26,13 @@ function skillString(skillsFromComponent) {
   return result;
 }
 
-function SkillRows(props) {
+interface SkillRowsProps {
+  demons: Demon[];
+  skills: string[];
+  numColumns: number;
+}
+
+function SkillRows(props: SkillRowsProps) {
   let demonsWithTargetSkills = props.demons.filter(
     (d) =>
       d.skills.map((s) => s.name).filter((s) => props.skills.includes(s)).length
@@ -33,22 +41,29 @@ function SkillRows(props) {
   return (
     <>
       {demonsWithTargetSkills.map((d) => {
-          let skillsOnDemon = d.skills
-            .map((s) => s.name)
-            .filter((s) => props.skills.includes(s));
+        let skillsOnDemon = d.skills
+          .map((s) => s.name)
+          .filter((s) => props.skills.includes(s));
 
-          return (
-            <tr className="recipeTableSkillRow">
-              <td></td>
-              <td colSpan={props.numColumns+1}>{`${d.race} ${d.name}: ${skillString(skillsOnDemon)}`}</td>
-            </tr>
-          );
-        })}
+        return (
+          <tr className="recipeTableSkillRow">
+            <td></td>
+            <td colSpan={props.numColumns + 1}>{`${d.race} ${
+              d.name
+            }: ${skillString(skillsOnDemon)}`}</td>
+          </tr>
+        );
+      })}
     </>
   );
 }
 
-export function FusionRecipeResult(props) {
+interface FusionRecipeResultProps {
+  skills: string[];
+  recipe: FusionRecipe;
+}
+
+export function FusionRecipeResult(props: FusionRecipeResultProps) {
   let stack = traverseRecipe(props.recipe);
   let maxComponents = Math.max(...stack.map((r) => r.recipes.length));
   let i = 1;
@@ -60,7 +75,7 @@ export function FusionRecipeResult(props) {
           <tr>
             <th></th>
             <th className="recipeTableHeader">Result</th>
-            {[...Array(maxComponents).keys()].map((i) => {
+            {[...Array.from(Array(maxComponents).keys())].map((i) => {
               return <th className="recipeTableHeader">Component {i + 1}</th>;
             })}
           </tr>
