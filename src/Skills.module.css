@@ -1,3 +1,9 @@
+.partialWidthContainer {
+  width: 90%;
+  margin: auto;
+  margin-bottom: 5px;
+}
+
 .skillTable {
   border: 2px solid black;
   border-collapse: collapse;

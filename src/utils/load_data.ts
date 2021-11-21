@@ -7,11 +7,12 @@ import {
   SkillDemonMap,
   SkillDefinition,
 } from "./types";
-import { SMT5_DEMON_DATA } from "../smt_v_data/demon_data";
-import { SMT5_SPECIAL_RECIPES } from "../smt_v_data/special_recipes";
-import { SMT_5_SKILL_DATA } from "./../smt_v_data/skill_data";
-import { SMT5_ELEMENT_CHART } from "../smt_v_data/element_chart";
-import { SMT5_FUSION_CHART } from "../smt_v_data/fusion_chart";
+
+import { SMT5_DEMON_DATA } from "../data/smt_v_data/demon_data";
+import { SMT5_SPECIAL_RECIPES } from "../data/smt_v_data/special_recipes";
+import { SMT_5_SKILL_DATA } from "./../data/smt_v_data/skill_data";
+import { SMT5_ELEMENT_CHART } from "../data/smt_v_data/element_chart";
+import { SMT5_FUSION_CHART } from "../data/smt_v_data/fusion_chart";
 
 export type GameData = {
   fusionData: FusionData;

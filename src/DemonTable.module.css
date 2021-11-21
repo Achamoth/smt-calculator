@@ -1,20 +1,14 @@
-.centeredContainer {
-  margin-top: 20px;
-}
-
-.centeredContainer,
-.centeredContainerNoMargin {
-  display: flex;
-  justify-content: center;
-}
-
-.demonTableContents {
-  display: block;
+.partialWidthContainer {
+  width: 50%;
+  margin: auto;
+  margin-bottom: 5px;
 }
 
 .demonTable {
   border: 2px solid black;
   border-collapse: collapse;
+  width: 50%;
+  margin: auto;
 }
 
 .demonTableRow {
@@ -22,11 +16,11 @@
 }
 
 .demonTableRow:nth-child(even) {
-  background-color: #CCC;
+  background-color: #ccc;
 }
 
 .demonTableRow:nth-child(odd) {
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .demonTableCell,

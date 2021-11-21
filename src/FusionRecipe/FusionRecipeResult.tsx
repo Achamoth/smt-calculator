@@ -1,6 +1,6 @@
 import { Demon } from "../classes/Demon";
 import { FusionRecipe } from "../classes/FusionRecipe";
-import "./FusionRecipeResult.css";
+import styles from "./FusionRecipeResult.module.css";
 
 function traverseRecipe(recipe: FusionRecipe) {
   let recipeStack = [];
@@ -46,7 +46,7 @@ function SkillRows(props: SkillRowsProps) {
           .filter((s) => props.skills.includes(s));
 
         return (
-          <tr className="recipeTableSkillRow">
+          <tr className={styles.recipeTableSkillRow}>
             <td></td>
             <td colSpan={props.numColumns + 1}>{`${d.race} ${
               d.name
@@ -70,13 +70,15 @@ export function FusionRecipeResult(props: FusionRecipeResultProps) {
 
   return (
     <div>
-      <table className="recipeTable">
+      <table className={styles.recipeTable}>
         <thead>
           <tr>
             <th></th>
-            <th className="recipeTableHeader">Result</th>
+            <th className={styles.recipeTableHeader}>Result</th>
             {[...Array.from(Array(maxComponents).keys())].map((i) => {
-              return <th className="recipeTableHeader">Component {i + 1}</th>;
+              return (
+                <th className={styles.recipeTableHeader}>Component {i + 1}</th>
+              );
             })}
           </tr>
         </thead>
@@ -85,12 +87,16 @@ export function FusionRecipeResult(props: FusionRecipeResultProps) {
             if (r.recipes.length) {
               return (
                 <>
-                  <tr className="recipeTableRow">
-                    <td className="recipeTableResultCell">{i++}</td>
-                    <td className="recipeTableResultCell">{`${r.demon.race} ${r.demon.name}`}</td>
+                  <tr className={styles.recipeTableRow}>
+                    <td className={styles.recipeTableResultCell}>{i++}</td>
+                    <td
+                      className={styles.recipeTableResultCell}
+                    >{`${r.demon.race} ${r.demon.name}`}</td>
                     {r.recipes.map((rr) => {
                       return (
-                        <td className="recipeTableComponentCell">{`${rr.demon.race} ${rr.demon.name}`}</td>
+                        <td
+                          className={styles.recipeTableComponentCell}
+                        >{`${rr.demon.race} ${rr.demon.name}`}</td>
                       );
                     })}
                   </tr>

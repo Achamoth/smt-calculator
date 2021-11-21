@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { TextField } from "@mui/material";
 import { Demon } from "./classes/Demon";
+import { FusionData } from "./utils/types";
 import { getFusionCombinations } from "./utils/demon_fusion";
 import { NavBar } from "./NavBar";
-import "./DemonFusions.css";
-import { FusionData } from "./utils/types";
+import styles from "./DemonFusions.module.css";
+import globalStyles from "./globals.module.css";
 
 function matchesFilter(demon: Demon, filter: string) {
   return demon.name.toLowerCase().startsWith(filter.toLowerCase());
@@ -33,21 +35,15 @@ export function DemonFusions(props: DemonFusionsProps) {
   return (
     <div>
       <div>
-        <NavBar
-          textFieldOnChange={
-            fusionCombinations.length < 2
-              ? undefined
-              : (e) => setFilter(e.target.value)
-          }
-        />
-        <div className="demonFusionContents">
-          <div className="demon">
+        <NavBar />
+        <div className={styles.demonFusionContents}>
+          <div className={styles.demon}>
             <h1>{`LV${demon.level} ${demon.race} ${demon.name}`}</h1>
-            <table className="demonSkills">
+            <table className={styles.demonSkills}>
               <thead>
                 <tr key="skillHeader">
-                  <th className="demonSkillsHeader">Skill</th>
-                  <th className="demonSkillsHeader">Level</th>
+                  <th className={styles.demonSkillsHeader}>Skill</th>
+                  <th className={styles.demonSkillsHeader}>Level</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,8 +51,8 @@ export function DemonFusions(props: DemonFusionsProps) {
                   .sort((s1, s2) => (s1.level < s2.level ? -1 : 1))
                   .map((s) => {
                     return (
-                      <tr className="demonSkillRow" key={s.name}>
-                        <td className="demonSkillCell">
+                      <tr className={styles.demonSkillRow} key={s.name}>
+                        <td className={styles.demonSkillCell}>
                           <Link
                             to={`/skills/${s.name
                               .toLowerCase()
@@ -65,7 +61,7 @@ export function DemonFusions(props: DemonFusionsProps) {
                             {s.name}
                           </Link>
                         </td>
-                        <td className="demonSkillCell">
+                        <td className={styles.demonSkillCell}>
                           {s.level === 0
                             ? "Innate"
                             : s.level === 5277
@@ -80,38 +76,56 @@ export function DemonFusions(props: DemonFusionsProps) {
           </div>
         </div>
       </div>
-      <div className="centeredContainer">
-        <table className="fusionCombinations">
-          <thead>
-            <tr key="fusionHeader">
-              {[...Array.from(Array(maxComponents).keys())].map((i) => {
+      <div className={globalStyles.centeredContainer}>
+        <div className={globalStyles.blockContainerFullWidth}>
+          <div className={styles.filter}>
+            <TextField
+              fullWidth
+              label="Filter..."
+              variant="outlined"
+              onChange={
+                fusionCombinations.length < 2
+                  ? undefined
+                  : (e: React.ChangeEvent<HTMLInputElement>) =>
+                      setFilter(e.target.value)
+              }
+            />
+          </div>
+          <table className={styles.fusionCombinations}>
+            <thead>
+              <tr key="fusionHeader">
+                {[...Array.from(Array(maxComponents).keys())].map((i) => {
+                  return (
+                    <th className={styles.fusionCombinationsHeader}>
+                      Component {i + 1}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {filteredFusionCombinations.map((c) => {
                 return (
-                  <th className="fusionCombinationsHeader">
-                    Component {i + 1}
-                  </th>
+                  <tr
+                    className={styles.fusionRow}
+                    key={`${c[0].name}-${c[1].name}`}
+                  >
+                    {/* Redo key */}
+                    {c.map((component) => {
+                      return (
+                        <td className={styles.fusionCombinationsCell}>
+                          <Link
+                            to={`/${component.name.toLowerCase()}`}
+                          >{`LV${component.level} ${component.race} ${component.name}`}</Link>
+                        </td>
+                      );
+                    })}
+                  </tr>
                 );
               })}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredFusionCombinations.map((c) => {
-              return (
-                <tr className="fusionRow" key={`${c[0].name}-${c[1].name}`}>
-                  {/* Redo key */}
-                  {c.map((component) => {
-                    return (
-                      <td className="fusionCombinationsCell">
-                        <Link
-                          to={`/${component.name.toLowerCase()}`}
-                        >{`LV${component.level} ${component.race} ${component.name}`}</Link>
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

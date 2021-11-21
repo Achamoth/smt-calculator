@@ -7,21 +7,36 @@ h1 {
   font-size: larger;
 }
 
-.demonSkills, .fusionCombinations {
+.filter {
+  width: 45%;
+  margin: auto;
+  margin-bottom: 5px;
+}
+
+.fusionCombinations {
+  width: 45%;
+  margin: auto;
+}
+
+.demonSkills,
+.fusionCombinations {
   border: 2px solid black;
   border-collapse: collapse;
 }
 
-.demonSkillRow, .fusionRow {
+.demonSkillRow,
+.fusionRow {
   border-top: 1px solid blue;
 }
 
-.demonSkillRow:nth-child(even), .fusionRow:nth-child(even) {
-  background-color: #CCC;
+.demonSkillRow:nth-child(even),
+.fusionRow:nth-child(even) {
+  background-color: #ccc;
 }
 
-.demonSkillRow:nth-child(odd), .fusionRow:nth-child(odd) {
-  background-color: #FFF;
+.demonSkillRow:nth-child(odd),
+.fusionRow:nth-child(odd) {
+  background-color: #fff;
 }
 
 .demonSkillCell,

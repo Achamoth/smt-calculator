@@ -10,7 +10,8 @@ import { FusionRecipe } from "../classes/FusionRecipe";
 import { FusionData, SkillDemonMap } from "../utils/types";
 import { findFusionRecipes } from "../utils/fusion_recipe";
 import { FusionRecipeResult } from "./FusionRecipeResult";
-import "./FusionRecipeSkillFinder.css";
+import styles from "./FusionRecipeSkillFinder.module.css";
+import globalStyles from "../globals.module.css";
 
 enum RecipeCalculationStatus {
   UNSTARTED,
@@ -164,10 +165,10 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
 
   return (
     <div>
-      <div className="centeredContainer">
-        <div className="demonSelection">
+      <div className={globalStyles.centeredContainer}>
+        <div className={styles.demonSelection}>
           <Autocomplete
-            className="demonSelection"
+            className={styles.demonSelection}
             disablePortal
             id="demonSelection"
             options={demonOptions}
@@ -185,10 +186,10 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
           />
         </div>
       </div>
-      <div className="centeredContainer">
-        <div className="skillSelectionPair">
+      <div className={globalStyles.centeredContainer}>
+        <div className={styles.skillSelectionPair}>
           <Autocomplete
-            className="skillSelection"
+            className={styles.skillSelection}
             disablePortal
             id="skillSelection1"
             options={skills}
@@ -202,7 +203,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
             }
           />
           <Autocomplete
-            className="skillSelection"
+            className={styles.skillSelection}
             disablePortal
             id="skillSelection2"
             options={skills}
@@ -215,9 +216,9 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               )
             }
           />
-          <div className="skillSelectionPair">
+          <div className={styles.skillSelectionPair}>
             <Autocomplete
-              className="skillSelection"
+              className={styles.skillSelection}
               disablePortal
               id="skillSelection3"
               options={skills}
@@ -233,7 +234,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               }
             />
             <Autocomplete
-              className="skillSelection"
+              className={styles.skillSelection}
               disablePortal
               id="skillSelection4"
               options={skills}
@@ -249,9 +250,9 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               }
             />
           </div>
-          <div className="skillSelectionPair">
+          <div className={styles.skillSelectionPair}>
             <Autocomplete
-              className="skillSelection"
+              className={styles.skillSelection}
               disablePortal
               id="skillSelection5"
               options={skills}
@@ -267,7 +268,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               }
             />
             <Autocomplete
-              className="skillSelection"
+              className={styles.skillSelection}
               disablePortal
               id="skillSelection6"
               options={skills}
@@ -283,9 +284,9 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               }
             />
           </div>
-          <div className="skillSelectionPair">
+          <div className={styles.skillSelectionPair}>
             <Autocomplete
-              className="skillSelection"
+              className={styles.skillSelection}
               disablePortal
               id="skillSelection7"
               options={skills}
@@ -301,7 +302,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               }
             />
             <Autocomplete
-              className="skillSelection"
+              className={styles.skillSelection}
               disablePortal
               id="skillSelection8"
               options={skills}
@@ -319,9 +320,9 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
           </div>
         </div>
       </div>
-      <div className="centeredContainer">
+      <div className={globalStyles.centeredContainer}>
         <Button
-          className="findRecipeButton"
+          className={styles.findRecipeButton}
           variant="contained"
           onClick={() => {
             setRecipeCalculationStatus(RecipeCalculationStatus.RUNNING);
@@ -338,7 +339,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
           Find Recipe
         </Button>
       </div>
-      <div className="centeredContainer">
+      <div className={globalStyles.centeredContainer}>
         {recipeCalculationStatus === RecipeCalculationStatus.RUNNING && (
           <CircularProgress />
         )}

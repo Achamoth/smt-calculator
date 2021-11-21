@@ -4,7 +4,7 @@ import { FusionData, SkillDemonMap } from "../utils/types";
 import { FusionRecipeSkillFinder } from "./FusionRecipeSkillFinder";
 import { FusionRecipeComponentFinder } from "./FusionRecipeComponentFinder";
 import { NavBar } from "../NavBar";
-import "./FusionRecipe.css";
+import styles from "./FusionRecipe.module.css";
 
 enum CalculationType {
   SKILLS,
@@ -29,16 +29,16 @@ export function FusionRecipe(props: FusionRecipeProps) {
   return (
     <div>
       <NavBar />
-      <div className="recipeFinderContainer">
+      <div className={styles.recipeFinderContainer}>
         <Button
-          className="toggleRecipeType"
+          className={styles.toggleRecipeType}
           variant={buttonOutlineType(CalculationType.SKILLS, calculationType)}
           onClick={(e) => setCalculationType(CalculationType.SKILLS)}
         >
           Skills
         </Button>
         <Button
-          className="toggleRecipeType"
+          className={styles.toggleRecipeType}
           variant={buttonOutlineType(
             CalculationType.COMPONENTS,
             calculationType
@@ -47,7 +47,7 @@ export function FusionRecipe(props: FusionRecipeProps) {
         >
           Components
         </Button>
-        <div className="recipeFinder">
+        <div className={styles.recipeFinder}>
           {calculationType === CalculationType.SKILLS && (
             <FusionRecipeSkillFinder
               fusionData={props.fusionData}
