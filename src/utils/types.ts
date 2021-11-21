@@ -1,5 +1,15 @@
 import { Demon } from "../classes/Demon";
 
+export type DATA = {
+  DEMON_DATA: any;
+  SPECIAL_RECIPES: any;
+  SKILL_DATA: any;
+  ELEMENT_CHART: any;
+  FUSION_CHART: any;
+  ATTRIBUTES: any;
+  RESISTANCES: any;
+};
+
 export type DemonSkillUnlock = {
   demonLevel: number;
   race: string;

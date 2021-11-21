@@ -3,12 +3,10 @@ import { useState } from "react";
 import { TextField } from "@mui/material";
 import { Demon } from "./classes/Demon";
 import {
-  DemonAttribute,
+  UniversalDemonAttribute,
   compareDemons,
   demonResist,
-  ElementalResistance,
 } from "./utils/demon_utils";
-import { objectToArray } from "./utils/general_utils";
 import { NavBar } from "./NavBar";
 import styles from "./DemonTable.module.css";
 import globalStyles from "./globals.module.css";
@@ -19,9 +17,9 @@ type SortState = {
 };
 
 const SortingOrders = {
-  LV: DemonAttribute.LEVEL,
-  RACE: DemonAttribute.RACE,
-  NAME: DemonAttribute.NAME,
+  LV: UniversalDemonAttribute.LEVEL,
+  RACE: UniversalDemonAttribute.RACE,
+  NAME: UniversalDemonAttribute.NAME,
 };
 
 function updateSort(oldSort: SortState, headerClicked: string) {
@@ -34,12 +32,14 @@ function updateSort(oldSort: SortState, headerClicked: string) {
 
 interface DemonTableProps {
   demons: Demon[];
+  attributes: string[];
+  resistances: number[];
 }
 
 export function DemonTable(props: DemonTableProps) {
   let [filter, setFilter] = useState("");
   let [sort, setSort] = useState<SortState>({
-    sort: DemonAttribute.RACE,
+    sort: UniversalDemonAttribute.RACE,
     ascending: true,
   });
 
@@ -47,8 +47,8 @@ export function DemonTable(props: DemonTableProps) {
     .filter((d) => d.name.toLowerCase().startsWith(filter.toLowerCase()))
     .sort((d1, d2) => compareDemons(d1, d2, sort));
 
-  let headers: string[] = objectToArray(DemonAttribute);
-  let resistances: number[] = objectToArray(ElementalResistance);
+  let headers: string[] = props.attributes;
+  let resistances: number[] = props.resistances;
 
   return (
     <div>
