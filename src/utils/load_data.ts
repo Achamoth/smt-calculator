@@ -1,4 +1,5 @@
 import { smt_iv_data } from "../data/smt_iv_data/smt_iv_data";
+import { smt_iv_a_data } from "../data/smt_iv_a_data/smt_iv_a_data";
 import { smt_v_data } from "../data/smt_v_data/smt_v_data";
 import { Demon, Skill } from "../classes/Demon";
 import {
@@ -35,6 +36,9 @@ export function loadGameData(game: Game): GameData {
   switch (game) {
     case Game.SMT_IV:
       data = smt_iv_data();
+      break;
+    case Game.SMT_IV_A:
+      data = smt_iv_a_data();
       break;
     default:
     case Game.SMT_V:
