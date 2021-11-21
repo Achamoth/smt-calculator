@@ -1,7 +1,6 @@
-import "./DemonTable.css";
-import { NavBar } from "./NavBar";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Demon } from "./classes/Demon";
 import {
   DemonAttribute,
   compareDemons,
@@ -9,6 +8,13 @@ import {
   ElementalResistance,
 } from "./utils/demon_utils";
 import { objectToArray } from "./utils/general_utils";
+import { NavBar } from "./NavBar";
+import "./DemonTable.css";
+
+type SortState = {
+  sort: string;
+  ascending: boolean;
+};
 
 const SortingOrders = {
   LV: DemonAttribute.LEVEL,
@@ -16,17 +22,21 @@ const SortingOrders = {
   NAME: DemonAttribute.NAME,
 };
 
-function updateSort(oldSort, headerClicked) {
-  if (!SortingOrders[headerClicked.toUpperCase()]) return oldSort;
+function updateSort(oldSort: SortState, headerClicked: string) {
+  if (!(SortingOrders as any)[headerClicked.toUpperCase()]) return oldSort;
   if (oldSort.sort === headerClicked) {
     return { sort: oldSort.sort, ascending: !oldSort.ascending };
   }
   return { sort: headerClicked, ascending: true };
 }
 
-export function DemonTable(props) {
+interface DemonTableProps {
+  demons: Demon[];
+}
+
+export function DemonTable(props: DemonTableProps) {
   let [filter, setFilter] = useState("");
-  let [sort, setSort] = useState({
+  let [sort, setSort] = useState<SortState>({
     sort: DemonAttribute.RACE,
     ascending: true,
   });
@@ -35,8 +45,8 @@ export function DemonTable(props) {
     .filter((d) => d.name.toLowerCase().startsWith(filter.toLowerCase()))
     .sort((d1, d2) => compareDemons(d1, d2, sort));
 
-  let headers = objectToArray(DemonAttribute);
-  let resistances = objectToArray(ElementalResistance);
+  let headers: string[] = objectToArray(DemonAttribute);
+  let resistances: number[] = objectToArray(ElementalResistance);
 
   return (
     <div>
