@@ -4,19 +4,22 @@ import { Demon } from "./classes/Demon";
 import { getFusionCombinations } from "./utils/demon_fusion";
 import { NavBar } from "./NavBar";
 import "./DemonFusions.css";
+import { FusionData } from "./utils/types";
 
 function matchesFilter(demon: Demon, filter: string) {
   return demon.name.toLowerCase().startsWith(filter.toLowerCase());
 }
 
 interface DemonFusionsProps {
-  demons: Demon[];
+  fusionData: FusionData;
 }
 
 export function DemonFusions(props: DemonFusionsProps) {
   let name = useParams().demonName;
-  let demon = props.demons.find((d) => d.name.toLowerCase() === name)!;
-  let fusionCombinations = getFusionCombinations(demon);
+  let demon = props.fusionData.demons.find(
+    (d) => d.name.toLowerCase() === name
+  )!;
+  let fusionCombinations = getFusionCombinations(demon, props.fusionData);
   let maxComponents =
     fusionCombinations.length > 0
       ? Math.max(...fusionCombinations.map((r) => r.length))

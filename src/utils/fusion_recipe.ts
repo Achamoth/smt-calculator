@@ -1,13 +1,16 @@
-import { getFusionCombinations } from "./demon_fusion";
 import { FusionRecipe } from "../classes/FusionRecipe";
 import { Demon } from "../classes/Demon";
+import { getFusionCombinations } from "./demon_fusion";
+import { FusionData } from "./types";
 
 export function findPathFromComponentToResult(
+  fusionData: FusionData,
   demon: Demon,
   targetComponents: string[]
 ) {
   return new Promise<FusionRecipe>((resolve, reject) => {
     let recipe = getBestFusionRecipe(
+      fusionData,
       demon,
       targetComponents,
       (r: FusionRecipe, t: string[]) => r.foundComponents(t),
@@ -17,9 +20,14 @@ export function findPathFromComponentToResult(
   });
 }
 
-export function findFusionRecipes(demon: Demon, targetSkills: string[]) {
+export function findFusionRecipes(
+  fusionData: FusionData,
+  demon: Demon,
+  targetSkills: string[]
+) {
   return new Promise<FusionRecipe>((resolve, reject) => {
     let recipe = getBestFusionRecipe(
+      fusionData,
       demon,
       targetSkills,
       (r: FusionRecipe, t: string[]) => r.foundSkills(t),
@@ -30,6 +38,7 @@ export function findFusionRecipes(demon: Demon, targetSkills: string[]) {
 }
 
 function getBestFusionRecipe(
+  fusionData: FusionData,
   demon: Demon,
   targets: string[],
   found: (r: FusionRecipe, t: string[]) => string[],
@@ -37,7 +46,7 @@ function getBestFusionRecipe(
 ) {
   let bestChain = new FusionRecipe(demon);
   for (let i = 1; i < maxDepth; i++) {
-    let recipe = getFusionRecipes(demon, targets, found, i, 0);
+    let recipe = getFusionRecipes(fusionData, demon, targets, found, i, 0);
     if (found(recipe, targets).length >= targets.length) {
       return recipe;
     }
@@ -49,6 +58,7 @@ function getBestFusionRecipe(
 }
 
 function getFusionRecipes(
+  fusionData: FusionData,
   demon: Demon,
   targets: string[],
   found: (r: FusionRecipe, t: string[]) => string[],
@@ -61,7 +71,7 @@ function getFusionRecipes(
     return bestChain;
   }
 
-  let fusionCombinations = getFusionCombinations(demon);
+  let fusionCombinations = getFusionCombinations(demon, fusionData);
 
   for (let combination of fusionCombinations) {
     let result = new FusionRecipe(demon);
@@ -77,6 +87,7 @@ function getFusionRecipes(
     for (const component of combination) {
       let missing = findMissing(found(result, targets), targets);
       let newRecipe = getFusionRecipes(
+        fusionData,
         component,
         missing,
         found,

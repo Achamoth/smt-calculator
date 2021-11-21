@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@mui/material";
+import { FusionData, SkillDemonMap } from "../utils/types";
 import { FusionRecipeSkillFinder } from "./FusionRecipeSkillFinder";
 import { FusionRecipeComponentFinder } from "./FusionRecipeComponentFinder";
 import { NavBar } from "../NavBar";
@@ -10,6 +11,11 @@ enum CalculationType {
   COMPONENTS,
 }
 
+interface FusionRecipeProps {
+  fusionData: FusionData;
+  skillList: SkillDemonMap[];
+}
+
 function buttonOutlineType(
   buttonCalculationType: CalculationType,
   curCalculationType: CalculationType
@@ -17,7 +23,7 @@ function buttonOutlineType(
   return buttonCalculationType === curCalculationType ? "outlined" : "text";
 }
 
-export function FusionRecipe() {
+export function FusionRecipe(props: FusionRecipeProps) {
   let [calculationType, setCalculationType] = useState(CalculationType.SKILLS);
 
   return (
@@ -43,10 +49,13 @@ export function FusionRecipe() {
         </Button>
         <div className="recipeFinder">
           {calculationType === CalculationType.SKILLS && (
-            <FusionRecipeSkillFinder />
+            <FusionRecipeSkillFinder
+              fusionData={props.fusionData}
+              skillList={props.skillList}
+            />
           )}
           {calculationType === CalculationType.COMPONENTS && (
-            <FusionRecipeComponentFinder />
+            <FusionRecipeComponentFinder fusionData={props.fusionData} />
           )}
         </div>
       </div>

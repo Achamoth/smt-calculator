@@ -5,26 +5,50 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
-import { FusionRecipeResult } from "./FusionRecipeResult";
-import { parse_demons } from "../utils/demon_utils";
-import { findPathFromComponentToResult } from "../utils/fusion_recipe";
 import { Demon } from "../classes/Demon";
-import "./FusionRecipeComponentFinder.css";
 import { FusionRecipe } from "../classes/FusionRecipe";
+import { FusionData } from "../utils/types";
+import { findPathFromComponentToResult } from "../utils/fusion_recipe";
+import { FusionRecipeResult } from "./FusionRecipeResult";
+import "./FusionRecipeComponentFinder.css";
+
+enum RecipeCalculationStatus {
+  UNSTARTED,
+  RUNNING,
+  FINISHED,
+}
 
 type ComponentFinderState = {
   demon?: DemonOption | null;
   components: DemonOption[];
 };
 
+type DemonOption = {
+  label: string;
+  name: string;
+};
+
+interface DemonSelectionProps {
+  value?: DemonOption;
+  label: string;
+  key?: string;
+  demonOptions: DemonOption[];
+  onChange: (e: any, v: DemonOption | null) => void;
+}
+
+interface FusionRecipeComponentFinderProps {
+  fusionData: FusionData;
+}
+
 function getFusionRecipe(
   state: ComponentFinderState,
-  demons: Demon[],
+  fusionData: FusionData,
   completionCallback: () => void,
   setFusionRecipe: (v: FusionRecipe) => void
 ) {
-  let demon = demons.find((d) => d.name === state.demon!.name)!;
+  let demon = fusionData.demons.find((d) => d.name === state.demon!.name)!;
   let promise = findPathFromComponentToResult(
+    fusionData,
     demon,
     state.components.map((c) => c.name)
   );
@@ -35,20 +59,6 @@ function getFusionRecipe(
     },
     (r) => {}
   );
-}
-
-enum RecipeCalculationStatus {
-  UNSTARTED,
-  RUNNING,
-  FINISHED,
-}
-
-interface DemonSelectionProps {
-  value?: DemonOption;
-  label: string;
-  key?: string;
-  demonOptions: DemonOption[];
-  onChange: (e: any, v: DemonOption | null) => void;
 }
 
 function DemonSelection(props: DemonSelectionProps) {
@@ -70,13 +80,10 @@ function DemonSelection(props: DemonSelectionProps) {
   );
 }
 
-type DemonOption = {
-  label: string;
-  name: string;
-};
-
-export function FusionRecipeComponentFinder() {
-  const demons = parse_demons();
+export function FusionRecipeComponentFinder(
+  props: FusionRecipeComponentFinderProps
+) {
+  const demons = props.fusionData.demons;
   const demonOptions: DemonOption[] = demons.map((d) => {
     return { label: `${d.race} ${d.name}`, name: d.name };
   });
@@ -146,7 +153,7 @@ export function FusionRecipeComponentFinder() {
             setRecipeCalculationStatus(RecipeCalculationStatus.RUNNING);
             getFusionRecipe(
               state,
-              demons,
+              props.fusionData,
               () =>
                 setRecipeCalculationStatus(RecipeCalculationStatus.FINISHED),
               setFusionRecipe
