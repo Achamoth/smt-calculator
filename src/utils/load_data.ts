@@ -14,11 +14,21 @@ import { SMT_5_SKILL_DATA } from "./../data/smt_v_data/skill_data";
 import { SMT5_ELEMENT_CHART } from "../data/smt_v_data/element_chart";
 import { SMT5_FUSION_CHART } from "../data/smt_v_data/fusion_chart";
 
+export enum Game {
+  SMT_V = "Shin Megami Tensei V",
+  SMT_IV = "Shin Megami Tensei IV",
+  SMT_IV_A = "Shin Megami Tensei IV Apocalypse",
+}
+
 export type GameData = {
   fusionData: FusionData;
   skillList: SkillDemonMap[];
   skillDetails: SkillDefinition[];
 };
+
+export function supportedGames() {
+  return [Game.SMT_V, Game.SMT_IV, Game.SMT_IV_A];
+}
 
 export function loadGameData(): GameData {
   let demons = parse_demons();

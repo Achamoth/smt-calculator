@@ -1,16 +1,25 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { loadGameData } from "./utils/load_data";
+import { loadGameData, supportedGames, Game } from "./utils/load_data";
+import { GameSelector } from "./GameSelector";
 import { DemonTable } from "./DemonTable";
 import { DemonDetails } from "./DemonDetails";
 import { Skills } from "./Skills";
 import { FusionRecipe } from "./FusionRecipe/FusionRecipe";
 import { SkillDetails } from "./SkillDetails";
+import { useState } from "react";
 
 function App() {
   let { fusionData, skillList, skillDetails } = loadGameData();
+  let games = supportedGames();
+  let [game, setGame] = useState(Game.SMT_V);
 
   return (
-    <>
+    <div>
+      <GameSelector
+        games={games}
+        selectedGame={game}
+        onGameSelectionChanged={setGame}
+      />
       <Router basename={"/smt-calculator"}>
         <Routes>
           <Route path="/" element={<DemonTable demons={fusionData.demons} />} />
@@ -31,7 +40,7 @@ function App() {
           />
         </Routes>
       </Router>
-    </>
+    </div>
   );
 }
 
