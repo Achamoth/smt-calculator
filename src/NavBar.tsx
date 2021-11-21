@@ -2,7 +2,11 @@ import { Link } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
 import "./NavBar.css";
 
-export function NavBar(props) {
+interface NavBarProps {
+  textFieldOnChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export function NavBar(props: NavBarProps) {
   return (
     <div className="centeredContainer">
       <div className="navBar">

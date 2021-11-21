@@ -31,10 +31,17 @@ function parse_skills(skills: any): Skill[] {
   return result;
 }
 
+export type DemonSkillUnlock = {
+  demonLevel: number;
+  race: string;
+  name: string;
+  skillLevel: number;
+};
+
 export type SkillDemonMap = {
   name: string;
-  demons: Demon[];
-}
+  demons: DemonSkillUnlock[];
+};
 
 export function get_all_skills(): SkillDemonMap[] {
   let skills: any = {};
@@ -70,7 +77,7 @@ export function get_all_skills(): SkillDemonMap[] {
 export type SpecialFusion = {
   name: string;
   fusion: string[];
-}
+};
 
 export function get_special_fusions(): SpecialFusion[] {
   let specialFusions: SpecialFusion[] = [];
@@ -92,7 +99,7 @@ export const DemonAttribute = {
   ELEC: "Elec",
   WIND: "Wind",
   LIGHT: "Light",
-  DARK: "Dark"
+  DARK: "Dark",
 };
 
 export const ElementalResistance = {
@@ -126,7 +133,7 @@ export function demonResist(demon: Demon, elementalResistance: number) {
 export type Sort = {
   sort: string;
   ascending: boolean;
-}
+};
 
 export function compareDemons(d1: Demon, d2: Demon, sort: Sort) {
   switch (sort.sort) {
