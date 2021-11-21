@@ -9,9 +9,10 @@ import { SkillDetails } from "./SkillDetails";
 import { useState } from "react";
 
 function App() {
-  let { fusionData, skillList, skillDetails } = loadGameData();
-  let games = supportedGames();
   let [game, setGame] = useState(Game.SMT_V);
+  let games = supportedGames();
+  let { fusionData, skillList, skillDetails, attributes, resistances } =
+    loadGameData(game);
 
   return (
     <div>
@@ -22,7 +23,16 @@ function App() {
       />
       <Router basename={"/smt-calculator"}>
         <Routes>
-          <Route path="/" element={<DemonTable demons={fusionData.demons} />} />
+          <Route
+            path="/"
+            element={
+              <DemonTable
+                demons={fusionData.demons}
+                attributes={attributes}
+                resistances={resistances}
+              />
+            }
+          />
           <Route path="/skills" element={<Skills skills={skillList} />} />
           <Route
             path="/skills/:skillName"

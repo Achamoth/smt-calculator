@@ -1,3 +1,5 @@
+import { smt_iv_data } from "../data/smt_iv_data/smt_iv_data";
+import { smt_v_data } from "../data/smt_v_data/smt_v_data";
 import { Demon, Skill } from "../classes/Demon";
 import {
   SpecialFusion,
@@ -6,13 +8,9 @@ import {
   FusionData,
   SkillDemonMap,
   SkillDefinition,
+  DATA,
 } from "./types";
-
-import { SMT5_DEMON_DATA } from "../data/smt_v_data/demon_data";
-import { SMT5_SPECIAL_RECIPES } from "../data/smt_v_data/special_recipes";
-import { SMT_5_SKILL_DATA } from "./../data/smt_v_data/skill_data";
-import { SMT5_ELEMENT_CHART } from "../data/smt_v_data/element_chart";
-import { SMT5_FUSION_CHART } from "../data/smt_v_data/fusion_chart";
+import { objectToArray } from "./general_utils";
 
 export enum Game {
   SMT_V = "Shin Megami Tensei V",
@@ -24,30 +22,46 @@ export type GameData = {
   fusionData: FusionData;
   skillList: SkillDemonMap[];
   skillDetails: SkillDefinition[];
+  attributes: string[];
+  resistances: number[];
 };
 
 export function supportedGames() {
   return [Game.SMT_V, Game.SMT_IV, Game.SMT_IV_A];
 }
 
-export function loadGameData(): GameData {
-  let demons = parse_demons();
-  let specialFusions = get_special_fusions();
-  let fusionChart = load_fusion_chart();
-  let elementChart = load_element_chart();
+export function loadGameData(game: Game): GameData {
+  let data: DATA;
+  switch (game) {
+    case Game.SMT_IV:
+      data = smt_iv_data();
+      break;
+    default:
+    case Game.SMT_V:
+      data = smt_v_data();
+      break;
+  }
+
+  let demons = parse_demons(data.DEMON_DATA);
+  let specialFusions = get_special_fusions(data.SPECIAL_RECIPES);
+  let fusionChart = load_fusion_chart(data.FUSION_CHART);
+  let elementChart = load_element_chart(data.ELEMENT_CHART);
   let fusionData = { demons, specialFusions, fusionChart, elementChart };
 
-  let skillList = get_all_skills();
-  let skillDetails = get_skill_data();
+  let skillList = get_all_skills(demons);
+  let skillDetails = get_skill_data(data.SKILL_DATA);
 
-  return { fusionData, skillList, skillDetails };
+  let attributes: string[] = objectToArray(data.ATTRIBUTES);
+  let resistances: number[] = objectToArray(data.RESISTANCES);
+
+  return { fusionData, skillList, skillDetails, attributes, resistances };
 }
 
-function parse_demons() {
+function parse_demons(DEMON_DATA: any) {
   let demons: Demon[] = [];
-  for (const property in SMT5_DEMON_DATA) {
+  for (const property in DEMON_DATA) {
     let name = property;
-    let demon = (SMT5_DEMON_DATA as any)[property];
+    let demon = (DEMON_DATA as any)[property];
     demons.push(
       new Demon(
         demon.race,
@@ -72,9 +86,8 @@ function parse_skills(skills: any): Skill[] {
   return result;
 }
 
-function get_all_skills(): SkillDemonMap[] {
+function get_all_skills(demons: Demon[]): SkillDemonMap[] {
   let skills: any = {};
-  let demons = parse_demons();
   demons.forEach((d) => {
     d.skills.forEach((s) => {
       if (skills[s.name]) {
@@ -103,28 +116,28 @@ function get_all_skills(): SkillDemonMap[] {
   return result;
 }
 
-function get_special_fusions(): SpecialFusion[] {
+function get_special_fusions(SPECIAL_RECIPES: any): SpecialFusion[] {
   let specialFusions: SpecialFusion[] = [];
-  for (const property in SMT5_SPECIAL_RECIPES) {
+  for (const property in SPECIAL_RECIPES) {
     let name = property;
-    let fusion: string[] = (SMT5_SPECIAL_RECIPES as any)[property];
+    let fusion: string[] = (SPECIAL_RECIPES as any)[property];
     specialFusions.push({ name: name, fusion: fusion });
   }
   return specialFusions;
 }
 
-function get_skill_data(): SkillDefinition[] {
+function get_skill_data(SKILL_DATA: any): SkillDefinition[] {
   let skills: SkillDefinition[] = [];
-  for (const property in SMT_5_SKILL_DATA) {
-    skills.push({ name: property, skill: (SMT_5_SKILL_DATA as any)[property] });
+  for (const property in SKILL_DATA) {
+    skills.push({ name: property, skill: (SKILL_DATA as any)[property] });
   }
   return skills;
 }
 
-function load_element_chart(): ElementChart {
-  return SMT5_ELEMENT_CHART;
+function load_element_chart(ELEMENT_CHART: any): ElementChart {
+  return ELEMENT_CHART;
 }
 
-function load_fusion_chart(): FusionChart {
-  return SMT5_FUSION_CHART;
+function load_fusion_chart(FUSION_CHART: any): FusionChart {
+  return FUSION_CHART;
 }

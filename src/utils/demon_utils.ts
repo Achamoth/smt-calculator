@@ -1,26 +1,9 @@
 import { Demon } from "../classes/Demon";
 
-export const DemonAttribute = {
+export const UniversalDemonAttribute = {
   LEVEL: "LV",
   RACE: "Race",
   NAME: "Name",
-  PHYS: "Phys",
-  FIRE: "Fire",
-  ICE: "Ice",
-  ELEC: "Elec",
-  WIND: "Wind",
-  LIGHT: "Light",
-  DARK: "Dark",
-};
-
-export const ElementalResistance = {
-  PHYS: 0,
-  FIRE: 1,
-  ICE: 2,
-  ELEC: 3,
-  WIND: 4,
-  LIGHT: 5,
-  DARK: 6,
 };
 
 export function demonResist(demon: Demon, elementalResistance: number) {
@@ -48,7 +31,7 @@ export type Sort = {
 
 export function compareDemons(d1: Demon, d2: Demon, sort: Sort) {
   switch (sort.sort) {
-    case DemonAttribute.LEVEL:
+    case UniversalDemonAttribute.LEVEL:
       return sort.ascending
         ? d1.level < d2.level
           ? -1
@@ -56,7 +39,7 @@ export function compareDemons(d1: Demon, d2: Demon, sort: Sort) {
         : d1.level < d2.level
         ? 1
         : -1;
-    case DemonAttribute.NAME:
+    case UniversalDemonAttribute.NAME:
       return sort.ascending
         ? d1.name < d2.name
           ? -1
@@ -65,7 +48,7 @@ export function compareDemons(d1: Demon, d2: Demon, sort: Sort) {
         ? 1
         : -1;
     default:
-    case DemonAttribute.RACE:
+    case UniversalDemonAttribute.RACE:
       let order: number = compareDemonsByRace(d1, d2);
       return sort.ascending ? order : order * -1;
   }
