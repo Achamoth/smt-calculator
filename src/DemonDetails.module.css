@@ -1,0 +1,36 @@
+.demonDetailsContents {
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  font-size: larger;
+}
+
+.demonSkills {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+.demonSkillRow {
+  border-top: 1px solid blue;
+}
+
+.demonSkillRow:nth-child(even) {
+  background-color: #ccc;
+}
+
+.demonSkillRow:nth-child(odd) {
+  background-color: #fff;
+}
+
+.demonSkillCell,
+.demonSkillsHeader {
+  border-right: 1px dotted blue;
+  padding-right: 20px;
+  text-align: start;
+}
+
+.demonSkillsHeader {
+  background-color: grey;
+}

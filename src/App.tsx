@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { loadGameData } from "./utils/load_data";
 import { DemonTable } from "./DemonTable";
-import { DemonFusions } from "./DemonFusions";
+import { DemonDetails } from "./DemonDetails";
 import { Skills } from "./Skills";
 import { FusionRecipe } from "./FusionRecipe/FusionRecipe";
 import { SkillDetails } from "./SkillDetails";
@@ -27,7 +27,7 @@ function App() {
           />
           <Route
             path="/:demonName"
-            element={<DemonFusions fusionData={fusionData} />}
+            element={<DemonDetails fusionData={fusionData} />}
           />
         </Routes>
       </Router>

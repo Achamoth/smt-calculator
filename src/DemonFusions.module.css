@@ -1,12 +1,3 @@
-.demonFusionContents {
-  display: flex;
-  justify-content: center;
-}
-
-h1 {
-  font-size: larger;
-}
-
 .filter {
   width: 45%;
   margin: auto;
@@ -18,29 +9,28 @@ h1 {
   margin: auto;
 }
 
-.demonSkills,
-.fusionCombinations {
+.fusionCombinationsSpecialFusion {
+  width: fit-content;
+  margin: auto;
+}
+
+.fusionCombinationsTable {
   border: 2px solid black;
   border-collapse: collapse;
 }
 
-.demonSkillRow,
 .fusionRow {
   border-top: 1px solid blue;
 }
 
-.demonSkillRow:nth-child(even),
 .fusionRow:nth-child(even) {
   background-color: #ccc;
 }
 
-.demonSkillRow:nth-child(odd),
 .fusionRow:nth-child(odd) {
   background-color: #fff;
 }
 
-.demonSkillCell,
-.demonSkillsHeader,
 .fusionCombinationsCell,
 .fusionCombinationsHeader {
   border-right: 1px dotted blue;
@@ -48,7 +38,6 @@ h1 {
   text-align: start;
 }
 
-.demonSkillsHeader,
 .fusionCombinationsHeader {
   background-color: grey;
 }
