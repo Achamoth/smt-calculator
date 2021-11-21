@@ -1,6 +1,5 @@
 .skillDetailContents {
-  display: flex;
-  justify-content: center;
+  display: block;
 }
 
 h1 {

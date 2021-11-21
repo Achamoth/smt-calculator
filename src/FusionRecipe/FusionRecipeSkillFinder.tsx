@@ -1,16 +1,57 @@
+import { useState } from "react";
 import {
   Autocomplete,
   TextField,
   Button,
   CircularProgress,
 } from "@mui/material";
-import { useState } from "react";
-import { FusionRecipeResult } from "./FusionRecipeResult.js";
-import { get_all_skills, parse_demons } from "./../utils/demon_utils.js";
-import { findFusionRecipes } from "./../utils/fusion_recipe.js";
+import { Demon } from "../classes/Demon";
+import { FusionRecipe } from "../classes/FusionRecipe";
+import { get_all_skills, parse_demons } from "../utils/demon_utils";
+import { findFusionRecipes } from "../utils/fusion_recipe";
+import { FusionRecipeResult } from "./FusionRecipeResult";
 import "./FusionRecipeSkillFinder.css";
 
-function getTargetSkills(state) {
+enum RecipeCalculationStatus {
+  UNSTARTED,
+  RUNNING,
+  FINISHED,
+}
+
+enum StateChange {
+  SKILL,
+  DEMON,
+}
+
+type FusionRecipeSkillFinderState = {
+  skill_1?: string;
+  skill_2?: string;
+  skill_3?: string;
+  skill_4?: string;
+  skill_5?: string;
+  skill_6?: string;
+  skill_7?: string;
+  skill_8?: string;
+  demon?: string;
+};
+
+type ChangeStateSkill = {
+  stateType: StateChange.SKILL;
+  newValue: string | null;
+  skillNumber: number;
+};
+
+type ChangeStateDemon = {
+  stateType: StateChange.DEMON;
+  newValue: DemonOption | null;
+};
+
+type DemonOption = {
+  label: string;
+  name: string;
+};
+
+function getTargetSkills(state: FusionRecipeSkillFinderState) {
   let result = [];
   if (state.skill_1) result.push(state.skill_1);
   if (state.skill_2) result.push(state.skill_2);
@@ -23,8 +64,15 @@ function getTargetSkills(state) {
   return result;
 }
 
-function getFusionRecipe(state, demons, completionCallback, setFusionRecipe) {
-  let demon = demons.find((d) => d.name === state.demon);
+function getFusionRecipe(
+  state: FusionRecipeSkillFinderState,
+  demons: Demon[],
+  completionCallback: () => void,
+  setFusionRecipe: React.Dispatch<
+    React.SetStateAction<FusionRecipe | undefined>
+  >
+) {
+  let demon = demons.find((d) => d.name === state.demon)!;
   let skills = getTargetSkills(state);
   let promise = findFusionRecipes(demon, skills);
   promise.then(
@@ -36,69 +84,58 @@ function getFusionRecipe(state, demons, completionCallback, setFusionRecipe) {
   );
 }
 
-const RecipeCalculationStatus = {
-  UNSTARTED: 0,
-  RUNNING: 1,
-  FINISHED: 2,
-};
-
-const State = {
-  SKILL_1: 1,
-  SKILL_2: 2,
-  SKILL_3: 3,
-  SKILL_4: 4,
-  SKILL_5: 5,
-  SKILL_6: 6,
-  SKILL_7: 7,
-  SKILL_8: 8,
-  DEMON: 9,
-};
-
-function onChangeState(newValue, stateType, setState) {
-  switch (stateType) {
-    case State.SKILL_1:
-      setState((s) => {
-        return { ...s, skill_1: newValue };
-      });
+function onChangeState(
+  stateChange: ChangeStateSkill | ChangeStateDemon,
+  setState: Function // TODO I can't figure out how to pass a lambda function that accepts a lambda function parameter
+) {
+  switch (stateChange.stateType) {
+    case StateChange.SKILL:
+      switch (stateChange.skillNumber) {
+        case 1:
+          setState((s: FusionRecipeSkillFinderState) => {
+            return { ...s, skill_1: stateChange.newValue };
+          });
+          break;
+        case 2:
+          setState((s: FusionRecipeSkillFinderState) => {
+            return { ...s, skill_2: stateChange.newValue };
+          });
+          break;
+        case 3:
+          setState((s: FusionRecipeSkillFinderState) => {
+            return { ...s, skill_3: stateChange.newValue };
+          });
+          break;
+        case 4:
+          setState((s: FusionRecipeSkillFinderState) => {
+            return { ...s, skill_4: stateChange.newValue };
+          });
+          break;
+        case 5:
+          setState((s: FusionRecipeSkillFinderState) => {
+            return { ...s, skill_5: stateChange.newValue };
+          });
+          break;
+        case 6:
+          setState((s: FusionRecipeSkillFinderState) => {
+            return { ...s, skill_6: stateChange.newValue };
+          });
+          break;
+        case 7:
+          setState((s: FusionRecipeSkillFinderState) => {
+            return { ...s, skill_7: stateChange.newValue };
+          });
+          break;
+        case 8:
+          setState((s: FusionRecipeSkillFinderState) => {
+            return { ...s, skill_8: stateChange.newValue };
+          });
+          break;
+      }
       break;
-    case State.SKILL_2:
-      setState((s) => {
-        return { ...s, skill_2: newValue };
-      });
-      break;
-    case State.SKILL_3:
-      setState((s) => {
-        return { ...s, skill_3: newValue };
-      });
-      break;
-    case State.SKILL_4:
-      setState((s) => {
-        return { ...s, skill_4: newValue };
-      });
-      break;
-    case State.SKILL_5:
-      setState((s) => {
-        return { ...s, skill_5: newValue };
-      });
-      break;
-    case State.SKILL_6:
-      setState((s) => {
-        return { ...s, skill_6: newValue };
-      });
-      break;
-    case State.SKILL_7:
-      setState((s) => {
-        return { ...s, skill_7: newValue };
-      });
-      break;
-    case State.SKILL_8:
-      setState((s) => {
-        return { ...s, skill_8: newValue };
-      });
-      break;
-    case State.DEMON:
-      setState((s) => {
-        return { ...s, demon: newValue?.name };
+    case StateChange.DEMON:
+      setState((s: FusionRecipeSkillFinderState) => {
+        return { ...s, demon: stateChange.newValue?.name };
       });
       break;
     default:
@@ -109,15 +146,15 @@ function onChangeState(newValue, stateType, setState) {
 export function FusionRecipeSkillFinder() {
   const skills = get_all_skills().map((s) => s.name);
   const demons = parse_demons();
-  const demonOptions = demons.map((d) => {
+  const demonOptions: DemonOption[] = demons.map((d) => {
     return { label: `${d.race} ${d.name}`, name: d.name };
   });
 
-  let [state, setState] = useState({});
+  let [state, setState] = useState<FusionRecipeSkillFinderState>({});
   let [recipeCalculationStatus, setRecipeCalculationStatus] = useState(
     RecipeCalculationStatus.UNSTARTED
   );
-  let [fusionRecipe, setFusionRecipe] = useState(null);
+  let [fusionRecipe, setFusionRecipe] = useState<FusionRecipe>();
 
   return (
     <div>
@@ -132,7 +169,12 @@ export function FusionRecipeSkillFinder() {
             renderInput={(params) => (
               <TextField {...params} label="Demon to fuse" />
             )}
-            onChange={(e, v) => onChangeState(v, State.DEMON, setState)}
+            onChange={(e, v) =>
+              onChangeState(
+                { stateType: StateChange.DEMON, newValue: v },
+                setState
+              )
+            }
             isOptionEqualToValue={(o, v) => o.label === v.label}
           />
         </div>
@@ -146,7 +188,12 @@ export function FusionRecipeSkillFinder() {
             options={skills}
             sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} label="Skill 1" />}
-            onChange={(e, v) => onChangeState(v, State.SKILL_1, setState)}
+            onChange={(e, v) =>
+              onChangeState(
+                { stateType: StateChange.SKILL, newValue: v, skillNumber: 1 },
+                setState
+              )
+            }
           />
           <Autocomplete
             className="skillSelection"
@@ -155,7 +202,12 @@ export function FusionRecipeSkillFinder() {
             options={skills}
             sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} label="Skill 2" />}
-            onChange={(e, v) => onChangeState(v, State.SKILL_2, setState)}
+            onChange={(e, v) =>
+              onChangeState(
+                { stateType: StateChange.SKILL, newValue: v, skillNumber: 2 },
+                setState
+              )
+            }
           />
           <div className="skillSelectionPair">
             <Autocomplete
@@ -167,7 +219,12 @@ export function FusionRecipeSkillFinder() {
               renderInput={(params) => (
                 <TextField {...params} label="Skill 3" />
               )}
-              onChange={(e, v) => onChangeState(v, State.SKILL_3, setState)}
+              onChange={(e, v) =>
+                onChangeState(
+                  { stateType: StateChange.SKILL, newValue: v, skillNumber: 3 },
+                  setState
+                )
+              }
             />
             <Autocomplete
               className="skillSelection"
@@ -178,7 +235,12 @@ export function FusionRecipeSkillFinder() {
               renderInput={(params) => (
                 <TextField {...params} label="Skill 4" />
               )}
-              onChange={(e, v) => onChangeState(v, State.SKILL_4, setState)}
+              onChange={(e, v) =>
+                onChangeState(
+                  { stateType: StateChange.SKILL, newValue: v, skillNumber: 4 },
+                  setState
+                )
+              }
             />
           </div>
           <div className="skillSelectionPair">
@@ -191,7 +253,12 @@ export function FusionRecipeSkillFinder() {
               renderInput={(params) => (
                 <TextField {...params} label="Skill 5" />
               )}
-              onChange={(e, v) => onChangeState(v, State.SKILL_5, setState)}
+              onChange={(e, v) =>
+                onChangeState(
+                  { stateType: StateChange.SKILL, newValue: v, skillNumber: 5 },
+                  setState
+                )
+              }
             />
             <Autocomplete
               className="skillSelection"
@@ -202,7 +269,12 @@ export function FusionRecipeSkillFinder() {
               renderInput={(params) => (
                 <TextField {...params} label="Skill 6" />
               )}
-              onChange={(e, v) => onChangeState(v, State.SKILL_6, setState)}
+              onChange={(e, v) =>
+                onChangeState(
+                  { stateType: StateChange.SKILL, newValue: v, skillNumber: 6 },
+                  setState
+                )
+              }
             />
           </div>
           <div className="skillSelectionPair">
@@ -215,7 +287,12 @@ export function FusionRecipeSkillFinder() {
               renderInput={(params) => (
                 <TextField {...params} label="Skill 7" />
               )}
-              onChange={(e, v) => onChangeState(v, State.SKILL_7, setState)}
+              onChange={(e, v) =>
+                onChangeState(
+                  { stateType: StateChange.SKILL, newValue: v, skillNumber: 7 },
+                  setState
+                )
+              }
             />
             <Autocomplete
               className="skillSelection"
@@ -226,7 +303,12 @@ export function FusionRecipeSkillFinder() {
               renderInput={(params) => (
                 <TextField {...params} label="Skill 8" />
               )}
-              onChange={(e, v) => onChangeState(v, State.SKILL_8, setState)}
+              onChange={(e, v) =>
+                onChangeState(
+                  { stateType: StateChange.SKILL, newValue: v, skillNumber: 8 },
+                  setState
+                )
+              }
             />
           </div>
         </div>

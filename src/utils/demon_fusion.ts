@@ -1,13 +1,18 @@
-import { SMT5_FUSION_CHART } from "../smt_v_data/fusion_chart.js";
-import { SMT5_ELEMENT_CHART } from "../smt_v_data/element_chart.js";
-import { parse_demons, get_special_fusions } from "./demon_utils.js";
+import { SMT5_FUSION_CHART } from "../smt_v_data/fusion_chart";
+import { SMT5_ELEMENT_CHART } from "../smt_v_data/element_chart";
+import {
+  parse_demons,
+  get_special_fusions,
+  SpecialFusion,
+} from "./demon_utils";
+import { Demon } from "../classes/Demon";
 
-const ElementTransforms = {
-  UP: 1,
-  DOWN: -1,
-};
+enum ElementTransform {
+  UP = 1,
+  DOWN = -1,
+}
 
-function demonIsFusable(demon) {
+function demonIsFusable(demon: Demon) {
   return (
     demon.race.toLowerCase() !== "proto" &&
     demon.name.toLowerCase() !== "shiva" &&
@@ -16,17 +21,17 @@ function demonIsFusable(demon) {
 }
 
 // Get all immediate fusion combinations for demon, disregarding skills
-export function getFusionCombinations(demon) {
-  let combinations = [];
+export function getFusionCombinations(demon: Demon): Demon[][] {
+  let combinations: Demon[][] = [];
   let demons = parse_demons();
   let specialFusions = get_special_fusions();
 
   if (!demonIsFusable(demon)) return combinations;
 
   if (specialFusions.map((s) => s.name).includes(demon.name)) {
-    let fusion = specialFusions.find((s) => s.name === demon.name).fusion;
+    let fusion = specialFusions.find((s) => s.name === demon.name)!.fusion;
     combinations.push(
-      fusion.map((name) => demons.find((d) => d.name === name))
+      fusion.map((name) => demons.find((d) => d.name === name)!)
     );
     return combinations;
   }
@@ -36,52 +41,55 @@ export function getFusionCombinations(demon) {
     for (const race of racesToProduce) {
       let demonsInRace = demons.filter((d) => d.race === race);
       let racePairs = getAllCombinations(demonsInRace);
-      combinations.push(racePairs);
+      combinations.push(...racePairs);
     }
-    return combinations.flat();
+    return combinations;
   }
 
   let elementsUp = getElementsWithDesiredTransformForRace(
     demons,
     demon.race,
-    ElementTransforms.UP
+    ElementTransform.UP
   );
   combinations.push(
-    findCombinationsForElementAscension(demons, elementsUp, demon)
+    ...findCombinationsForElementAscension(demons, elementsUp, demon)
   );
 
   let elementsDown = getElementsWithDesiredTransformForRace(
     demons,
     demon.race,
-    ElementTransforms.DOWN
+    ElementTransform.DOWN
   );
   combinations.push(
-    findCombinationsForElementDescension(demons, elementsDown, demon)
+    ...findCombinationsForElementDescension(demons, elementsDown, demon)
   );
 
   let racePairs = getRacePairsForDesiredRace(demon.race);
   racePairs.forEach((r, _) => {
     combinations.push(
-      getCombinationsFromRaces(demon, demons, specialFusions, r[0], r[1])
+      ...getCombinationsFromRaces(demon, demons, specialFusions, r[0], r[1])
     );
   });
-  return combinations.flat();
+  return combinations;
 }
 
-function findRacesThatProduceElement(element) {
-  let races = [];
+function findRacesThatProduceElement(element: string) {
+  let races: string[] = [];
   searchFusionChart(element, (r1, _) => races.push(r1));
   return races;
 }
 
-function getRacePairsForDesiredRace(race) {
-  let result = [];
+function getRacePairsForDesiredRace(race: string) {
+  let result: string[][] = [];
   searchFusionChart(race, (r1, r2) => result.push([r1, r2]));
   return result;
 }
 
-function searchFusionChart(desiredResult, action) {
-  let result = [];
+function searchFusionChart(
+  desiredResult: string,
+  action: (r1: string, r2: string) => void
+) {
+  let result: string[][] = [];
   SMT5_FUSION_CHART.table.forEach((raceResults, i) => {
     raceResults.forEach((result, j) => {
       if (result === desiredResult) {
@@ -93,13 +101,13 @@ function searchFusionChart(desiredResult, action) {
 }
 
 function getCombinationsFromRaces(
-  desiredDemon,
-  demonList,
-  specialFusions,
-  race1,
-  race2
+  desiredDemon: Demon,
+  demonList: Demon[],
+  specialFusions: SpecialFusion[],
+  race1: string,
+  race2: string
 ) {
-  let result = [];
+  let result: Demon[][] = [];
   let race1Demons = demonList.filter((d) => d.race === race1);
   let race2Demons = demonList.filter((d) => d.race === race2);
   let desiredRaceDemons = demonList
@@ -122,32 +130,37 @@ function getCombinationsFromRaces(
 }
 
 function getElementsWithDesiredTransformForRace(
-  demonList,
-  race,
-  desiredTransform
+  demonList: Demon[],
+  race: string,
+  desiredTransform: ElementTransform
 ) {
-  let result = [];
+  let result: Demon[] = [];
   let elementTransforms =
     SMT5_ELEMENT_CHART.table[
       SMT5_ELEMENT_CHART.races.findIndex((r) => r === race)
     ];
   elementTransforms.forEach((t, i) => {
-    if (t === desiredTransform) {
-      result.push(
-        demonList.find((d) => d.name === SMT5_ELEMENT_CHART.elems[i])
-      );
+    if (t === desiredTransform.valueOf()) {
+      let demon = demonList.find((d) => d.name === SMT5_ELEMENT_CHART.elems[i]);
+      if (demon) {
+        result.push(demon);
+      }
     }
   });
   return result;
 }
 
-function findCombinationsForElementAscension(demons, elementsUp, demon) {
-  let result = [];
+function findCombinationsForElementAscension(
+  demons: Demon[],
+  elementsUp: Demon[],
+  demon: Demon
+) {
+  let result: Demon[][] = [];
   let demonsInRace = demons
     .filter((d) => d.race === demon.race)
     .sort((d1, d2) => (d1.level < d2.level ? -1 : 1));
 
-    // TODO Does not account for excluding special demons
+  // TODO Does not account for excluding special demons
   if (demon.name === demonsInRace[0].name) {
     elementsUp.forEach((e) => {
       result.push([e, demonsInRace[demonsInRace.length - 1]]);
@@ -162,8 +175,12 @@ function findCombinationsForElementAscension(demons, elementsUp, demon) {
   return result;
 }
 
-function findCombinationsForElementDescension(demons, elementsDown, demon) {
-  let result = [];
+function findCombinationsForElementDescension(
+  demons: Demon[],
+  elementsDown: Demon[],
+  demon: Demon
+) {
+  let result: Demon[][] = [];
   let demonsInRace = demons
     .filter((d) => d.race === demon.race)
     .sort((d1, d2) => (d1.level < d2.level ? -1 : 1));
@@ -180,11 +197,11 @@ function findCombinationsForElementDescension(demons, elementsDown, demon) {
   return result;
 }
 
-function getAllCombinations(strList) {
-  let result = [];
-  for (let i = 0; i < strList.length; i++) {
-    for (let j = i + 1; j < strList.length; j++) {
-      result.push([strList[i], strList[j]]);
+function getAllCombinations<T>(list: T[]) {
+  let result: T[][] = [];
+  for (let i = 0; i < list.length; i++) {
+    for (let j = i + 1; j < list.length; j++) {
+      result.push([list[i], list[j]]);
     }
   }
   return result;

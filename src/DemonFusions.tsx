@@ -1,16 +1,21 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Demon } from "./classes/Demon";
+import { getFusionCombinations } from "./utils/demon_fusion";
+import { NavBar } from "./NavBar";
 import "./DemonFusions.css";
-import { getFusionCombinations } from "./utils/demon_fusion.js";
-import { NavBar } from "./NavBar.js";
 
-function matchesFilter(demon, filter) {
+function matchesFilter(demon: Demon, filter: string) {
   return demon.name.toLowerCase().startsWith(filter.toLowerCase());
 }
 
-export function DemonFusions(props) {
+interface DemonFusionsProps {
+  demons: Demon[];
+}
+
+export function DemonFusions(props: DemonFusionsProps) {
   let name = useParams().demonName;
-  let demon = props.demons.find((d) => d.name.toLowerCase() === name);
+  let demon = props.demons.find((d) => d.name.toLowerCase() === name)!;
   let fusionCombinations = getFusionCombinations(demon);
   let maxComponents =
     fusionCombinations.length > 0
@@ -28,7 +33,7 @@ export function DemonFusions(props) {
         <NavBar
           textFieldOnChange={
             fusionCombinations.length < 2
-              ? null
+              ? undefined
               : (e) => setFilter(e.target.value)
           }
         />
@@ -76,7 +81,7 @@ export function DemonFusions(props) {
         <table className="fusionCombinations">
           <thead>
             <tr key="fusionHeader">
-              {[...Array(maxComponents).keys()].map((i) => {
+              {[...Array.from(Array(maxComponents).keys())].map((i) => {
                 return (
                   <th className="fusionCombinationsHeader">
                     Component {i + 1}

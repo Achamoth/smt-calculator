@@ -1,10 +1,10 @@
-import { parse_demons } from "./utils/demon_utils.js";
-import { DemonTable } from "./DemonTable.js";
+import { parse_demons } from "./utils/demon_utils";
+import { DemonTable } from "./DemonTable";
 import { DemonFusions } from "./DemonFusions";
-import { Skills } from "./Skills.js";
+import { Skills } from "./Skills";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { FusionRecipe } from "./FusionRecipe/FusionRecipe.js";
-import { SkillDetails } from "./SkillDetails.js";
+import { FusionRecipe } from "./FusionRecipe/FusionRecipe";
+import { SkillDetails } from "./SkillDetails";
 
 function App() {
   let demons = parse_demons();
