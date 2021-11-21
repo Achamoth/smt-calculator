@@ -4,12 +4,12 @@ import { Demon } from "../classes/Demon";
 
 export function findPathFromComponentToResult(
   demon: Demon,
-  targetComponents: Demon[]
+  targetComponents: string[]
 ) {
   return new Promise<FusionRecipe>((resolve, reject) => {
     let recipe = getBestFusionRecipe(
       demon,
-      targetComponents.map((t) => t.name),
+      targetComponents,
       (r: FusionRecipe, t: string[]) => r.foundComponents(t),
       10
     );
