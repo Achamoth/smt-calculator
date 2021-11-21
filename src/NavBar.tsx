@@ -1,9 +1,14 @@
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
+import { GameSelector, GameSelectionProps } from "./GameSelector";
 import styles from "./NavBar.module.css";
 import globalStyles from "./globals.module.css";
 
-export function NavBar() {
+interface NavBarProps {
+  gameSelectionProps: GameSelectionProps;
+}
+
+export function NavBar(props: NavBarProps) {
   return (
     <div className={globalStyles.centeredContainer}>
       <div className={styles.navBar}>
@@ -22,6 +27,7 @@ export function NavBar() {
             Recipe
           </Button>
         </Link>
+        <GameSelector {...props.gameSelectionProps} />
       </div>
     </div>
   );

@@ -7,7 +7,6 @@ import {
   compareDemons,
   demonResist,
 } from "./utils/demon_utils";
-import { NavBar } from "./NavBar";
 import styles from "./DemonTable.module.css";
 import globalStyles from "./globals.module.css";
 
@@ -51,57 +50,54 @@ export function DemonTable(props: DemonTableProps) {
   let resistances: number[] = props.resistances;
 
   return (
-    <div>
-      <NavBar />
-      <div className={globalStyles.centeredContainer}>
-        <div className={globalStyles.blockContainerFullWidth}>
-          <div className={styles.partialWidthContainer}>
-            <TextField
-              fullWidth
-              label="Filter..."
-              variant="outlined"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setFilter(e.target.value)
-              }
-            />
-          </div>
-          <table className={styles.demonTable}>
-            <thead>
-              <tr>
-                {headers.map((h) => {
-                  return (
-                    <th
-                      className={styles.demonTableHeader}
-                      onClick={(e) => setSort((s) => updateSort(s, h))}
-                    >
-                      {h}
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {demons.map((x) => {
+    <div className={globalStyles.centeredContainer}>
+      <div className={globalStyles.blockContainerFullWidth}>
+        <div className={styles.partialWidthContainer}>
+          <TextField
+            fullWidth
+            label="Filter..."
+            variant="outlined"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setFilter(e.target.value)
+            }
+          />
+        </div>
+        <table className={styles.demonTable}>
+          <thead>
+            <tr>
+              {headers.map((h) => {
                 return (
-                  <tr className={styles.demonTableRow} key={x.name}>
-                    <td className={styles.demonTableCell}>{x.level}</td>
-                    <td className={styles.demonTableCell}>{x.race}</td>
-                    <td className={styles.demonTableCell}>
-                      <Link to={`/${x.name.toLowerCase()}`}>{x.name}</Link>
-                    </td>
-                    {resistances.map((r) => {
-                      return (
-                        <td className={styles.demonTableCell}>
-                          {demonResist(x, r)}
-                        </td>
-                      );
-                    })}
-                  </tr>
+                  <th
+                    className={styles.demonTableHeader}
+                    onClick={(e) => setSort((s) => updateSort(s, h))}
+                  >
+                    {h}
+                  </th>
                 );
               })}
-            </tbody>
-          </table>
-        </div>
+            </tr>
+          </thead>
+          <tbody>
+            {demons.map((x) => {
+              return (
+                <tr className={styles.demonTableRow} key={x.name}>
+                  <td className={styles.demonTableCell}>{x.level}</td>
+                  <td className={styles.demonTableCell}>{x.race}</td>
+                  <td className={styles.demonTableCell}>
+                    <Link to={`/${x.name.toLowerCase()}`}>{x.name}</Link>
+                  </td>
+                  {resistances.map((r) => {
+                    return (
+                      <td className={styles.demonTableCell}>
+                        {demonResist(x, r)}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );

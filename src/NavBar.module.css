@@ -1,7 +1,8 @@
 .button {
-    margin: 0px 10px;
+  margin: 6px 10px;
 }
 
 .navBar {
-    margin: 5px;
+  margin: 5px;
+  display: flex;
 }

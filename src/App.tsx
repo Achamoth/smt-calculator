@@ -1,27 +1,28 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { loadGameData, supportedGames, Game } from "./utils/load_data";
-import { GameSelector } from "./GameSelector";
 import { DemonTable } from "./DemonTable";
 import { DemonDetails } from "./DemonDetails";
 import { Skills } from "./Skills";
 import { FusionRecipe } from "./FusionRecipe/FusionRecipe";
 import { SkillDetails } from "./SkillDetails";
 import { useState } from "react";
+import { NavBar } from "./NavBar";
 
 function App() {
   let [game, setGame] = useState(Game.SMT_V);
   let games = supportedGames();
   let { fusionData, skillList, skillDetails, attributes, resistances } =
     loadGameData(game);
+  let gameSelectorData = {
+    games: games,
+    selectedGame: game,
+    onGameSelectionChanged: setGame,
+  };
 
   return (
-    <div>
-      <GameSelector
-        games={games}
-        selectedGame={game}
-        onGameSelectionChanged={setGame}
-      />
-      <Router basename={"/smt-calculator"}>
+    <Router basename={"/smt-calculator"}>
+      <div>
+        <NavBar gameSelectionProps={gameSelectorData} />
         <Routes>
           <Route
             path="/"
@@ -49,8 +50,8 @@ function App() {
             element={<DemonDetails fusionData={fusionData} />}
           />
         </Routes>
-      </Router>
-    </div>
+      </div>
+    </Router>
   );
 }
 

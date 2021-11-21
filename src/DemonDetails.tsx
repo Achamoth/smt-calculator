@@ -1,6 +1,5 @@
 import { useParams, Link } from "react-router-dom";
 import { FusionData } from "./utils/types";
-import { NavBar } from "./NavBar";
 import styles from "./DemonDetails.module.css";
 import { DemonFusions } from "./DemonFusions";
 
@@ -16,7 +15,6 @@ export function DemonDetails(props: DemonDetailsProps) {
 
   return (
     <div>
-      <NavBar />
       <div className={styles.demonDetailsContents}>
         <div className={styles.demon}>
           <h1>{`LV${demon.level} ${demon.race} ${demon.name}`}</h1>
