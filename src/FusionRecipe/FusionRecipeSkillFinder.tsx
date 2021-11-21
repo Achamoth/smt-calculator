@@ -45,6 +45,7 @@ type ChangeStateSkill = {
 type ChangeStateDemon = {
   stateType: StateChange.DEMON;
   newValue: DemonOption | null;
+  demons: Demon[];
 };
 
 type DemonOption = {
@@ -91,10 +92,28 @@ function getFusionRecipe(
   );
 }
 
+function getNewStateWhenDemonChanges(
+  demonOption: DemonOption,
+  demons: Demon[]
+): FusionRecipeSkillFinderState {
+  let demon = demons.find((d) => d.name === demonOption.name)!;
+  let newState: any = { demon: demon.name };
+  for (let i: number = 1; i < 9; i++) {
+    if (demon.skills[i]) {
+      newState[`skill_${i}`] = demon.skills[i].name;
+    }
+  }
+  return newState;
+}
+
 function onChangeState(
   stateChange: ChangeStateSkill | ChangeStateDemon,
-  setState: Function // TODO I can't figure out how to pass a lambda function that accepts a lambda function parameter
+  setState: Function, // TODO I can't figure out how to pass a lambda function that accepts a lambda function parameter
+  setRecipeCalculationStatus: Function,
+  setFusionRecipe: Function
 ) {
+  setRecipeCalculationStatus(RecipeCalculationStatus.UNSTARTED);
+  setFusionRecipe(null);
   switch (stateChange.stateType) {
     case StateChange.SKILL:
       switch (stateChange.skillNumber) {
@@ -142,7 +161,14 @@ function onChangeState(
       break;
     case StateChange.DEMON:
       setState((s: FusionRecipeSkillFinderState) => {
-        return { ...s, demon: stateChange.newValue?.name };
+        if (!stateChange.newValue) {
+          return {};
+        }
+        return getNewStateWhenDemonChanges(
+          stateChange.newValue,
+          stateChange.demons
+        );
+        // return { ...s, demon: stateChange.newValue?.name };
       });
       break;
     default:
@@ -163,6 +189,8 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
   );
   let [fusionRecipe, setFusionRecipe] = useState<FusionRecipe>();
 
+  console.log(state);
+
   return (
     <div>
       <div className={globalStyles.centeredContainer}>
@@ -178,8 +206,10 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
             )}
             onChange={(e, v) =>
               onChangeState(
-                { stateType: StateChange.DEMON, newValue: v },
-                setState
+                { stateType: StateChange.DEMON, newValue: v, demons: demons },
+                setState,
+                setRecipeCalculationStatus,
+                setFusionRecipe
               )
             }
             isOptionEqualToValue={(o, v) => o.label === v.label}
@@ -189,6 +219,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
       <div className={globalStyles.centeredContainer}>
         <div className={styles.skillSelectionPair}>
           <Autocomplete
+            value={state.skill_1 ?? null}
             className={styles.skillSelection}
             disablePortal
             id="skillSelection1"
@@ -198,11 +229,14 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
             onChange={(e, v) =>
               onChangeState(
                 { stateType: StateChange.SKILL, newValue: v, skillNumber: 1 },
-                setState
+                setState,
+                setRecipeCalculationStatus,
+                setFusionRecipe
               )
             }
           />
           <Autocomplete
+            value={state.skill_2 ?? null}
             className={styles.skillSelection}
             disablePortal
             id="skillSelection2"
@@ -212,12 +246,15 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
             onChange={(e, v) =>
               onChangeState(
                 { stateType: StateChange.SKILL, newValue: v, skillNumber: 2 },
-                setState
+                setState,
+                setRecipeCalculationStatus,
+                setFusionRecipe
               )
             }
           />
           <div className={styles.skillSelectionPair}>
             <Autocomplete
+              value={state.skill_3 ?? null}
               className={styles.skillSelection}
               disablePortal
               id="skillSelection3"
@@ -229,11 +266,14 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               onChange={(e, v) =>
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 3 },
-                  setState
+                  setState,
+                  setRecipeCalculationStatus,
+                  setFusionRecipe
                 )
               }
             />
             <Autocomplete
+              value={state.skill_4 ?? null}
               className={styles.skillSelection}
               disablePortal
               id="skillSelection4"
@@ -245,13 +285,16 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               onChange={(e, v) =>
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 4 },
-                  setState
+                  setState,
+                  setRecipeCalculationStatus,
+                  setFusionRecipe
                 )
               }
             />
           </div>
           <div className={styles.skillSelectionPair}>
             <Autocomplete
+              value={state.skill_5 ?? null}
               className={styles.skillSelection}
               disablePortal
               id="skillSelection5"
@@ -263,11 +306,14 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               onChange={(e, v) =>
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 5 },
-                  setState
+                  setState,
+                  setRecipeCalculationStatus,
+                  setFusionRecipe
                 )
               }
             />
             <Autocomplete
+              value={state.skill_6 ?? null}
               className={styles.skillSelection}
               disablePortal
               id="skillSelection6"
@@ -279,13 +325,16 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               onChange={(e, v) =>
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 6 },
-                  setState
+                  setState,
+                  setRecipeCalculationStatus,
+                  setFusionRecipe
                 )
               }
             />
           </div>
           <div className={styles.skillSelectionPair}>
             <Autocomplete
+              value={state.skill_7 ?? null}
               className={styles.skillSelection}
               disablePortal
               id="skillSelection7"
@@ -297,11 +346,14 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               onChange={(e, v) =>
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 7 },
-                  setState
+                  setState,
+                  setRecipeCalculationStatus,
+                  setFusionRecipe
                 )
               }
             />
             <Autocomplete
+              value={state.skill_8 ?? null}
               className={styles.skillSelection}
               disablePortal
               id="skillSelection8"
@@ -313,7 +365,9 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               onChange={(e, v) =>
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 8 },
-                  setState
+                  setState,
+                  setRecipeCalculationStatus,
+                  setFusionRecipe
                 )
               }
             />

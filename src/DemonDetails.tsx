@@ -13,6 +13,14 @@ export function DemonDetails(props: DemonDetailsProps) {
     (d) => d.name.toLowerCase() === name
   )!;
 
+  if (!demon) {
+    return (
+      <div className={styles.demonDetailsContents}>
+        <h1>Demon not found</h1>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className={styles.demonDetailsContents}>

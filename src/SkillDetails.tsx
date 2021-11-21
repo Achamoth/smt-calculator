@@ -11,6 +11,14 @@ export function SkillDetails(props: SkillDetailsProps) {
   let name = useParams().skillName!.replace("_", " ");
   let skill = props.skills.find((s) => s.name.toLowerCase() === name)!;
 
+  if (!skill) {
+    return (
+      <div className={globalStyles.centeredContainerNoMargin}>
+        <h1>Skill not found</h1>
+      </div>
+    );
+  }
+
   return (
     <div className={globalStyles.centeredContainerNoMargin}>
       <div className={styles.skillDetailContents}>
