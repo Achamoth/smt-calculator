@@ -1,11 +1,15 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { NavBar } from "./NavBar";
-import { get_all_skills, DemonSkillUnlock } from "./utils/demon_utils";
+import { DemonSkillUnlock, SkillDemonMap } from "./utils/types";
 import "./Skills.css";
 
 interface DemonsPossessingSkillsProps {
   demonsWithSkills: DemonSkillUnlock[];
+}
+
+interface SkillsProps {
+  skills: SkillDemonMap[];
 }
 
 function DemonsPossessingSkills(props: DemonsPossessingSkillsProps) {
@@ -27,9 +31,9 @@ function DemonsPossessingSkills(props: DemonsPossessingSkillsProps) {
   );
 }
 
-export function Skills() {
+export function Skills(props: SkillsProps) {
   let [filter, setFilter] = useState("");
-  const allSkills = get_all_skills();
+  const allSkills = props.skills;
   const skills = allSkills
     .filter((s) => s.name.toLowerCase().startsWith(filter.toLowerCase()))
     .sort((s1, s2) => (s1.name < s2.name ? -1 : 1));

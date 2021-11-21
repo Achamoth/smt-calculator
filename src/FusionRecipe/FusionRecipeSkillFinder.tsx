@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { Demon } from "../classes/Demon";
 import { FusionRecipe } from "../classes/FusionRecipe";
-import { get_all_skills, parse_demons } from "../utils/demon_utils";
+import { FusionData, SkillDemonMap } from "../utils/types";
 import { findFusionRecipes } from "../utils/fusion_recipe";
 import { FusionRecipeResult } from "./FusionRecipeResult";
 import "./FusionRecipeSkillFinder.css";
@@ -51,6 +51,11 @@ type DemonOption = {
   name: string;
 };
 
+interface FusionRecipeSkillFinderProps {
+  fusionData: FusionData;
+  skillList: SkillDemonMap[];
+}
+
 function getTargetSkills(state: FusionRecipeSkillFinderState) {
   let result = [];
   if (state.skill_1) result.push(state.skill_1);
@@ -66,6 +71,7 @@ function getTargetSkills(state: FusionRecipeSkillFinderState) {
 
 function getFusionRecipe(
   state: FusionRecipeSkillFinderState,
+  fusionData: FusionData,
   demons: Demon[],
   completionCallback: () => void,
   setFusionRecipe: React.Dispatch<
@@ -74,7 +80,7 @@ function getFusionRecipe(
 ) {
   let demon = demons.find((d) => d.name === state.demon)!;
   let skills = getTargetSkills(state);
-  let promise = findFusionRecipes(demon, skills);
+  let promise = findFusionRecipes(fusionData, demon, skills);
   promise.then(
     (v) => {
       completionCallback();
@@ -143,9 +149,9 @@ function onChangeState(
   }
 }
 
-export function FusionRecipeSkillFinder() {
-  const skills = get_all_skills().map((s) => s.name);
-  const demons = parse_demons();
+export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
+  const skills = props.skillList.map((s) => s.name);
+  const demons = props.fusionData.demons;
   const demonOptions: DemonOption[] = demons.map((d) => {
     return { label: `${d.race} ${d.name}`, name: d.name };
   });
@@ -321,6 +327,7 @@ export function FusionRecipeSkillFinder() {
             setRecipeCalculationStatus(RecipeCalculationStatus.RUNNING);
             getFusionRecipe(
               state,
+              props.fusionData,
               demons,
               () =>
                 setRecipeCalculationStatus(RecipeCalculationStatus.FINISHED),

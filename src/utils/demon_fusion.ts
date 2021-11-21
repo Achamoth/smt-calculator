@@ -1,10 +1,4 @@
-import { SMT5_FUSION_CHART } from "../smt_v_data/fusion_chart";
-import { SMT5_ELEMENT_CHART } from "../smt_v_data/element_chart";
-import {
-  parse_demons,
-  get_special_fusions,
-  SpecialFusion,
-} from "./demon_utils";
+import { FusionData, SpecialFusion, FusionChart, ElementChart } from "./types";
 import { Demon } from "../classes/Demon";
 
 enum ElementTransform {
@@ -21,10 +15,12 @@ function demonIsFusable(demon: Demon) {
 }
 
 // Get all immediate fusion combinations for demon, disregarding skills
-export function getFusionCombinations(demon: Demon): Demon[][] {
+export function getFusionCombinations(
+  demon: Demon,
+  fusionData: FusionData
+): Demon[][] {
   let combinations: Demon[][] = [];
-  let demons = parse_demons();
-  let specialFusions = get_special_fusions();
+  let { demons, specialFusions, fusionChart, elementChart } = fusionData;
 
   if (!demonIsFusable(demon)) return combinations;
 
@@ -37,7 +33,7 @@ export function getFusionCombinations(demon: Demon): Demon[][] {
   }
 
   if (demon.race === "Element") {
-    let racesToProduce = findRacesThatProduceElement(demon.name);
+    let racesToProduce = findRacesThatProduceElement(fusionChart, demon.name);
     for (const race of racesToProduce) {
       let demonsInRace = demons.filter((d) => d.race === race);
       let racePairs = getAllCombinations(demonsInRace);
@@ -47,6 +43,7 @@ export function getFusionCombinations(demon: Demon): Demon[][] {
   }
 
   let elementsUp = getElementsWithDesiredTransformForRace(
+    elementChart,
     demons,
     demon.race,
     ElementTransform.UP
@@ -56,6 +53,7 @@ export function getFusionCombinations(demon: Demon): Demon[][] {
   );
 
   let elementsDown = getElementsWithDesiredTransformForRace(
+    elementChart,
     demons,
     demon.race,
     ElementTransform.DOWN
@@ -64,7 +62,7 @@ export function getFusionCombinations(demon: Demon): Demon[][] {
     ...findCombinationsForElementDescension(demons, elementsDown, demon)
   );
 
-  let racePairs = getRacePairsForDesiredRace(demon.race);
+  let racePairs = getRacePairsForDesiredRace(fusionChart, demon.race);
   racePairs.forEach((r, _) => {
     combinations.push(
       ...getCombinationsFromRaces(demon, demons, specialFusions, r[0], r[1])
@@ -73,27 +71,31 @@ export function getFusionCombinations(demon: Demon): Demon[][] {
   return combinations;
 }
 
-function findRacesThatProduceElement(element: string) {
+function findRacesThatProduceElement(
+  fusionChart: FusionChart,
+  element: string
+) {
   let races: string[] = [];
-  searchFusionChart(element, (r1, _) => races.push(r1));
+  searchFusionChart(fusionChart, element, (r1, _) => races.push(r1));
   return races;
 }
 
-function getRacePairsForDesiredRace(race: string) {
+function getRacePairsForDesiredRace(fusionChart: FusionChart, race: string) {
   let result: string[][] = [];
-  searchFusionChart(race, (r1, r2) => result.push([r1, r2]));
+  searchFusionChart(fusionChart, race, (r1, r2) => result.push([r1, r2]));
   return result;
 }
 
 function searchFusionChart(
+  fusionChart: FusionChart,
   desiredResult: string,
   action: (r1: string, r2: string) => void
 ) {
   let result: string[][] = [];
-  SMT5_FUSION_CHART.table.forEach((raceResults, i) => {
+  fusionChart.table.forEach((raceResults, i) => {
     raceResults.forEach((result, j) => {
       if (result === desiredResult) {
-        action(SMT5_FUSION_CHART.races[i], SMT5_FUSION_CHART.races[j]);
+        action(fusionChart.races[i], fusionChart.races[j]);
       }
     });
   });
@@ -130,18 +132,17 @@ function getCombinationsFromRaces(
 }
 
 function getElementsWithDesiredTransformForRace(
+  elementChart: ElementChart,
   demonList: Demon[],
   race: string,
   desiredTransform: ElementTransform
 ) {
   let result: Demon[] = [];
   let elementTransforms =
-    SMT5_ELEMENT_CHART.table[
-      SMT5_ELEMENT_CHART.races.findIndex((r) => r === race)
-    ];
+    elementChart.table[elementChart.races.findIndex((r) => r === race)];
   elementTransforms.forEach((t, i) => {
     if (t === desiredTransform.valueOf()) {
-      let demon = demonList.find((d) => d.name === SMT5_ELEMENT_CHART.elems[i]);
+      let demon = demonList.find((d) => d.name === elementChart.elems[i]);
       if (demon) {
         result.push(demon);
       }
