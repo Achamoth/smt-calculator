@@ -54,7 +54,7 @@ export function DemonTable(props: DemonTableProps) {
     <div>
       <NavBar />
       <div className={globalStyles.centeredContainer}>
-        <div className={globalStyles.blockContainer}>
+        <div className={globalStyles.blockContainerFullWidth}>
           <div className={styles.partialWidthContainer}>
             <TextField
               fullWidth

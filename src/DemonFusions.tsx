@@ -77,7 +77,7 @@ export function DemonFusions(props: DemonFusionsProps) {
         </div>
       </div>
       <div className={globalStyles.centeredContainer}>
-        <div className={globalStyles.blockContainer}>
+        <div className={globalStyles.blockContainerFullWidth}>
           <div className={styles.filter}>
             <TextField
               fullWidth
