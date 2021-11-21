@@ -5,12 +5,11 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
-import { Demon } from "../classes/Demon";
 import { FusionRecipe } from "../classes/FusionRecipe";
 import { FusionData } from "../utils/types";
 import { findPathFromComponentToResult } from "../utils/fusion_recipe";
 import { FusionRecipeResult } from "./FusionRecipeResult";
-import "./FusionRecipeComponentFinder.css";
+import styles from "./FusionRecipeComponentFinder.module.css";
 
 enum RecipeCalculationStatus {
   UNSTARTED,
@@ -63,11 +62,11 @@ function getFusionRecipe(
 
 function DemonSelection(props: DemonSelectionProps) {
   return (
-    <div className="demonSelection">
+    <div className={styles.demonSelection}>
       <Autocomplete
         value={props.value}
         key={props.key}
-        className="demonSelection"
+        className={styles.demonSelection}
         disablePortal
         id="demonSelection"
         options={props.demonOptions}
@@ -95,8 +94,8 @@ export function FusionRecipeComponentFinder(
   let [fusionRecipe, setFusionRecipe] = useState<FusionRecipe>();
 
   return (
-    <div className="fusionByComponentsContainer">
-      <div className="demonAndComponentSelection">
+    <div className={styles.fusionByComponentsContainer}>
+      <div className={styles.demonAndComponentSelection}>
         <div>
           <DemonSelection
             demonOptions={demonOptions}
@@ -108,7 +107,7 @@ export function FusionRecipeComponentFinder(
             }
           />
         </div>
-        <div className="componentSelection">
+        <div className={styles.componentSelection}>
           {state.components.map((c, i) => {
             return (
               <DemonSelection
@@ -146,7 +145,7 @@ export function FusionRecipeComponentFinder(
           />
         </div>
       </div>
-      <div className="centeredWithBottomMargin">
+      <div className={styles.centeredWithBottomMargin}>
         <Button
           variant="contained"
           onClick={() => {
@@ -163,7 +162,7 @@ export function FusionRecipeComponentFinder(
           Find Recipe
         </Button>
       </div>
-      <div className="centeredWithBottomMargin">
+      <div className={styles.centeredWithBottomMargin}>
         {recipeCalculationStatus === RecipeCalculationStatus.RUNNING && (
           <CircularProgress />
         )}

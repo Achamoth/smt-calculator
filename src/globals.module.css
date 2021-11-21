@@ -1,0 +1,18 @@
+.centeredContainer {
+  margin-top: 20px;
+}
+
+.centeredContainer,
+.centeredContainerNoMargin {
+  display: flex;
+  justify-content: center;
+}
+
+.blockContainer {
+  display: block;
+}
+
+.blockContainerFullWidth {
+  display: block;
+  width: 100%;
+}
