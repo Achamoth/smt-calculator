@@ -42,7 +42,11 @@ function App() {
           <Route
             path="/recipe"
             element={
-              <FusionRecipe fusionData={fusionData} skillList={skillList} />
+              <FusionRecipe
+                fusionData={fusionData}
+                skillList={skillList}
+                key={game}
+              />
             }
           />
           <Route

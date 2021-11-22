@@ -189,8 +189,6 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
   );
   let [fusionRecipe, setFusionRecipe] = useState<FusionRecipe>();
 
-  console.log(state);
-
   return (
     <div>
       <div className={globalStyles.centeredContainer}>
