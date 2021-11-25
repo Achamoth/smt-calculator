@@ -1,5 +1,3 @@
-# Shin Megami Tensei V Fusion Tool
+# Shin Megami Tensei Fusion Tool
 
-Fusion tool for SMT V, with fusion recipe calculation.
-
-I have some plans to eventually support other games in the franchise.
+Fusion tool for SMT IV/IV Apocalypse/V, with fusion recipe calculation.
