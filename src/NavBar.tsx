@@ -18,16 +18,24 @@ export function NavBar(props: NavBarProps) {
           </Button>
         </Link>
         <Link className={styles.button} to="/skills">
-          <Button variant="contained" size="large" className="button">
+          <Button variant="contained" size="large">
             Skills
           </Button>
         </Link>
         <Link className={styles.button} to="/recipe">
-          <Button variant="contained" size="large" className="button">
+          <Button variant="contained" size="large">
             Recipe
           </Button>
         </Link>
         <GameSelector {...props.gameSelectionProps} />
+        <a
+          href="http://www.github.com/Achamoth/smt-calculator/issues"
+          className={styles.button}
+        >
+          <Button variant="outlined" size="large" className="button">
+            Report Issue (Source Code)
+          </Button>
+        </a>
       </div>
     </div>
   );
