@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@mui/material";
 import { FusionData, SkillDemonMap } from "../utils/types";
+import { Game } from "../utils/load_data";
 import { FusionRecipeSkillFinder } from "./FusionRecipeSkillFinder";
 import { FusionRecipeComponentFinder } from "./FusionRecipeComponentFinder";
 import styles from "./FusionRecipe.module.css";
@@ -13,6 +14,7 @@ enum CalculationType {
 interface FusionRecipeProps {
   fusionData: FusionData;
   skillList: SkillDemonMap[];
+  game: Game;
 }
 
 function buttonOutlineType(
@@ -46,10 +48,14 @@ export function FusionRecipe(props: FusionRecipeProps) {
           <FusionRecipeSkillFinder
             fusionData={props.fusionData}
             skillList={props.skillList}
+            key={props.game}
           />
         )}
         {calculationType === CalculationType.COMPONENTS && (
-          <FusionRecipeComponentFinder fusionData={props.fusionData} />
+          <FusionRecipeComponentFinder
+            fusionData={props.fusionData}
+            key={props.game}
+          />
         )}
       </div>
     </div>

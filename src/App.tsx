@@ -45,7 +45,7 @@ function App() {
               <FusionRecipe
                 fusionData={fusionData}
                 skillList={skillList}
-                key={game}
+                game={game}
               />
             }
           />
