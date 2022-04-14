@@ -3,7 +3,7 @@ export const SMT5_SPECIAL_RECIPES = {
   "Abdiel A": ["Abdiel", "Amon", "Kali"],
   Alice: ["Muu Shuwuu", "Poltergeist", "Bugs", "Jack-o'-Lantern"],
   Amanozako: ["Kurama Tengu", "Koppa Tengu", "Nue", "Kin-Ki"],
-  Anahita: ["Naga Raja", "Xuanwu", "Mermaid"],
+  Anahita: ["Naga", "Xuanwu", "Mermaid"],
   Arioch: ["Seth", "Cybele", "Anzu"],
   Baal: ["Mot", "Belphegor", "Mithras"],
   Beelzebub: ["Baal", "Abaddon", "Nebiros"],
