@@ -1,10 +1,14 @@
 .skillSelection {
-    margin-right: 10px;
-    margin-left: 10px;
-    display: inline-block;
-    padding-bottom: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
+  display: inline-block;
+  padding-bottom: 10px;
 }
 
 .demonSelection {
-    padding-bottom: 10px;
+  padding-bottom: 10px;
+}
+
+.innateSkill {
+  background-color: honeydew;
 }

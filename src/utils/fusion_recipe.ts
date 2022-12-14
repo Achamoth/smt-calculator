@@ -17,7 +17,7 @@ export function findPathFromComponentToResult(
       10
     );
     resolve(recipe);
-  });
+  }).catch((e) => console.error(e));
 }
 
 export function findFusionRecipes(
@@ -34,7 +34,7 @@ export function findFusionRecipes(
       10
     );
     resolve(recipe);
-  });
+  }).catch((e) => console.error(e));
 }
 
 function getBestFusionRecipe(

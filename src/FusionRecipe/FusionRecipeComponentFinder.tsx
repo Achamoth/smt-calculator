@@ -54,7 +54,7 @@ function getFusionRecipe(
   promise.then(
     (v) => {
       completionCallback();
-      setFusionRecipe(v);
+      if (v) setFusionRecipe(v);
     },
     (r) => {}
   );

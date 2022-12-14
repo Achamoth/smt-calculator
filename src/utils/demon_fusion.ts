@@ -9,7 +9,6 @@ enum ElementTransform {
 function demonIsFusable(demon: Demon) {
   return (
     demon.race.toLowerCase() !== "proto" &&
-    demon.name.toLowerCase() !== "shiva" &&
     demon.name.toLowerCase() !== "demi-fiend"
   );
 }
@@ -48,9 +47,11 @@ export function getFusionCombinations(
     demon.race,
     ElementTransform.UP
   );
-  combinations.push(
-    ...findCombinationsForElementAscension(demons, elementsUp, demon)
-  );
+  if (elementsUp && elementsUp.length > 0) {
+    combinations.push(
+      ...findCombinationsForElementAscension(demons, elementsUp, demon)
+    );
+  }
 
   let elementsDown = getElementsWithDesiredTransformForRace(
     elementChart,
@@ -58,16 +59,20 @@ export function getFusionCombinations(
     demon.race,
     ElementTransform.DOWN
   );
-  combinations.push(
-    ...findCombinationsForElementDescension(demons, elementsDown, demon)
-  );
+  if (elementsDown && elementsDown.length > 0) {
+    combinations.push(
+      ...findCombinationsForElementDescension(demons, elementsDown, demon)
+    );
+  }
 
   let racePairs = getRacePairsForDesiredRace(fusionChart, demon.race);
-  racePairs.forEach((r, _) => {
-    combinations.push(
-      ...getCombinationsFromRaces(demon, demons, specialFusions, r[0], r[1])
-    );
-  });
+  if (racePairs && racePairs.length > 0) {
+    racePairs.forEach((r, _) => {
+      combinations.push(
+        ...getCombinationsFromRaces(demon, demons, specialFusions, r[0], r[1])
+      );
+    });
+  }
   return combinations;
 }
 
@@ -140,14 +145,16 @@ function getElementsWithDesiredTransformForRace(
   let result: Demon[] = [];
   let elementTransforms =
     elementChart.table[elementChart.races.findIndex((r) => r === race)];
-  elementTransforms.forEach((t, i) => {
-    if (t === desiredTransform.valueOf()) {
-      let demon = demonList.find((d) => d.name === elementChart.elems[i]);
-      if (demon) {
-        result.push(demon);
+  if (elementTransforms && elementTransforms.length > 0) {
+    elementTransforms.forEach((t, i) => {
+      if (t === desiredTransform.valueOf()) {
+        let demon = demonList.find((d) => d.name === elementChart.elems[i]);
+        if (demon) {
+          result.push(demon);
+        }
       }
-    }
-  });
+    });
+  }
   return result;
 }
 

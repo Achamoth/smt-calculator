@@ -46,7 +46,7 @@ function SkillRows(props: SkillRowsProps) {
           .filter((s) => props.skills.includes(s));
 
         return (
-          <tr className={styles.recipeTableSkillRow}>
+          <tr key={d.name} className={styles.recipeTableSkillRow}>
             <td></td>
             <td colSpan={props.numColumns + 1}>{`${d.race} ${
               d.name
@@ -72,12 +72,12 @@ export function FusionRecipeResult(props: FusionRecipeResultProps) {
     <div>
       <table className={styles.recipeTable}>
         <thead>
-          <tr>
+          <tr key={"recipeResultHeader"}>
             <th></th>
             <th className={styles.recipeTableHeader}>Result</th>
-            {[...Array.from(Array(maxComponents).keys())].map((i) => {
+            {[...Array.from(Array(maxComponents).keys())].map((j) => {
               return (
-                <th className={styles.recipeTableHeader}>Component {i + 1}</th>
+                <th className={styles.recipeTableHeader}>Component {j + 1}</th>
               );
             })}
           </tr>
@@ -87,7 +87,7 @@ export function FusionRecipeResult(props: FusionRecipeResultProps) {
             if (r.recipes.length) {
               return (
                 <>
-                  <tr className={styles.recipeTableRow}>
+                  <tr key={i} className={styles.recipeTableRow}>
                     <td className={styles.recipeTableResultCell}>{i++}</td>
                     <td
                       className={styles.recipeTableResultCell}
@@ -95,6 +95,7 @@ export function FusionRecipeResult(props: FusionRecipeResultProps) {
                     {r.recipes.map((rr) => {
                       return (
                         <td
+                          key={`${i}${rr.demon.name}`}
                           className={styles.recipeTableComponentCell}
                         >{`${rr.demon.race} ${rr.demon.name}`}</td>
                       );

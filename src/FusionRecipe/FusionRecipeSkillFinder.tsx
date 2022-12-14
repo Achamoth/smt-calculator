@@ -86,9 +86,11 @@ function getFusionRecipe(
   promise.then(
     (v) => {
       completionCallback();
-      setFusionRecipe(v);
+      if (v) setFusionRecipe(v);
     },
-    (r) => {}
+    (r) => {
+      console.log(r);
+    }
   );
 }
 
@@ -189,6 +191,22 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
   );
   let [fusionRecipe, setFusionRecipe] = useState<FusionRecipe>();
 
+  let classNameForSkill = (skill: string | undefined): string | undefined => {
+    if (state.demon && skill) {
+      let demonData = demons.find(
+        (d) => d.name.toLowerCase() === state.demon?.toLowerCase()
+      );
+      if (
+        demonData?.skills.some(
+          (s) => s.name.toLowerCase() === skill.toLowerCase()
+        )
+      ) {
+        return styles.innateSkill;
+      }
+    }
+    return undefined;
+  };
+
   return (
     <div>
       <div className={globalStyles.centeredContainer}>
@@ -223,7 +241,11 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
             id="skillSelection1"
             options={skills}
             sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Skill 1" />}
+            renderInput={(params) => (
+              <div className={classNameForSkill(state.skill_1)}>
+                <TextField {...params} label="Skill 1" />
+              </div>
+            )}
             onChange={(e, v) =>
               onChangeState(
                 { stateType: StateChange.SKILL, newValue: v, skillNumber: 1 },
@@ -240,7 +262,11 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
             id="skillSelection2"
             options={skills}
             sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Skill 2" />}
+            renderInput={(params) => (
+              <div className={classNameForSkill(state.skill_2)}>
+                <TextField {...params} label="Skill 2" />
+              </div>
+            )}
             onChange={(e, v) =>
               onChangeState(
                 { stateType: StateChange.SKILL, newValue: v, skillNumber: 2 },
@@ -259,7 +285,9 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               options={skills}
               sx={{ width: 300 }}
               renderInput={(params) => (
-                <TextField {...params} label="Skill 3" />
+                <div className={classNameForSkill(state.skill_3)}>
+                  <TextField {...params} label="Skill 3" />
+                </div>
               )}
               onChange={(e, v) =>
                 onChangeState(
@@ -278,7 +306,9 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               options={skills}
               sx={{ width: 300 }}
               renderInput={(params) => (
-                <TextField {...params} label="Skill 4" />
+                <div className={classNameForSkill(state.skill_4)}>
+                  <TextField {...params} label="Skill 4" />
+                </div>
               )}
               onChange={(e, v) =>
                 onChangeState(
@@ -299,7 +329,9 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               options={skills}
               sx={{ width: 300 }}
               renderInput={(params) => (
-                <TextField {...params} label="Skill 5" />
+                <div className={classNameForSkill(state.skill_5)}>
+                  <TextField {...params} label="Skill 5" />
+                </div>
               )}
               onChange={(e, v) =>
                 onChangeState(
@@ -318,7 +350,9 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               options={skills}
               sx={{ width: 300 }}
               renderInput={(params) => (
-                <TextField {...params} label="Skill 6" />
+                <div className={classNameForSkill(state.skill_6)}>
+                  <TextField {...params} label="Skill 6" />
+                </div>
               )}
               onChange={(e, v) =>
                 onChangeState(
@@ -339,7 +373,9 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               options={skills}
               sx={{ width: 300 }}
               renderInput={(params) => (
-                <TextField {...params} label="Skill 7" />
+                <div className={classNameForSkill(state.skill_7)}>
+                  <TextField {...params} label="Skill 7" />
+                </div>
               )}
               onChange={(e, v) =>
                 onChangeState(
@@ -358,7 +394,9 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               options={skills}
               sx={{ width: 300 }}
               renderInput={(params) => (
-                <TextField {...params} label="Skill 8" />
+                <div className={classNameForSkill(state.skill_8)}>
+                  <TextField {...params} label="Skill 8" />
+                </div>
               )}
               onChange={(e, v) =>
                 onChangeState(
