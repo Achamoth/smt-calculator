@@ -68,6 +68,7 @@ function getFusionRecipes(
   let fusionCombinations = getFusionCombinations(demon, fusionData);
 
   for (let combination of fusionCombinations) {
+    if (combination.some((d) => shouldSkipDemon(d, fusionData))) continue;
     let result = new FusionRecipe(demon);
 
     combination.forEach((d) => {
@@ -99,6 +100,17 @@ function getFusionRecipes(
     }
   }
   return bestChain;
+}
+
+// Famed/Undead demons only come from accidents in SMT IV, so they're useless in a recipe unless they're a special fusion.
+function shouldSkipDemon(d: Demon, data: FusionData): boolean {
+  return (
+    (d.race.toLocaleLowerCase() === "famed" ||
+      d.race.toLocaleLowerCase() === "undead") &&
+    !data.specialFusions.some(
+      (s) => s.name.toLocaleLowerCase() === d.name.toLocaleLowerCase()
+    )
+  );
 }
 
 function findMissing(found: string[], targets: string[]) {
