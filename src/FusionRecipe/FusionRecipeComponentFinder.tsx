@@ -1,21 +1,10 @@
-import {
-  Autocomplete,
-  TextField,
-  Button,
-  CircularProgress,
-} from "@mui/material";
+import { Autocomplete, TextField, Button } from "@mui/material";
 import { useState } from "react";
 import { FusionRecipe } from "../classes/FusionRecipe";
 import { FusionData } from "../utils/types";
 import { findPathFromComponentToResult } from "../utils/fusion_recipe";
 import { FusionRecipeResult } from "./FusionRecipeResult";
 import styles from "./FusionRecipeComponentFinder.module.css";
-
-enum RecipeCalculationStatus {
-  UNSTARTED,
-  RUNNING,
-  FINISHED,
-}
 
 type ComponentFinderState = {
   demon?: DemonOption | null;
@@ -30,7 +19,7 @@ type DemonOption = {
 interface DemonSelectionProps {
   value?: DemonOption;
   label: string;
-  key?: string;
+  propsKey?: string;
   demonOptions: DemonOption[];
   onChange: (e: any, v: DemonOption | null) => void;
 }
@@ -42,22 +31,15 @@ interface FusionRecipeComponentFinderProps {
 function getFusionRecipe(
   state: ComponentFinderState,
   fusionData: FusionData,
-  completionCallback: () => void,
-  setFusionRecipe: (v: FusionRecipe) => void
+  setFusionRecipes: (v: FusionRecipe[]) => void
 ) {
   let demon = fusionData.demons.find((d) => d.name === state.demon!.name)!;
-  let promise = findPathFromComponentToResult(
+  let recipes = findPathFromComponentToResult(
     fusionData,
     demon,
     state.components.map((c) => c.name)
   );
-  promise.then(
-    (v) => {
-      completionCallback();
-      if (v) setFusionRecipe(v);
-    },
-    (r) => {}
-  );
+  setFusionRecipes(recipes);
 }
 
 function DemonSelection(props: DemonSelectionProps) {
@@ -65,7 +47,7 @@ function DemonSelection(props: DemonSelectionProps) {
     <div className={styles.demonSelection}>
       <Autocomplete
         value={props.value}
-        key={props.key}
+        key={`selection_${props.propsKey}`}
         className={styles.demonSelection}
         disablePortal
         id="demonSelection"
@@ -88,10 +70,7 @@ export function FusionRecipeComponentFinder(
   });
 
   let [state, setState] = useState<ComponentFinderState>({ components: [] });
-  let [recipeCalculationStatus, setRecipeCalculationStatus] = useState(
-    RecipeCalculationStatus.UNSTARTED
-  );
-  let [fusionRecipe, setFusionRecipe] = useState<FusionRecipe>();
+  let [fusionRecipes, setFusionRecipes] = useState<FusionRecipe[]>();
 
   return (
     <div className={styles.fusionByComponentsContainer}>
@@ -113,6 +92,7 @@ export function FusionRecipeComponentFinder(
               <DemonSelection
                 value={c}
                 key={c.name}
+                propsKey={c.name}
                 demonOptions={demonOptions}
                 label={`Component ${i + 1}`}
                 onChange={(e: any, v: DemonOption | null) =>
@@ -130,7 +110,7 @@ export function FusionRecipeComponentFinder(
             );
           })}
           <DemonSelection
-            key={state.components.length.toString()}
+            propsKey={state.components.length.toString()}
             demonOptions={demonOptions}
             label={`Component ${state.components.length + 1}`}
             onChange={(e: any, v: DemonOption | null) =>
@@ -149,27 +129,16 @@ export function FusionRecipeComponentFinder(
         <Button
           variant="contained"
           onClick={() => {
-            setRecipeCalculationStatus(RecipeCalculationStatus.RUNNING);
-            getFusionRecipe(
-              state,
-              props.fusionData,
-              () =>
-                setRecipeCalculationStatus(RecipeCalculationStatus.FINISHED),
-              setFusionRecipe
-            );
+            getFusionRecipe(state, props.fusionData, setFusionRecipes);
           }}
         >
           Find Recipe
         </Button>
       </div>
       <div className={styles.centeredWithBottomMargin}>
-        {recipeCalculationStatus === RecipeCalculationStatus.RUNNING && (
-          <CircularProgress />
+        {fusionRecipes && (
+          <FusionRecipeResult recipes={fusionRecipes} skills={[]} />
         )}
-        {recipeCalculationStatus === RecipeCalculationStatus.FINISHED &&
-          fusionRecipe && (
-            <FusionRecipeResult recipe={fusionRecipe} skills={[]} />
-          )}
       </div>
     </div>
   );

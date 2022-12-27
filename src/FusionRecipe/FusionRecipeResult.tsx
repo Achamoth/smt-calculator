@@ -60,60 +60,72 @@ function SkillRows(props: SkillRowsProps) {
 
 interface FusionRecipeResultProps {
   skills: string[];
-  recipe: FusionRecipe;
+  recipes: FusionRecipe[];
 }
 
 export function FusionRecipeResult(props: FusionRecipeResultProps) {
-  let stack = traverseRecipe(props.recipe);
-  let maxComponents = Math.max(...stack.map((r) => r.recipes.length));
-  let i = 1;
-
+  let resultIndex = 0;
+  console.log(props.recipes);
   return (
-    <div>
-      <table className={styles.recipeTable}>
-        <thead>
-          <tr key={"recipeResultHeader"}>
-            <th></th>
-            <th className={styles.recipeTableHeader}>Result</th>
-            {[...Array.from(Array(maxComponents).keys())].map((j) => {
-              return (
-                <th className={styles.recipeTableHeader}>Component {j + 1}</th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {stack.reverse().map((r) => {
-            if (r.recipes.length) {
-              return (
-                <>
-                  <tr key={i} className={styles.recipeTableRow}>
-                    <td className={styles.recipeTableResultCell}>{i++}</td>
-                    <td
-                      className={styles.recipeTableResultCell}
-                    >{`${r.demon.race} ${r.demon.name}`}</td>
-                    {r.recipes.map((rr) => {
-                      return (
-                        <td
-                          key={`${i}${rr.demon.name}`}
-                          className={styles.recipeTableComponentCell}
-                        >{`${rr.demon.race} ${rr.demon.name}`}</td>
-                      );
-                    })}
-                  </tr>
-                  <SkillRows
-                    demons={r.recipes.map((r) => r.demon)}
-                    skills={props.skills}
-                    numColumns={maxComponents}
-                  />
-                </>
-              );
-            } else {
-              return <></>;
-            }
-          })}
-        </tbody>
-      </table>
+    <div key="top_div_result">
+      {props.recipes.map((r) => {
+        let stack = traverseRecipe(r);
+        let maxComponents = Math.max(...stack.map((r) => r.recipes.length));
+        let i = 1;
+
+        return (
+          <div className={styles.singleResult} key={`result_${resultIndex++}`}>
+            <table className={styles.recipeTable} key={`table_${resultIndex}`}>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th className={styles.recipeTableHeader}>Result</th>
+                  {[...Array.from(Array(maxComponents).keys())].map((j) => {
+                    return (
+                      <th className={styles.recipeTableHeader}>
+                        Component {j + 1}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {stack.reverse().map((r) => {
+                  if (r.recipes.length) {
+                    return (
+                      <>
+                        <tr className={styles.recipeTableRow}>
+                          <td className={styles.recipeTableResultCell}>
+                            {i++}
+                          </td>
+                          <td
+                            className={styles.recipeTableResultCell}
+                          >{`${r.demon.race} ${r.demon.name}`}</td>
+                          {r.recipes.map((rr) => {
+                            return (
+                              <td
+                                key={`${resultIndex}_${i}_${rr.demon.name}`}
+                                className={styles.recipeTableComponentCell}
+                              >{`${rr.demon.race} ${rr.demon.name}`}</td>
+                            );
+                          })}
+                        </tr>
+                        <SkillRows
+                          demons={r.recipes.map((r) => r.demon)}
+                          skills={props.skills}
+                          numColumns={maxComponents}
+                        />
+                      </>
+                    );
+                  } else {
+                    return <></>;
+                  }
+                })}
+              </tbody>
+            </table>
+          </div>
+        );
+      })}
     </div>
   );
 }

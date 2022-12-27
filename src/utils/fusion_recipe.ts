@@ -6,55 +6,67 @@ import { FusionData } from "./types";
 export function findPathFromComponentToResult(
   fusionData: FusionData,
   demon: Demon,
-  targetComponents: string[]
+  targetComponents: string[],
+  resultLimit: number = 1,
+  depthLimit: number = 10
 ) {
-  return new Promise<FusionRecipe>((resolve, reject) => {
-    let recipe = getBestFusionRecipe(
-      fusionData,
-      demon,
-      targetComponents,
-      (r: FusionRecipe, t: string[]) => r.foundComponents(t),
-      10
-    );
-    resolve(recipe);
-  }).catch((e) => console.error(e));
+  return getBestFusionRecipes(
+    fusionData,
+    demon,
+    targetComponents,
+    (r: FusionRecipe, t: string[]) => r.foundComponents(t),
+    depthLimit,
+    resultLimit
+  );
 }
 
 export function findFusionRecipes(
   fusionData: FusionData,
   demon: Demon,
-  targetSkills: string[]
+  targetSkills: string[],
+  resultLimit: number,
+  depthLimit: number = 10
 ) {
-  return new Promise<FusionRecipe>((resolve, reject) => {
-    let recipe = getBestFusionRecipe(
-      fusionData,
-      demon,
-      targetSkills,
-      (r: FusionRecipe, t: string[]) => r.foundSkills(t),
-      10
-    );
-    resolve(recipe);
-  }).catch((e) => console.error(e));
+  return getBestFusionRecipes(
+    fusionData,
+    demon,
+    targetSkills,
+    (r: FusionRecipe, t: string[]) => r.foundSkills(t),
+    depthLimit,
+    resultLimit
+  );
 }
 
-function getBestFusionRecipe(
+function getBestFusionRecipes(
   fusionData: FusionData,
   demon: Demon,
   targets: string[],
   found: (r: FusionRecipe, t: string[]) => string[],
-  maxDepth: number
+  maxDepth: number,
+  resultLimit: number
 ) {
-  let bestChain = new FusionRecipe(demon);
+  console.log(resultLimit);
+  let recipes: FusionRecipe[] = [];
   for (let i = 1; i < maxDepth; i++) {
-    let recipe = getFusionRecipes(fusionData, demon, targets, found, i, 0);
-    if (found(recipe, targets).length >= targets.length) {
-      return recipe;
-    }
-    if (found(recipe, targets).length > found(bestChain, targets).length) {
-      bestChain = recipe;
+    console.log(i);
+    let curDepthRecipes = getFusionRecipes(
+      fusionData,
+      demon,
+      targets,
+      found,
+      i,
+      0,
+      resultLimit - recipes.length
+    );
+    for (let index = 0; index < curDepthRecipes.length; index++) {
+      let r = curDepthRecipes[index];
+      if (found(r, targets).length >= targets.length) {
+        recipes.push(r);
+      }
+      if (recipes.length >= resultLimit) break;
     }
   }
-  return bestChain;
+  return recipes;
 }
 
 function getFusionRecipes(
@@ -63,12 +75,13 @@ function getFusionRecipes(
   targets: string[],
   found: (r: FusionRecipe, t: string[]) => string[],
   depthLimit: number,
-  curDepth: number
+  curDepth: number,
+  resultLimit: number
 ) {
-  let bestChain = new FusionRecipe(demon);
+  let foundRecipes: FusionRecipe[] = [];
 
   if (curDepth === depthLimit) {
-    return bestChain;
+    return foundRecipes;
   }
 
   let fusionCombinations = getFusionCombinations(demon, fusionData);
@@ -81,30 +94,38 @@ function getFusionRecipes(
     });
 
     if (found(result, targets).length >= targets.length) {
-      return result;
+      foundRecipes.push(result);
+      if (foundRecipes.length >= resultLimit) {
+        return foundRecipes;
+      }
     }
 
     for (const component of combination) {
+      console.log(curDepth, component);
       let missing = findMissing(found(result, targets), targets);
-      let newRecipe = getFusionRecipes(
+      let newRecipes = getFusionRecipes(
         fusionData,
         component,
         missing,
         found,
         depthLimit,
-        curDepth + 1
+        curDepth + 1,
+        resultLimit - foundRecipes.length
       );
-      result.replaceRecipe(component.name, newRecipe);
-      if (found(result, targets).length >= targets.length) {
-        return result;
+      for (let index = 0; index < newRecipes?.length; index++) {
+        let componentRecipe = newRecipes[index];
+        result.replaceRecipe(component.name, componentRecipe);
+        if (found(result, targets).length >= targets.length) {
+          foundRecipes.push(result);
+          if (foundRecipes.length >= resultLimit) {
+            return foundRecipes;
+          }
+        }
       }
     }
-
-    if (found(bestChain, targets).length < found(result, targets).length) {
-      bestChain = result;
-    }
   }
-  return bestChain;
+
+  return foundRecipes;
 }
 
 function findMissing(found: string[], targets: string[]) {

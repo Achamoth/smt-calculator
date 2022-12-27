@@ -23,3 +23,7 @@
 .recipeTableRow {
   border-bottom: 1px solid black;
 }
+
+.singleResult {
+  margin-bottom: 20px;
+}

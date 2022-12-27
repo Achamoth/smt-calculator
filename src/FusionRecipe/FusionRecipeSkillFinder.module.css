@@ -12,3 +12,7 @@
 .innateSkill {
   background-color: honeydew;
 }
+
+.maxResults {
+  max-width: 150px;
+}

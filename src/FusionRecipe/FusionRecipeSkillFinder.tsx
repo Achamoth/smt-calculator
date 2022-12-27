@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  Autocomplete,
-  TextField,
-  Button,
-  CircularProgress,
-} from "@mui/material";
+import { Autocomplete, TextField, Button } from "@mui/material";
 import { Demon } from "../classes/Demon";
 import { FusionRecipe } from "../classes/FusionRecipe";
 import { FusionData, SkillDemonMap } from "../utils/types";
@@ -13,15 +8,10 @@ import { FusionRecipeResult } from "./FusionRecipeResult";
 import styles from "./FusionRecipeSkillFinder.module.css";
 import globalStyles from "../globals.module.css";
 
-enum RecipeCalculationStatus {
-  UNSTARTED,
-  RUNNING,
-  FINISHED,
-}
-
 enum StateChange {
   SKILL,
   DEMON,
+  MAX_RESULTS,
 }
 
 type FusionRecipeSkillFinderState = {
@@ -34,6 +24,12 @@ type FusionRecipeSkillFinderState = {
   skill_7?: string;
   skill_8?: string;
   demon?: string;
+  max_results: number;
+};
+
+type ChangeStateMaxResults = {
+  stateType: StateChange.MAX_RESULTS;
+  newValue: number;
 };
 
 type ChangeStateSkill = {
@@ -75,23 +71,14 @@ function getFusionRecipe(
   state: FusionRecipeSkillFinderState,
   fusionData: FusionData,
   demons: Demon[],
-  completionCallback: () => void,
-  setFusionRecipe: React.Dispatch<
-    React.SetStateAction<FusionRecipe | undefined>
+  setFusionRecipes: React.Dispatch<
+    React.SetStateAction<FusionRecipe[] | undefined>
   >
 ) {
   let demon = demons.find((d) => d.name === state.demon)!;
   let skills = getTargetSkills(state);
-  let promise = findFusionRecipes(fusionData, demon, skills);
-  promise.then(
-    (v) => {
-      completionCallback();
-      if (v) setFusionRecipe(v);
-    },
-    (r) => {
-      console.log(r);
-    }
-  );
+  let recipes = findFusionRecipes(fusionData, demon, skills, state.max_results);
+  setFusionRecipes(recipes);
 }
 
 function getNewStateWhenDemonChanges(
@@ -100,21 +87,20 @@ function getNewStateWhenDemonChanges(
 ): FusionRecipeSkillFinderState {
   let demon = demons.find((d) => d.name === demonOption.name)!;
   let newState: any = { demon: demon.name };
-  for (let i: number = 1; i < 9; i++) {
-    if (demon.skills[i]) {
-      newState[`skill_${i}`] = demon.skills[i].name;
+  let innateSkills = demon.skills.filter((s) => s.level !== 5277); // Magatsuhi skill TODO Move to function
+  for (let i: number = 0; i < 8; i++) {
+    if (innateSkills[i]) {
+      newState[`skill_${i + 1}`] = innateSkills[i].name;
     }
   }
   return newState;
 }
 
 function onChangeState(
-  stateChange: ChangeStateSkill | ChangeStateDemon,
-  setState: Function, // TODO I can't figure out how to pass a lambda function that accepts a lambda function parameter
-  setRecipeCalculationStatus: Function,
+  stateChange: ChangeStateSkill | ChangeStateDemon | ChangeStateMaxResults,
+  setState: Function,
   setFusionRecipe: Function
 ) {
-  setRecipeCalculationStatus(RecipeCalculationStatus.UNSTARTED);
   setFusionRecipe(null);
   switch (stateChange.stateType) {
     case StateChange.SKILL:
@@ -170,7 +156,11 @@ function onChangeState(
           stateChange.newValue,
           stateChange.demons
         );
-        // return { ...s, demon: stateChange.newValue?.name };
+      });
+      break;
+    case StateChange.MAX_RESULTS:
+      setState((s: FusionRecipeSkillFinderState) => {
+        return { ...s, max_results: stateChange.newValue };
       });
       break;
     default:
@@ -185,11 +175,10 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
     return { label: `${d.race} ${d.name}`, name: d.name };
   });
 
-  let [state, setState] = useState<FusionRecipeSkillFinderState>({});
-  let [recipeCalculationStatus, setRecipeCalculationStatus] = useState(
-    RecipeCalculationStatus.UNSTARTED
-  );
-  let [fusionRecipe, setFusionRecipe] = useState<FusionRecipe>();
+  let [state, setState] = useState<FusionRecipeSkillFinderState>({
+    max_results: 5,
+  });
+  let [fusionRecipes, setFusionRecipes] = useState<FusionRecipe[]>();
 
   let classNameForSkill = (skill: string | undefined): string | undefined => {
     if (state.demon && skill) {
@@ -224,8 +213,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               onChangeState(
                 { stateType: StateChange.DEMON, newValue: v, demons: demons },
                 setState,
-                setRecipeCalculationStatus,
-                setFusionRecipe
+                setFusionRecipes
               )
             }
             isOptionEqualToValue={(o, v) => o.label === v.label}
@@ -250,8 +238,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               onChangeState(
                 { stateType: StateChange.SKILL, newValue: v, skillNumber: 1 },
                 setState,
-                setRecipeCalculationStatus,
-                setFusionRecipe
+                setFusionRecipes
               )
             }
           />
@@ -271,8 +258,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               onChangeState(
                 { stateType: StateChange.SKILL, newValue: v, skillNumber: 2 },
                 setState,
-                setRecipeCalculationStatus,
-                setFusionRecipe
+                setFusionRecipes
               )
             }
           />
@@ -293,8 +279,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 3 },
                   setState,
-                  setRecipeCalculationStatus,
-                  setFusionRecipe
+                  setFusionRecipes
                 )
               }
             />
@@ -314,8 +299,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 4 },
                   setState,
-                  setRecipeCalculationStatus,
-                  setFusionRecipe
+                  setFusionRecipes
                 )
               }
             />
@@ -337,8 +321,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 5 },
                   setState,
-                  setRecipeCalculationStatus,
-                  setFusionRecipe
+                  setFusionRecipes
                 )
               }
             />
@@ -358,8 +341,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 6 },
                   setState,
-                  setRecipeCalculationStatus,
-                  setFusionRecipe
+                  setFusionRecipes
                 )
               }
             />
@@ -381,8 +363,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 7 },
                   setState,
-                  setRecipeCalculationStatus,
-                  setFusionRecipe
+                  setFusionRecipes
                 )
               }
             />
@@ -402,8 +383,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 8 },
                   setState,
-                  setRecipeCalculationStatus,
-                  setFusionRecipe
+                  setFusionRecipes
                 )
               }
             />
@@ -411,35 +391,43 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
         </div>
       </div>
       <div className={globalStyles.centeredContainer}>
+        <span className={styles.maxResults}>
+          <TextField
+            InputLabelProps={{ shrink: true }}
+            type={"number"}
+            variant="outlined"
+            label="Max results"
+            value={state.max_results}
+            size="small"
+            onChange={(e) =>
+              onChangeState(
+                {
+                  stateType: StateChange.MAX_RESULTS,
+                  newValue: parseInt(e.target.value),
+                },
+                setState,
+                setFusionRecipes
+              )
+            }
+          />
+        </span>
         <Button
           className={styles.findRecipeButton}
           variant="contained"
           onClick={() => {
-            setRecipeCalculationStatus(RecipeCalculationStatus.RUNNING);
-            getFusionRecipe(
-              state,
-              props.fusionData,
-              demons,
-              () =>
-                setRecipeCalculationStatus(RecipeCalculationStatus.FINISHED),
-              setFusionRecipe
-            );
+            getFusionRecipe(state, props.fusionData, demons, setFusionRecipes);
           }}
         >
           Find Recipe
         </Button>
       </div>
       <div className={globalStyles.centeredContainer}>
-        {recipeCalculationStatus === RecipeCalculationStatus.RUNNING && (
-          <CircularProgress />
+        {fusionRecipes && (
+          <FusionRecipeResult
+            recipes={fusionRecipes}
+            skills={getTargetSkills(state)}
+          />
         )}
-        {recipeCalculationStatus === RecipeCalculationStatus.FINISHED &&
-          fusionRecipe && (
-            <FusionRecipeResult
-              recipe={fusionRecipe}
-              skills={getTargetSkills(state)}
-            />
-          )}
       </div>
     </div>
   );
