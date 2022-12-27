@@ -15,6 +15,10 @@
   text-align: start;
 }
 
+.recipeTableDesiredComponent {
+  background-color: honeydew;
+}
+
 .recipeTableSkillRow {
   background-color: honeydew;
   border-bottom: 1px solid black;

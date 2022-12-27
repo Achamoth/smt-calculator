@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  Autocomplete,
-  TextField,
-  Button,
-  CircularProgress,
-} from "@mui/material";
+import { Autocomplete, TextField, Button } from "@mui/material";
 import { Demon } from "../classes/Demon";
 import { FusionRecipe } from "../classes/FusionRecipe";
 import { FusionData, SkillDemonMap } from "../utils/types";
@@ -12,12 +7,7 @@ import { findFusionRecipes } from "../utils/fusion_recipe";
 import { FusionRecipeResult } from "./FusionRecipeResult";
 import styles from "./FusionRecipeSkillFinder.module.css";
 import globalStyles from "../globals.module.css";
-
-enum RecipeCalculationStatus {
-  UNSTARTED,
-  RUNNING,
-  FINISHED,
-}
+import { getInnateSkills } from "../utils/demon_utils";
 
 enum StateChange {
   SKILL,
@@ -75,23 +65,14 @@ function getFusionRecipe(
   state: FusionRecipeSkillFinderState,
   fusionData: FusionData,
   demons: Demon[],
-  completionCallback: () => void,
   setFusionRecipe: React.Dispatch<
     React.SetStateAction<FusionRecipe | undefined>
   >
 ) {
   let demon = demons.find((d) => d.name === state.demon)!;
   let skills = getTargetSkills(state);
-  let promise = findFusionRecipes(fusionData, demon, skills);
-  promise.then(
-    (v) => {
-      completionCallback();
-      if (v) setFusionRecipe(v);
-    },
-    (r) => {
-      console.log(r);
-    }
-  );
+  let recipe = findFusionRecipes(fusionData, demon, skills);
+  setFusionRecipe(recipe);
 }
 
 function getNewStateWhenDemonChanges(
@@ -99,10 +80,11 @@ function getNewStateWhenDemonChanges(
   demons: Demon[]
 ): FusionRecipeSkillFinderState {
   let demon = demons.find((d) => d.name === demonOption.name)!;
+  let innateSkills = getInnateSkills(demon);
   let newState: any = { demon: demon.name };
-  for (let i: number = 1; i < 9; i++) {
-    if (demon.skills[i]) {
-      newState[`skill_${i}`] = demon.skills[i].name;
+  for (let i = 0; i < 8; i++) {
+    if (innateSkills[i]) {
+      newState[`skill_${i + 1}`] = innateSkills[i].name;
     }
   }
   return newState;
@@ -110,11 +92,9 @@ function getNewStateWhenDemonChanges(
 
 function onChangeState(
   stateChange: ChangeStateSkill | ChangeStateDemon,
-  setState: Function, // TODO I can't figure out how to pass a lambda function that accepts a lambda function parameter
-  setRecipeCalculationStatus: Function,
+  setState: Function,
   setFusionRecipe: Function
 ) {
-  setRecipeCalculationStatus(RecipeCalculationStatus.UNSTARTED);
   setFusionRecipe(null);
   switch (stateChange.stateType) {
     case StateChange.SKILL:
@@ -186,9 +166,6 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
   });
 
   let [state, setState] = useState<FusionRecipeSkillFinderState>({});
-  let [recipeCalculationStatus, setRecipeCalculationStatus] = useState(
-    RecipeCalculationStatus.UNSTARTED
-  );
   let [fusionRecipe, setFusionRecipe] = useState<FusionRecipe>();
 
   let classNameForSkill = (skill: string | undefined): string | undefined => {
@@ -224,7 +201,6 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               onChangeState(
                 { stateType: StateChange.DEMON, newValue: v, demons: demons },
                 setState,
-                setRecipeCalculationStatus,
                 setFusionRecipe
               )
             }
@@ -250,7 +226,6 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               onChangeState(
                 { stateType: StateChange.SKILL, newValue: v, skillNumber: 1 },
                 setState,
-                setRecipeCalculationStatus,
                 setFusionRecipe
               )
             }
@@ -271,7 +246,6 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               onChangeState(
                 { stateType: StateChange.SKILL, newValue: v, skillNumber: 2 },
                 setState,
-                setRecipeCalculationStatus,
                 setFusionRecipe
               )
             }
@@ -293,7 +267,6 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 3 },
                   setState,
-                  setRecipeCalculationStatus,
                   setFusionRecipe
                 )
               }
@@ -314,7 +287,6 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 4 },
                   setState,
-                  setRecipeCalculationStatus,
                   setFusionRecipe
                 )
               }
@@ -337,7 +309,6 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 5 },
                   setState,
-                  setRecipeCalculationStatus,
                   setFusionRecipe
                 )
               }
@@ -358,7 +329,6 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 6 },
                   setState,
-                  setRecipeCalculationStatus,
                   setFusionRecipe
                 )
               }
@@ -381,7 +351,6 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 7 },
                   setState,
-                  setRecipeCalculationStatus,
                   setFusionRecipe
                 )
               }
@@ -402,7 +371,6 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 onChangeState(
                   { stateType: StateChange.SKILL, newValue: v, skillNumber: 8 },
                   setState,
-                  setRecipeCalculationStatus,
                   setFusionRecipe
                 )
               }
@@ -415,31 +383,20 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
           className={styles.findRecipeButton}
           variant="contained"
           onClick={() => {
-            setRecipeCalculationStatus(RecipeCalculationStatus.RUNNING);
-            getFusionRecipe(
-              state,
-              props.fusionData,
-              demons,
-              () =>
-                setRecipeCalculationStatus(RecipeCalculationStatus.FINISHED),
-              setFusionRecipe
-            );
+            getFusionRecipe(state, props.fusionData, demons, setFusionRecipe);
           }}
         >
           Find Recipe
         </Button>
       </div>
       <div className={globalStyles.centeredContainer}>
-        {recipeCalculationStatus === RecipeCalculationStatus.RUNNING && (
-          <CircularProgress />
+        {fusionRecipe && (
+          <FusionRecipeResult
+            recipe={fusionRecipe}
+            skills={getTargetSkills(state)}
+            components={[]}
+          />
         )}
-        {recipeCalculationStatus === RecipeCalculationStatus.FINISHED &&
-          fusionRecipe && (
-            <FusionRecipeResult
-              recipe={fusionRecipe}
-              skills={getTargetSkills(state)}
-            />
-          )}
       </div>
     </div>
   );
