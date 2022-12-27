@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { Demon } from "../classes/Demon";
 import { FusionRecipe } from "../classes/FusionRecipe";
 import styles from "./FusionRecipeResult.module.css";
@@ -61,6 +62,7 @@ function SkillRows(props: SkillRowsProps) {
 interface FusionRecipeResultProps {
   skills: string[];
   recipe: FusionRecipe;
+  components: string[];
 }
 
 export function FusionRecipeResult(props: FusionRecipeResultProps) {
@@ -93,10 +95,17 @@ export function FusionRecipeResult(props: FusionRecipeResultProps) {
                       className={styles.recipeTableResultCell}
                     >{`${r.demon.race} ${r.demon.name}`}</td>
                     {r.recipes.map((rr) => {
+                      let cellClass = classNames(
+                        styles.recipeTableComponentCell,
+                        {
+                          [`${styles.recipeTableDesiredComponent}`]:
+                            props.components.includes(rr.demon.name),
+                        }
+                      );
                       return (
                         <td
                           key={`${i}${rr.demon.name}`}
-                          className={styles.recipeTableComponentCell}
+                          className={cellClass}
                         >{`${rr.demon.race} ${rr.demon.name}`}</td>
                       );
                     })}

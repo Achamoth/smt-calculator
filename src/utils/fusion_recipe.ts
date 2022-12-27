@@ -8,16 +8,13 @@ export function findPathFromComponentToResult(
   demon: Demon,
   targetComponents: string[]
 ) {
-  return new Promise<FusionRecipe>((resolve, reject) => {
-    let recipe = getBestFusionRecipe(
-      fusionData,
-      demon,
-      targetComponents,
-      (r: FusionRecipe, t: string[]) => r.foundComponents(t),
-      10
-    );
-    resolve(recipe);
-  }).catch((e) => console.error(e));
+  return getBestFusionRecipe(
+    fusionData,
+    demon,
+    targetComponents,
+    (r: FusionRecipe, t: string[]) => r.foundComponents(t),
+    10
+  );
 }
 
 export function findFusionRecipes(
@@ -25,16 +22,13 @@ export function findFusionRecipes(
   demon: Demon,
   targetSkills: string[]
 ) {
-  return new Promise<FusionRecipe>((resolve, reject) => {
-    let recipe = getBestFusionRecipe(
-      fusionData,
-      demon,
-      targetSkills,
-      (r: FusionRecipe, t: string[]) => r.foundSkills(t),
-      10
-    );
-    resolve(recipe);
-  }).catch((e) => console.error(e));
+  return getBestFusionRecipe(
+    fusionData,
+    demon,
+    targetSkills,
+    (r: FusionRecipe, t: string[]) => r.foundSkills(t),
+    10
+  );
 }
 
 function getBestFusionRecipe(
