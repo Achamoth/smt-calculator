@@ -1,40 +1,14 @@
-import { FusionRecipe } from "../classes/FusionRecipe";
-import { Demon } from "../classes/Demon";
-import { getFusionCombinations } from "./demon_fusion";
-import { FusionData } from "./types";
+import { FusionRecipe } from "../classes/FusionRecipe.ts";
+import { Demon } from "../classes/Demon.ts";
+import { getFusionCombinations } from "./demon_fusion.ts";
+import { FusionData } from "./types.ts";
 
-export function findPathFromComponentToResult(
-  fusionData: FusionData,
-  demon: Demon,
-  targetComponents: string[],
-  resultLimit: number = 1,
-  depthLimit: number = 10
-) {
-  return getBestFusionRecipes(
-    fusionData,
-    demon,
-    targetComponents,
-    (r: FusionRecipe, t: string[]) => r.foundComponents(t),
-    depthLimit,
-    resultLimit
-  );
+export function findPathFromComponentToResult(fusionData: FusionData, demon: Demon, targetComponents: string[], resultLimit: number = 1, depthLimit: number = 10) {
+  return getBestFusionRecipes(fusionData, demon, targetComponents, (r: FusionRecipe, t: string[]) => r.foundComponents(t), depthLimit, resultLimit);
 }
 
-export function findFusionRecipes(
-  fusionData: FusionData,
-  demon: Demon,
-  targetSkills: string[],
-  resultLimit: number,
-  depthLimit: number = 10
-) {
-  return getBestFusionRecipes(
-    fusionData,
-    demon,
-    targetSkills,
-    (r: FusionRecipe, t: string[]) => r.foundSkills(t),
-    depthLimit,
-    resultLimit
-  );
+export function findFusionRecipes(fusionData: FusionData, demon: Demon, targetSkills: string[], resultLimit: number, depthLimit: number = 10) {
+  return getBestFusionRecipes(fusionData, demon, targetSkills, (r: FusionRecipe, t: string[]) => r.foundSkills(t), depthLimit, resultLimit);
 }
 
 function getBestFusionRecipes(
@@ -45,28 +19,25 @@ function getBestFusionRecipes(
   maxDepth: number,
   resultLimit: number
 ) {
-  console.log(resultLimit);
-  let recipes: FusionRecipe[] = [];
+  let result: FusionRecipe[] = [];
+
   for (let i = 1; i < maxDepth; i++) {
     console.log(i);
-    let curDepthRecipes = getFusionRecipes(
-      fusionData,
-      demon,
-      targets,
-      found,
-      i,
-      0,
-      resultLimit - recipes.length
-    );
+    let curDepthRecipes = getFusionRecipes(fusionData, demon, targets, found, i, 0, resultLimit);
+
     for (let index = 0; index < curDepthRecipes.length; index++) {
       let r = curDepthRecipes[index];
       if (found(r, targets).length >= targets.length) {
-        recipes.push(r);
+        result.push(r);
       }
-      if (recipes.length >= resultLimit) break;
     }
+
+    if (result.length >= resultLimit) {
+      break;
+    }
+    result = [];
   }
-  return recipes;
+  return result;
 }
 
 function getFusionRecipes(
@@ -88,8 +59,8 @@ function getFusionRecipes(
 
   for (let combination of fusionCombinations) {
     if (combination.some((d) => shouldSkipDemon(d, fusionData))) continue;
-    let result = new FusionRecipe(demon);
 
+    let result = new FusionRecipe(demon);
     combination.forEach((d) => {
       result.addComponentRecipe(new FusionRecipe(d));
     });
@@ -102,20 +73,13 @@ function getFusionRecipes(
     }
 
     for (const component of combination) {
-      console.log(curDepth, component);
       let missing = findMissing(found(result, targets), targets);
-      let newRecipes = getFusionRecipes(
-        fusionData,
-        component,
-        missing,
-        found,
-        depthLimit,
-        curDepth + 1,
-        resultLimit - foundRecipes.length
-      );
+      let newRecipes = getFusionRecipes(fusionData, component, missing, found, depthLimit, curDepth + 1, resultLimit - foundRecipes.length);
+
       for (let index = 0; index < newRecipes?.length; index++) {
         let componentRecipe = newRecipes[index];
         result.replaceRecipe(component.name, componentRecipe);
+
         if (found(result, targets).length >= targets.length) {
           foundRecipes.push(result);
           if (foundRecipes.length >= resultLimit) {
@@ -132,11 +96,8 @@ function getFusionRecipes(
 // Famed/Undead demons only come from accidents in SMT IV, so they're useless in a recipe unless they're a special fusion.
 function shouldSkipDemon(d: Demon, data: FusionData): boolean {
   return (
-    (d.race.toLocaleLowerCase() === "famed" ||
-      d.race.toLocaleLowerCase() === "undead") &&
-    !data.specialFusions.some(
-      (s) => s.name.toLocaleLowerCase() === d.name.toLocaleLowerCase()
-    )
+    (d.race.toLocaleLowerCase() === "famed" || d.race.toLocaleLowerCase() === "undead") &&
+    !data.specialFusions.some((s) => s.name.toLocaleLowerCase() === d.name.toLocaleLowerCase())
   );
 }
 

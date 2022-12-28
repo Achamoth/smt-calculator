@@ -1,4 +1,4 @@
-import { Demon } from "../classes/Demon";
+import { Demon } from "../classes/Demon.ts";
 
 export type DATA = {
   DEMON_DATA: any;

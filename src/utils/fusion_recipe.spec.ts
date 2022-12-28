@@ -1,32 +1,5 @@
-import { Demon } from "../classes/Demon";
 import { findFusionRecipes } from "./fusion_recipe";
 import { Game, loadGameData } from "./load_data";
-
-const crazyDemon: Demon = {
-  race: "Fury",
-  name: "Shiva",
-  level: 90,
-  skills: [
-    {
-      name: "Antichthon",
-      level: 0,
-    },
-    {
-      name: "Enduring Soul",
-      level: 0,
-    },
-    {
-      name: "Repel Phys",
-      level: 91,
-    },
-    {
-      name: "Victory Cry",
-      level: 92,
-    },
-  ],
-  resistances: "s-d-d-nn",
-  affinities: [],
-};
 
 const crazyUpgrade: string[] = [
   "Enduring Soul",
@@ -41,13 +14,11 @@ const crazyUpgrade: string[] = [
 
 it(`getFusionRecipes doesn't freeze`, async () => {
   let data = loadGameData(Game.SMT_IV);
+  let shiva = data.fusionData.demons.filter((d) => d.name === "Shiva")[0];
+  console.log("test");
 
   try {
-    const result = await findFusionRecipes(
-      data.fusionData,
-      crazyDemon,
-      crazyUpgrade
-    );
+    const result = findFusionRecipes(data.fusionData, shiva, crazyUpgrade, 1);
     console.log("result: ", result);
   } catch (e) {
     throw e;

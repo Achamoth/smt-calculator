@@ -1,5 +1,10 @@
-import { FusionData, SpecialFusion, FusionChart, ElementChart } from "./types";
-import { Demon } from "../classes/Demon";
+import {
+  FusionData,
+  SpecialFusion,
+  FusionChart,
+  ElementChart,
+} from "./types.ts";
+import { Demon } from "../classes/Demon.ts";
 
 enum ElementTransform {
   UP = 1,

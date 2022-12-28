@@ -1,7 +1,7 @@
-import { smt_iv_data } from "../data/smt_iv_data/smt_iv_data";
-import { smt_iv_a_data } from "../data/smt_iv_a_data/smt_iv_a_data";
-import { smt_v_data } from "../data/smt_v_data/smt_v_data";
-import { Demon, Skill } from "../classes/Demon";
+import { smt_iv_data } from "../data/smt_iv_data/smt_iv_data.ts";
+import { smt_iv_a_data } from "../data/smt_iv_a_data/smt_iv_a_data.ts";
+import { smt_v_data } from "../data/smt_v_data/smt_v_data.ts";
+import { Demon, Skill } from "../classes/Demon.ts";
 import {
   SpecialFusion,
   ElementChart,
@@ -10,8 +10,8 @@ import {
   SkillDemonMap,
   SkillDefinition,
   DATA,
-} from "./types";
-import { objectToArray } from "./general_utils";
+} from "./types.ts";
+import { objectToArray } from "./general_utils.ts";
 
 export enum Game {
   SMT_V = "Shin Megami Tensei V",
