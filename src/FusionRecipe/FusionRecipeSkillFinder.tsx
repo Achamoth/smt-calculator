@@ -7,6 +7,7 @@ import { findFusionRecipes } from "../utils/fusion_recipe";
 import { FusionRecipeResult } from "./FusionRecipeResult";
 import styles from "./FusionRecipeSkillFinder.module.css";
 import globalStyles from "../globals.module.css";
+import { getInnateSkills } from "../utils/demon_utils";
 
 enum StateChange {
   SKILL,
@@ -86,9 +87,9 @@ function getNewStateWhenDemonChanges(
   demons: Demon[]
 ): FusionRecipeSkillFinderState {
   let demon = demons.find((d) => d.name === demonOption.name)!;
+  let innateSkills = getInnateSkills(demon);
   let newState: any = { demon: demon.name };
-  let innateSkills = demon.skills.filter((s) => s.level !== 5277); // Magatsuhi skill TODO Move to function
-  for (let i: number = 0; i < 8; i++) {
+  for (let i = 0; i < 8; i++) {
     if (innateSkills[i]) {
       newState[`skill_${i + 1}`] = innateSkills[i].name;
     }
@@ -426,6 +427,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
           <FusionRecipeResult
             recipes={fusionRecipes}
             skills={getTargetSkills(state)}
+            components={[]}
           />
         )}
       </div>

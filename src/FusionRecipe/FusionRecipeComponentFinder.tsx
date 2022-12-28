@@ -79,11 +79,12 @@ export function FusionRecipeComponentFinder(
           <DemonSelection
             demonOptions={demonOptions}
             label="Demon to fuse"
-            onChange={(e: any, v: DemonOption | null) =>
+            onChange={(e: any, v: DemonOption | null) => {
               setState((s) => {
-                return { ...s, demon: v };
-              })
-            }
+                return { demon: v, components: [] };
+              });
+              setFusionRecipes(undefined);
+            }}
           />
         </div>
         <div className={styles.componentSelection}>
@@ -137,7 +138,11 @@ export function FusionRecipeComponentFinder(
       </div>
       <div className={styles.centeredWithBottomMargin}>
         {fusionRecipes && (
-          <FusionRecipeResult recipes={fusionRecipes} skills={[]} />
+          <FusionRecipeResult
+            recipes={fusionRecipes}
+            skills={[]}
+            components={state.components.map((c) => c.name)}
+          />
         )}
       </div>
     </div>

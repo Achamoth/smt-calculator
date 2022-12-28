@@ -54,6 +54,10 @@ export function compareDemons(d1: Demon, d2: Demon, sort: Sort) {
   }
 }
 
+export function getInnateSkills(d: Demon) {
+  return d.skills.filter((s) => s.level !== 5277); // Magatsuhi skills
+}
+
 function compareDemonsByRace(d1: Demon, d2: Demon) {
   if (d1.race === d2.race) {
     return d1.level < d2.level ? -1 : 1;
