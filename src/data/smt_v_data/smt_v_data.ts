@@ -1,9 +1,9 @@
-import { SMT5_DEMON_DATA } from "./demon_data";
-import { SMT5_SPECIAL_RECIPES } from "./special_recipes";
-import { SMT_5_SKILL_DATA } from "./skill_data";
-import { SMT5_ELEMENT_CHART } from "./element_chart";
-import { SMT5_FUSION_CHART } from "./fusion_chart";
-import { DATA } from "../../utils/types";
+import { SMT5_DEMON_DATA } from "./demon_data.js";
+import { SMT5_SPECIAL_RECIPES } from "./special_recipes.js";
+import { SMT_5_SKILL_DATA } from "./skill_data.js";
+import { SMT5_ELEMENT_CHART } from "./element_chart.js";
+import { SMT5_FUSION_CHART } from "./fusion_chart.js";
+import { DATA } from "../../utils/types.ts";
 
 const DemonAttribute = {
   LEVEL: "LV",

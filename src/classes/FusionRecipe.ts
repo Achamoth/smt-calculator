@@ -1,7 +1,6 @@
-import { Demon } from "./Demon";
+import { Demon } from "./Demon.ts";
 
 export class FusionRecipe {
-  
   recipes: FusionRecipe[];
 
   constructor(public demon: Demon) {
