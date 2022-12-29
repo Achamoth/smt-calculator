@@ -1,7 +1,7 @@
 import { Demon } from "../classes/Demon";
 
 export const UniversalDemonAttribute = {
-  LEVEL: "LV",
+  LEVEL: "Lvl",
   RACE: "Race",
   NAME: "Name",
 };
@@ -32,21 +32,9 @@ export type Sort = {
 export function compareDemons(d1: Demon, d2: Demon, sort: Sort) {
   switch (sort.sort) {
     case UniversalDemonAttribute.LEVEL:
-      return sort.ascending
-        ? d1.level < d2.level
-          ? -1
-          : 1
-        : d1.level < d2.level
-        ? 1
-        : -1;
+      return sort.ascending ? (d1.level < d2.level ? -1 : 1) : d1.level < d2.level ? 1 : -1;
     case UniversalDemonAttribute.NAME:
-      return sort.ascending
-        ? d1.name < d2.name
-          ? -1
-          : 1
-        : d1.name < d2.name
-        ? 1
-        : -1;
+      return sort.ascending ? (d1.name < d2.name ? -1 : 1) : d1.name < d2.name ? 1 : -1;
     default:
     case UniversalDemonAttribute.RACE:
       let order: number = compareDemonsByRace(d1, d2);

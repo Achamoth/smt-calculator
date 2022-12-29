@@ -36,4 +36,26 @@
 
 .demonTableHeader {
   background-color: grey;
+  position: sticky;
+  top: 0;
+}
+
+.repel {
+  color: lightblue;
+}
+
+.absorb {
+  color: greenyellow;
+}
+
+.null {
+  color: grey;
+}
+
+.resist {
+  color: darkolivegreen;
+}
+
+.weak {
+  color: red;
 }

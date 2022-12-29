@@ -6,8 +6,8 @@ import { SMT5_FUSION_CHART } from "./fusion_chart";
 import { DATA } from "../../utils/types";
 
 const DemonAttribute = {
-  LEVEL: "LV",
   RACE: "Race",
+  LEVEL: "Lvl",
   NAME: "Name",
   PHYS: "Phys",
   FIRE: "Fire",

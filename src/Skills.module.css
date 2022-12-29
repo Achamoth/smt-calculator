@@ -32,4 +32,6 @@
 
 .skillTableHeader {
   background-color: grey;
+  position: sticky;
+  top: 0;
 }
