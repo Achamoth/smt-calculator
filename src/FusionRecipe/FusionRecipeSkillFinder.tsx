@@ -82,7 +82,8 @@ function getFusionRecipe(
 ) {
   let demon = demons.find((d) => d.name === state.demon)!;
   let skills = getTargetSkills(state);
-  let recipe = findFusionRecipes(fusionData, demon, skills);
+  let configuration = { max_level: state.configuration.max_level, excluded_demons: state.configuration.excluded_demons.map((d) => d.name) };
+  let recipe = findFusionRecipes(fusionData, demon, skills, configuration);
   setFusionRecipe(recipe);
 }
 
@@ -154,6 +155,7 @@ function onChangeState(stateChange: ChangeStateSkill | ChangeStateDemon | Change
       });
       break;
     case StateChange.CONFIGURATION:
+      console.log(stateChange.newValue);
       setState((s: FusionRecipeSkillFinderState) => {
         return { ...s, configuration: stateChange.newValue };
       });
@@ -169,7 +171,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
   const demonOptions: DemonOption[] = demons.map((d) => {
     return { label: `${d.race} ${d.name}`, name: d.name };
   });
-  const maxLevelOptions = [...Array(99).keys()].map((x) => x + 1);
+  const maxLevelOptions = [...Array(99).keys()].map((x) => `${x + 1}`);
 
   let [state, setState] = useState<FusionRecipeSkillFinderState>({ configuration: { excluded_demons: [], max_level: 99 } });
   let [fusionRecipe, setFusionRecipe] = useState<FusionRecipe>();
@@ -330,14 +332,14 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
       </div>
       <div className={globalStyles.centeredContainerNoMargin}>
         <Autocomplete
-          value={state.configuration.max_level}
+          value={`${state.configuration.max_level}`}
           disablePortal
           id="maxLevelSelection"
           options={maxLevelOptions}
           sx={{ width: 100 }}
           renderInput={(params) => <TextField {...params} label="Max Lvl" />}
           onChange={(e, v) =>
-            onChangeState({ stateType: StateChange.CONFIGURATION, newValue: { ...state.configuration, max_level: v ?? 99 } }, setState, setFusionRecipe)
+            onChangeState({ stateType: StateChange.CONFIGURATION, newValue: { ...state.configuration, max_level: v ? parseInt(v) : 99 } }, setState, setFusionRecipe)
           }
         />
       </div>
@@ -349,17 +351,16 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
               key={d.name}
               demonOptions={demonOptions}
               label={`Excluded demon ${i + 1}`}
-              onChange={(e: any, v: DemonOption | null) =>
-                setState((s) => {
-                  let newExcludedDemons = s.configuration?.excluded_demons;
-                  if (!v) {
-                    newExcludedDemons.splice(i, 1);
-                  } else {
-                    newExcludedDemons[i] = v;
-                  }
-                  return { ...s, configuration: { ...s.configuration, excludedDemons: newExcludedDemons } };
-                })
-              }
+              onChange={(e: any, v: DemonOption | null) => {
+                let newExcludedDemons = state.configuration?.excluded_demons;
+                if (!v) {
+                  newExcludedDemons.splice(i, 1);
+                } else {
+                  newExcludedDemons[i] = v;
+                }
+                const newConfiguration = { ...state.configuration, excluded_demons: newExcludedDemons };
+                onChangeState({ stateType: StateChange.CONFIGURATION, newValue: newConfiguration }, setState, setFusionRecipe);
+              }}
             />
           );
         })}

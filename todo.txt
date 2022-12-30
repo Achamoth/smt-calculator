@@ -2,9 +2,6 @@
 - Better background colors (fix divs to make this consistent everywhere)
 - Add demon stats and affinities to table, ability to sort by any header
 - Add customization for fusion recipe
-    - Max level for any demon in recipe
-    - Exclude any demons from recipe
-    - Should probably perform some validation checks to make sure the recipe can be generated at all
     - Timeout after one minute?
     - Find a way to prevent thread from blocking?
 - Fix component recipe generation (seems to just break after enough components are added)
