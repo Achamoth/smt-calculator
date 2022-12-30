@@ -6,7 +6,6 @@ export type DATA = {
   SKILL_DATA: any;
   ELEMENT_CHART: any;
   FUSION_CHART: any;
-  ATTRIBUTES: any;
   RESISTANCES: any;
 };
 

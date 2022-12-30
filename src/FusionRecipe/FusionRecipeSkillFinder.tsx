@@ -3,16 +3,23 @@ import { Autocomplete, TextField, Button } from "@mui/material";
 import { Demon } from "../classes/Demon";
 import { FusionRecipe } from "../classes/FusionRecipe";
 import { FusionData, SkillDemonMap } from "../utils/types";
+import { getInnateSkills } from "../utils/demon_utils";
 import { findFusionRecipes } from "../utils/fusion_recipe";
 import { FusionRecipeResult } from "./FusionRecipeResult";
+import { DemonSelection } from "./FusionRecipeComponentFinder";
 import styles from "./FusionRecipeSkillFinder.module.css";
 import globalStyles from "../globals.module.css";
-import { getInnateSkills } from "../utils/demon_utils";
 
 enum StateChange {
   SKILL,
   DEMON,
+  CONFIGURATION,
 }
+
+type FusionRecipeConfiguration = {
+  max_level: number;
+  excluded_demons: DemonOption[];
+};
 
 type FusionRecipeSkillFinderState = {
   skill_1?: string;
@@ -24,6 +31,7 @@ type FusionRecipeSkillFinderState = {
   skill_7?: string;
   skill_8?: string;
   demon?: string;
+  configuration: FusionRecipeConfiguration;
 };
 
 type ChangeStateSkill = {
@@ -36,6 +44,11 @@ type ChangeStateDemon = {
   stateType: StateChange.DEMON;
   newValue: DemonOption | null;
   demons: Demon[];
+};
+
+type ChangeStateConfiguration = {
+  stateType: StateChange.CONFIGURATION;
+  newValue: FusionRecipeConfiguration;
 };
 
 type DemonOption = {
@@ -65,36 +78,28 @@ function getFusionRecipe(
   state: FusionRecipeSkillFinderState,
   fusionData: FusionData,
   demons: Demon[],
-  setFusionRecipe: React.Dispatch<
-    React.SetStateAction<FusionRecipe | undefined>
-  >
+  setFusionRecipe: React.Dispatch<React.SetStateAction<FusionRecipe | undefined>>
 ) {
   let demon = demons.find((d) => d.name === state.demon)!;
   let skills = getTargetSkills(state);
-  let recipe = findFusionRecipes(fusionData, demon, skills);
+  let configuration = { max_level: state.configuration.max_level, excluded_demons: state.configuration.excluded_demons.map((d) => d.name) };
+  let recipe = findFusionRecipes(fusionData, demon, skills, configuration);
   setFusionRecipe(recipe);
 }
 
-function getNewStateWhenDemonChanges(
-  demonOption: DemonOption,
-  demons: Demon[]
-): FusionRecipeSkillFinderState {
+function getNewStateWhenDemonChanges(demonOption: DemonOption, demons: Demon[], configuration: FusionRecipeConfiguration): FusionRecipeSkillFinderState {
   let demon = demons.find((d) => d.name === demonOption.name)!;
   let innateSkills = getInnateSkills(demon);
-  let newState: any = { demon: demon.name };
+  let newState: FusionRecipeSkillFinderState = { demon: demon.name, configuration };
   for (let i = 0; i < 8; i++) {
     if (innateSkills[i]) {
-      newState[`skill_${i + 1}`] = innateSkills[i].name;
+      (newState as any)[`skill_${i + 1}`] = innateSkills[i].name;
     }
   }
   return newState;
 }
 
-function onChangeState(
-  stateChange: ChangeStateSkill | ChangeStateDemon,
-  setState: Function,
-  setFusionRecipe: Function
-) {
+function onChangeState(stateChange: ChangeStateSkill | ChangeStateDemon | ChangeStateConfiguration, setState: Function, setFusionRecipe: Function) {
   setFusionRecipe(null);
   switch (stateChange.stateType) {
     case StateChange.SKILL:
@@ -142,15 +147,17 @@ function onChangeState(
       }
       break;
     case StateChange.DEMON:
-      setState((s: FusionRecipeSkillFinderState) => {
+      setState((s: FusionRecipeSkillFinderState): FusionRecipeSkillFinderState => {
         if (!stateChange.newValue) {
-          return {};
+          return { configuration: { ...s.configuration } };
         }
-        return getNewStateWhenDemonChanges(
-          stateChange.newValue,
-          stateChange.demons
-        );
-        // return { ...s, demon: stateChange.newValue?.name };
+        return getNewStateWhenDemonChanges(stateChange.newValue, stateChange.demons, s.configuration);
+      });
+      break;
+    case StateChange.CONFIGURATION:
+      console.log(stateChange.newValue);
+      setState((s: FusionRecipeSkillFinderState) => {
+        return { ...s, configuration: stateChange.newValue };
       });
       break;
     default:
@@ -164,20 +171,15 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
   const demonOptions: DemonOption[] = demons.map((d) => {
     return { label: `${d.race} ${d.name}`, name: d.name };
   });
+  const maxLevelOptions = [...Array(99).keys()].map((x) => `${x + 1}`);
 
-  let [state, setState] = useState<FusionRecipeSkillFinderState>({});
+  let [state, setState] = useState<FusionRecipeSkillFinderState>({ configuration: { excluded_demons: [], max_level: 99 } });
   let [fusionRecipe, setFusionRecipe] = useState<FusionRecipe>();
 
   let classNameForSkill = (skill: string | undefined): string | undefined => {
     if (state.demon && skill) {
-      let demonData = demons.find(
-        (d) => d.name.toLowerCase() === state.demon?.toLowerCase()
-      );
-      if (
-        demonData?.skills.some(
-          (s) => s.name.toLowerCase() === skill.toLowerCase()
-        )
-      ) {
+      let demonData = demons.find((d) => d.name.toLowerCase() === state.demon?.toLowerCase());
+      if (demonData?.skills.some((s) => s.name.toLowerCase() === skill.toLowerCase())) {
         return styles.innateSkill;
       }
     }
@@ -186,7 +188,10 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
 
   return (
     <div>
-      <div className={globalStyles.centeredContainer}>
+      <div className={globalStyles.centeredContainerNoMargin}>
+        <h3>Desired demon</h3>
+      </div>
+      <div className={globalStyles.centeredContainerNoMargin}>
         <div className={styles.demonSelection}>
           <Autocomplete
             className={styles.demonSelection}
@@ -194,16 +199,8 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
             id="demonSelection"
             options={demonOptions}
             sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Demon to fuse" />
-            )}
-            onChange={(e, v) =>
-              onChangeState(
-                { stateType: StateChange.DEMON, newValue: v, demons: demons },
-                setState,
-                setFusionRecipe
-              )
-            }
+            renderInput={(params) => <TextField {...params} label="Demon to fuse" />}
+            onChange={(e, v) => onChangeState({ stateType: StateChange.DEMON, newValue: v, demons: demons }, setState, setFusionRecipe)}
             isOptionEqualToValue={(o, v) => o.label === v.label}
           />
         </div>
@@ -222,13 +219,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 <TextField {...params} label="Skill 1" />
               </div>
             )}
-            onChange={(e, v) =>
-              onChangeState(
-                { stateType: StateChange.SKILL, newValue: v, skillNumber: 1 },
-                setState,
-                setFusionRecipe
-              )
-            }
+            onChange={(e, v) => onChangeState({ stateType: StateChange.SKILL, newValue: v, skillNumber: 1 }, setState, setFusionRecipe)}
           />
           <Autocomplete
             value={state.skill_2 ?? null}
@@ -242,13 +233,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                 <TextField {...params} label="Skill 2" />
               </div>
             )}
-            onChange={(e, v) =>
-              onChangeState(
-                { stateType: StateChange.SKILL, newValue: v, skillNumber: 2 },
-                setState,
-                setFusionRecipe
-              )
-            }
+            onChange={(e, v) => onChangeState({ stateType: StateChange.SKILL, newValue: v, skillNumber: 2 }, setState, setFusionRecipe)}
           />
           <div className={styles.skillSelectionPair}>
             <Autocomplete
@@ -263,13 +248,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                   <TextField {...params} label="Skill 3" />
                 </div>
               )}
-              onChange={(e, v) =>
-                onChangeState(
-                  { stateType: StateChange.SKILL, newValue: v, skillNumber: 3 },
-                  setState,
-                  setFusionRecipe
-                )
-              }
+              onChange={(e, v) => onChangeState({ stateType: StateChange.SKILL, newValue: v, skillNumber: 3 }, setState, setFusionRecipe)}
             />
             <Autocomplete
               value={state.skill_4 ?? null}
@@ -283,13 +262,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                   <TextField {...params} label="Skill 4" />
                 </div>
               )}
-              onChange={(e, v) =>
-                onChangeState(
-                  { stateType: StateChange.SKILL, newValue: v, skillNumber: 4 },
-                  setState,
-                  setFusionRecipe
-                )
-              }
+              onChange={(e, v) => onChangeState({ stateType: StateChange.SKILL, newValue: v, skillNumber: 4 }, setState, setFusionRecipe)}
             />
           </div>
           <div className={styles.skillSelectionPair}>
@@ -305,13 +278,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                   <TextField {...params} label="Skill 5" />
                 </div>
               )}
-              onChange={(e, v) =>
-                onChangeState(
-                  { stateType: StateChange.SKILL, newValue: v, skillNumber: 5 },
-                  setState,
-                  setFusionRecipe
-                )
-              }
+              onChange={(e, v) => onChangeState({ stateType: StateChange.SKILL, newValue: v, skillNumber: 5 }, setState, setFusionRecipe)}
             />
             <Autocomplete
               value={state.skill_6 ?? null}
@@ -325,13 +292,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                   <TextField {...params} label="Skill 6" />
                 </div>
               )}
-              onChange={(e, v) =>
-                onChangeState(
-                  { stateType: StateChange.SKILL, newValue: v, skillNumber: 6 },
-                  setState,
-                  setFusionRecipe
-                )
-              }
+              onChange={(e, v) => onChangeState({ stateType: StateChange.SKILL, newValue: v, skillNumber: 6 }, setState, setFusionRecipe)}
             />
           </div>
           <div className={styles.skillSelectionPair}>
@@ -347,13 +308,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                   <TextField {...params} label="Skill 7" />
                 </div>
               )}
-              onChange={(e, v) =>
-                onChangeState(
-                  { stateType: StateChange.SKILL, newValue: v, skillNumber: 7 },
-                  setState,
-                  setFusionRecipe
-                )
-              }
+              onChange={(e, v) => onChangeState({ stateType: StateChange.SKILL, newValue: v, skillNumber: 7 }, setState, setFusionRecipe)}
             />
             <Autocomplete
               value={state.skill_8 ?? null}
@@ -367,16 +322,61 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
                   <TextField {...params} label="Skill 8" />
                 </div>
               )}
-              onChange={(e, v) =>
-                onChangeState(
-                  { stateType: StateChange.SKILL, newValue: v, skillNumber: 8 },
-                  setState,
-                  setFusionRecipe
-                )
-              }
+              onChange={(e, v) => onChangeState({ stateType: StateChange.SKILL, newValue: v, skillNumber: 8 }, setState, setFusionRecipe)}
             />
           </div>
         </div>
+      </div>
+      <div className={globalStyles.centeredContainer}>
+        <h3>Recipe configuration</h3>
+      </div>
+      <div className={globalStyles.centeredContainerNoMargin}>
+        <Autocomplete
+          value={`${state.configuration.max_level}`}
+          disablePortal
+          id="maxLevelSelection"
+          options={maxLevelOptions}
+          sx={{ width: 100 }}
+          renderInput={(params) => <TextField {...params} label="Max Lvl" />}
+          onChange={(e, v) =>
+            onChangeState({ stateType: StateChange.CONFIGURATION, newValue: { ...state.configuration, max_level: v ? parseInt(v) : 99 } }, setState, setFusionRecipe)
+          }
+        />
+      </div>
+      <div className={styles.excludedDemonSelection}>
+        {state.configuration?.excluded_demons.map((d, i) => {
+          return (
+            <DemonSelection
+              value={d}
+              key={d.name}
+              demonOptions={demonOptions}
+              label={`Excluded demon ${i + 1}`}
+              onChange={(e: any, v: DemonOption | null) => {
+                let newExcludedDemons = state.configuration?.excluded_demons;
+                if (!v) {
+                  newExcludedDemons.splice(i, 1);
+                } else {
+                  newExcludedDemons[i] = v;
+                }
+                const newConfiguration = { ...state.configuration, excluded_demons: newExcludedDemons };
+                onChangeState({ stateType: StateChange.CONFIGURATION, newValue: newConfiguration }, setState, setFusionRecipe);
+              }}
+            />
+          );
+        })}
+        <DemonSelection
+          key={state.configuration.excluded_demons.length.toString()}
+          demonOptions={demonOptions}
+          label={`Excluded demon ${state.configuration.excluded_demons.length + 1}`}
+          onChange={(e: any, v: DemonOption | null) => {
+            let newExcludedDemons = state.configuration.excluded_demons;
+            if (v) {
+              newExcludedDemons.push(v);
+            }
+            const newConfiguration = { ...state.configuration, excluded_demons: newExcludedDemons };
+            onChangeState({ stateType: StateChange.CONFIGURATION, newValue: newConfiguration }, setState, setFusionRecipe);
+          }}
+        />
       </div>
       <div className={globalStyles.centeredContainer}>
         <Button
@@ -389,15 +389,7 @@ export function FusionRecipeSkillFinder(props: FusionRecipeSkillFinderProps) {
           Find Recipe
         </Button>
       </div>
-      <div className={globalStyles.centeredContainer}>
-        {fusionRecipe && (
-          <FusionRecipeResult
-            recipe={fusionRecipe}
-            skills={getTargetSkills(state)}
-            components={[]}
-          />
-        )}
-      </div>
+      <div className={globalStyles.centeredContainer}>{fusionRecipe && <FusionRecipeResult recipe={fusionRecipe} skills={getTargetSkills(state)} components={[]} />}</div>
     </div>
   );
 }

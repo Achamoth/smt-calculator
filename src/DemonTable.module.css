@@ -24,16 +24,46 @@
 }
 
 .demonTableCell,
-.demonTableHeader {
+.demonTableHeaderSecondTier,
+.demonTableHeaderTopTier {
   border-right: 1px dotted blue;
   padding-right: 20px;
-  text-align: start;
+  text-align: center;
 }
 
-.demonTableHeader:hover {
+.demonTableHeaderSecondTier:hover {
   cursor: pointer;
 }
 
-.demonTableHeader {
+.demonTableHeaderSecondTier {
   background-color: grey;
+}
+
+.demonTableHeaderTopTier {
+  background-color: darkgray;
+}
+
+.demonTableHeader {
+  position: sticky;
+  top: 0;
+}
+
+.repel {
+  color: darkblue;
+}
+
+.absorb {
+  color: greenyellow;
+}
+
+.null {
+  color: grey;
+}
+
+.resist {
+  color: darkolivegreen;
+}
+
+.weak {
+  color: red;
 }

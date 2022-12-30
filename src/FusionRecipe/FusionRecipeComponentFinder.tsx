@@ -28,11 +28,7 @@ interface FusionRecipeComponentFinderProps {
   fusionData: FusionData;
 }
 
-function getFusionRecipe(
-  state: ComponentFinderState,
-  fusionData: FusionData,
-  setFusionRecipe: (v: FusionRecipe) => void
-) {
+function getFusionRecipe(state: ComponentFinderState, fusionData: FusionData, setFusionRecipe: (v: FusionRecipe) => void) {
   let demon = fusionData.demons.find((d) => d.name === state.demon!.name)!;
   let recipe = findPathFromComponentToResult(
     fusionData,
@@ -42,7 +38,7 @@ function getFusionRecipe(
   setFusionRecipe(recipe);
 }
 
-function DemonSelection(props: DemonSelectionProps) {
+export function DemonSelection(props: DemonSelectionProps) {
   return (
     <div className={styles.demonSelection}>
       <Autocomplete
@@ -61,9 +57,7 @@ function DemonSelection(props: DemonSelectionProps) {
   );
 }
 
-export function FusionRecipeComponentFinder(
-  props: FusionRecipeComponentFinderProps
-) {
+export function FusionRecipeComponentFinder(props: FusionRecipeComponentFinderProps) {
   const demons = props.fusionData.demons;
   const demonOptions: DemonOption[] = demons.map((d) => {
     return { label: `${d.race} ${d.name}`, name: d.name };
@@ -136,13 +130,7 @@ export function FusionRecipeComponentFinder(
         </Button>
       </div>
       <div className={styles.centeredWithBottomMargin}>
-        {fusionRecipe && (
-          <FusionRecipeResult
-            recipe={fusionRecipe}
-            skills={[]}
-            components={state.components.map((c) => c.name)}
-          />
-        )}
+        {fusionRecipe && <FusionRecipeResult recipe={fusionRecipe} skills={[]} components={state.components.map((c) => c.name)} />}
       </div>
     </div>
   );
