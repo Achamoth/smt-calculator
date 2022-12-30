@@ -11,7 +11,7 @@ import { NavBar } from "./NavBar";
 function App() {
   let [game, setGame] = useState(Game.SMT_V);
   let games = supportedGames();
-  let { fusionData, skillList, skillDetails, attributes, resistances } = loadGameData(game);
+  let { fusionData, skillList, skillDetails, resistances } = loadGameData(game);
   let gameSelectorData = {
     games: games,
     selectedGame: game,
@@ -23,7 +23,7 @@ function App() {
       <div>
         <NavBar gameSelectionProps={gameSelectorData} />
         <Routes>
-          <Route path="/" element={<DemonTable demons={fusionData.demons} attributes={attributes} resistances={resistances} />} />
+          <Route path="/" element={<DemonTable demons={fusionData.demons} resistances={resistances} />} />
           <Route path="/skills" element={<Skills skills={skillList} />} />
           <Route path="/skills/:skillName" element={<SkillDetails skills={skillDetails} />} />
           <Route path="/recipe" element={<FusionRecipe fusionData={fusionData} skillList={skillList} game={game} />} />

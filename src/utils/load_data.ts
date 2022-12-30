@@ -2,16 +2,7 @@ import { smt_iv_data } from "../data/smt_iv_data/smt_iv_data";
 import { smt_iv_a_data } from "../data/smt_iv_a_data/smt_iv_a_data";
 import { smt_v_data } from "../data/smt_v_data/smt_v_data";
 import { Demon, Skill } from "../classes/Demon";
-import {
-  SpecialFusion,
-  ElementChart,
-  FusionChart,
-  FusionData,
-  SkillDemonMap,
-  SkillDefinition,
-  DATA,
-} from "./types";
-import { objectToArray } from "./general_utils";
+import { SpecialFusion, ElementChart, FusionChart, FusionData, SkillDemonMap, SkillDefinition, DATA } from "./types";
 
 export enum Game {
   SMT_V = "Shin Megami Tensei V",
@@ -23,8 +14,7 @@ export type GameData = {
   fusionData: FusionData;
   skillList: SkillDemonMap[];
   skillDetails: SkillDefinition[];
-  attributes: string[];
-  resistances: number[];
+  resistances: string[];
 };
 
 export function supportedGames() {
@@ -54,11 +44,9 @@ export function loadGameData(game: Game): GameData {
 
   let skillList = get_all_skills(demons);
   let skillDetails = get_skill_data(data.SKILL_DATA);
+  let resistances: string[] = data.RESISTANCES;
 
-  let attributes: string[] = objectToArray(data.ATTRIBUTES);
-  let resistances: number[] = objectToArray(data.RESISTANCES);
-
-  return { fusionData, skillList, skillDetails, attributes, resistances };
+  return { fusionData, skillList, skillDetails, resistances };
 }
 
 function parse_demons(DEMON_DATA: any) {
@@ -66,16 +54,7 @@ function parse_demons(DEMON_DATA: any) {
   for (const property in DEMON_DATA) {
     let name = property;
     let demon = (DEMON_DATA as any)[property];
-    demons.push(
-      new Demon(
-        demon.race,
-        name,
-        demon.lvl,
-        parse_skills(demon.skills),
-        demon.resists,
-        demon.affinities
-      )
-    );
+    demons.push(new Demon(demon.race, name, demon.lvl, parse_skills(demon.skills), demon.resists, demon.affinities));
   }
   return demons;
 }

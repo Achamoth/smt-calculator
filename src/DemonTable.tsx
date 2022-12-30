@@ -10,26 +10,27 @@ import classNames from "classnames";
 type SortState = {
   sort: string;
   ascending: boolean;
+  element: number;
 };
 
 const SortingOrders = {
   LVL: UniversalDemonAttribute.LEVEL,
   RACE: UniversalDemonAttribute.RACE,
   NAME: UniversalDemonAttribute.NAME,
+  AFFINITY: UniversalDemonAttribute.AFFINITY,
 };
 
-function updateSort(oldSort: SortState, headerClicked: string) {
+function updateSort(oldSort: SortState, headerClicked: string, element: number) {
   if (!(SortingOrders as any)[headerClicked.toUpperCase()]) return oldSort;
-  if (oldSort.sort === headerClicked) {
-    return { sort: oldSort.sort, ascending: !oldSort.ascending };
+  if (oldSort.sort === headerClicked && oldSort.element === element) {
+    return { sort: oldSort.sort, ascending: !oldSort.ascending, element: oldSort.element };
   }
-  return { sort: headerClicked, ascending: true };
+  return { sort: headerClicked, ascending: true, element: element };
 }
 
 interface DemonTableProps {
   demons: Demon[];
-  attributes: string[];
-  resistances: number[];
+  resistances: string[];
 }
 
 export function DemonTable(props: DemonTableProps) {
@@ -37,12 +38,11 @@ export function DemonTable(props: DemonTableProps) {
   let [sort, setSort] = useState<SortState>({
     sort: UniversalDemonAttribute.RACE,
     ascending: true,
+    element: -1,
   });
 
   let demons = props.demons.filter((d) => d.name.toLowerCase().startsWith(filter.toLowerCase())).sort((d1, d2) => compareDemons(d1, d2, sort));
-
-  let headers: string[] = props.attributes;
-  let resistances: number[] = props.resistances;
+  let resistances: string[] = props.resistances;
 
   return (
     <div className={globalStyles.centeredContainer}>
@@ -51,12 +51,31 @@ export function DemonTable(props: DemonTableProps) {
           <TextField fullWidth label="Filter..." variant="outlined" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value)} />
         </div>
         <table className={styles.demonTable}>
-          <thead>
+          <colgroup span={3}></colgroup>
+          <colgroup span={resistances.length}></colgroup>
+          <thead className={styles.demonTableHeader}>
             <tr>
-              {headers.map((h) => {
+              <th className={styles.demonTableHeaderTopTier} colSpan={3}>
+                Demon
+              </th>
+              <th className={styles.demonTableHeaderTopTier} colSpan={resistances.length}>
+                Affinities
+              </th>
+            </tr>
+            <tr>
+              <th className={styles.demonTableHeaderSecondTier} onClick={(_) => setSort((s) => updateSort(s, UniversalDemonAttribute.RACE, -1))}>
+                Race
+              </th>
+              <th className={styles.demonTableHeaderSecondTier} onClick={(_) => setSort((s) => updateSort(s, UniversalDemonAttribute.LEVEL, -1))}>
+                Lvl
+              </th>
+              <th className={styles.demonTableHeaderSecondTier} onClick={(_) => setSort((s) => updateSort(s, UniversalDemonAttribute.NAME, -1))}>
+                Name
+              </th>
+              {resistances.map((r, i) => {
                 return (
-                  <th className={styles.demonTableHeader} onClick={(e) => setSort((s) => updateSort(s, h))}>
-                    {h}
+                  <th className={styles.demonTableHeaderSecondTier} onClick={(e) => setSort((s) => updateSort(s, UniversalDemonAttribute.AFFINITY, i))}>
+                    {r}
                   </th>
                 );
               })}
@@ -71,8 +90,8 @@ export function DemonTable(props: DemonTableProps) {
                   <td className={styles.demonTableCell}>
                     <Link to={`/${x.name.toLowerCase()}`}>{x.name}</Link>
                   </td>
-                  {resistances.map((r) => {
-                    let resistance = demonResist(x, r);
+                  {resistances.map((r, i) => {
+                    let resistance = demonResist(x, i);
                     let classes = classNames(
                       styles.demonTableCell,
                       { [`${styles.repel}`]: resistance === "rp" },
