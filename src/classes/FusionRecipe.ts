@@ -1,7 +1,6 @@
 import { Demon } from "./Demon";
 
 export class FusionRecipe {
-  
   recipes: FusionRecipe[];
 
   constructor(public demon: Demon) {
@@ -23,15 +22,18 @@ export class FusionRecipe {
     return result.flat();
   }
 
+  get depth(): number {
+    if (!this.recipes) return 1;
+    return 1 + Math.max(...this.recipes.map((r) => r.depth));
+  }
+
   foundSkills(targetSkills: string[]) {
     let skills: string[] = this.skills.filter((s) => targetSkills.includes(s));
     return [...Array.from(new Set(skills))];
   }
 
   foundComponents(targetComponents: string[]) {
-    let components = this.components.filter((s) =>
-      targetComponents.includes(s)
-    );
+    let components = this.components.filter((s) => targetComponents.includes(s));
     return [...Array.from(new Set(components))];
   }
 

@@ -83,6 +83,51 @@ function getFusionRecipes(
   return bestChain;
 }
 
+function getBestFusionRecipesBetter(
+  fusionData: FusionData,
+  demon: Demon,
+  targets: string[],
+  found: (r: FusionRecipe, t: string[]) => string[],
+  configuration: ConfigurationParameters,
+  depthLimit: number
+) {
+  let bestChain = new FusionRecipe(demon);
+
+  const fusionCombinations = getFusionCombinations(demon, fusionData);
+  const recipes: [FusionRecipe, Demon[]][] = fusionCombinations
+    .filter((c) => !c.some((d) => shouldSkipDemon(d, fusionData, configuration)))
+    .map((c) => {
+      const r = new FusionRecipe(demon);
+      c.forEach((d) => r.addComponentRecipe(new FusionRecipe(d)));
+      return [r, c];
+    });
+
+  while (recipes.length > 0) {
+    const [recipe, combination] = recipes.shift()!;
+
+    if (found(recipe, targets).length >= targets.length) {
+      return recipe;
+    } else if (found(recipe, targets).length > found(bestChain, targets).length) {
+      bestChain = recipe;
+    }
+
+    if (recipe.depth < depthLimit) {
+      combination.forEach((d) => {
+        let componentFusionCombinations = getFusionCombinations(d, fusionData);
+        let recipesWithNewComponentCombinations: [FusionRecipe, Demon[]][] = componentFusionCombinations
+          .filter((c) => !c.some((d) => shouldSkipDemon(d, fusionData, configuration)))
+          .map((c) => {
+            const newRecipe = recipe;
+            // This is really tough. Probably need to put in a stack of the whole recipe chain. Getting too complex;
+            return [newRecipe, c];
+          });
+      });
+    }
+  }
+
+  return bestChain;
+}
+
 // Famed/Undead demons only come from accidents in SMT IV, so they're useless in a recipe unless they're a special fusion.
 function shouldSkipDemon(d: Demon, data: FusionData, configuration: ConfigurationParameters): boolean {
   const onlyAttaiinableByFusionAccident =
