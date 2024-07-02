@@ -46,7 +46,8 @@ it(`getFusionRecipes doesn't freeze`, async () => {
     const result = await findFusionRecipes(
       data.fusionData,
       crazyDemon,
-      crazyUpgrade
+      crazyUpgrade,
+      { max_level: 99,  excluded_demons: []}
     );
     console.log("result: ", result);
   } catch (e) {
