@@ -1,10 +1,12 @@
 import { smt_iv_data } from "../data/smt_iv_data/smt_iv_data";
 import { smt_iv_a_data } from "../data/smt_iv_a_data/smt_iv_a_data";
 import { smt_v_data } from "../data/smt_v_data/smt_v_data";
+import { smt_v_v_data } from "../data/smt_v_v_data/smt_v_v_data";
 import { Demon, Skill } from "../classes/Demon";
 import { SpecialFusion, ElementChart, FusionChart, FusionData, SkillDemonMap, SkillDefinition, DATA } from "./types";
 
 export enum Game {
+  SMT_V_V = "Shin Megami Tensei V: Vengeance",
   SMT_V = "Shin Megami Tensei V",
   SMT_IV = "Shin Megami Tensei IV",
   SMT_IV_A = "Shin Megami Tensei IV Apocalypse",
@@ -18,11 +20,12 @@ export type GameData = {
 };
 
 export function supportedGames() {
-  return [Game.SMT_V, Game.SMT_IV, Game.SMT_IV_A];
+  return [Game.SMT_V, Game.SMT_IV, Game.SMT_IV_A, Game.SMT_V_V];
 }
 
 export function loadGameData(game: Game): GameData {
   let data: DATA;
+  let v_data: DATA | undefined;
   switch (game) {
     case Game.SMT_IV:
       data = smt_iv_data();
@@ -30,13 +33,17 @@ export function loadGameData(game: Game): GameData {
     case Game.SMT_IV_A:
       data = smt_iv_a_data();
       break;
-    default:
     case Game.SMT_V:
       data = smt_v_data();
       break;
+    default:
+    case Game.SMT_V_V:
+      v_data = smt_v_data();
+      data = smt_v_v_data();
+      break;
   }
 
-  let demons = parse_demons(data.DEMON_DATA);
+  let demons = parse_demons(data.DEMON_DATA, v_data?.DEMON_DATA);
   let specialFusions = get_special_fusions(data.SPECIAL_RECIPES);
   let fusionChart = load_fusion_chart(data.FUSION_CHART);
   let elementChart = load_element_chart(data.ELEMENT_CHART);
@@ -49,12 +56,21 @@ export function loadGameData(game: Game): GameData {
   return { fusionData, skillList, skillDetails, resistances };
 }
 
-function parse_demons(DEMON_DATA: any) {
+function parse_demons(DEMON_DATA: any, V_DEMON_DATA: any | undefined) {
   let demons: Demon[] = [];
   for (const property in DEMON_DATA) {
     let name = property;
     let demon = (DEMON_DATA as any)[property];
     demons.push(new Demon(demon.race, name, demon.lvl, parse_skills(demon.skills), demon.resists, demon.affinities));
+  }
+  if (V_DEMON_DATA) {
+    for (const property in V_DEMON_DATA) {
+      let name = property;
+      let demon = (V_DEMON_DATA as any)[property];
+      if (!demons.find(d => d.name.toLowerCase() === name.toLowerCase())) {
+        demons.push(new Demon(demon.race, name, demon.lvl, parse_skills(demon.skills), demon.resists, demon.affinities));
+      }
+    } 
   }
   return demons;
 }

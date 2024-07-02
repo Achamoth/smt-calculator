@@ -9,7 +9,7 @@ import { useState } from "react";
 import { NavBar } from "./NavBar";
 
 function App() {
-  let [game, setGame] = useState(Game.SMT_V);
+  let [game, setGame] = useState(Game.SMT_V_V);
   let games = supportedGames();
   let { fusionData, skillList, skillDetails, resistances } = loadGameData(game);
   let gameSelectorData = {
